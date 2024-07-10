@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "214054351427",
+    "project_id": "alz-app-472ad",
+    "storage_bucket": "alz-app-472ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:214054351427:android:c015512cb98537871c5af6",
+        "android_client_info": {
+          "package_name": "com.example.alz_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIdsyDDVBy7_T7NfeltPS0r_xfJO2xhZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
