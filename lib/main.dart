@@ -1,3 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+
 import 'journal.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +9,7 @@ import 'dart:async';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'messages.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import "package:firebase_core/firebase_core.dart";
+import "package:firebase_core_web/firebase_core_web.dart";
 
 
 Future<void> main() async{
@@ -16,7 +19,9 @@ Future<void> main() async{
     // Run the app
     runApp(const MyApp());
   }catch(e){
-    print("Error: $e");
+    if (kDebugMode) {
+      print("Errorrr: $e");
+    }
   }
 }
 
