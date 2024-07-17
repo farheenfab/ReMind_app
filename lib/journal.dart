@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'fetch.dart';
@@ -54,7 +52,8 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
             child: ElevatedButton(
               child: const Text('Push to Firebase!'),
               onPressed: () async {
-                await DatabaseService().addData(recordController.text, DateTime.now());
+                await DatabaseService().addData(recordController.text, DateTime.now().toString());
+                print(DateTime.now());
                 recordController.clear();
               },
             ),

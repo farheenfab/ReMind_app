@@ -4,7 +4,7 @@ class DatabaseService {
   // final String entryid;
   // DatabaseService({required this.entryid});
   final CollectionReference journalCollection = FirebaseFirestore.instance.collection('JournalEntry');
-  Future addData(String entry, DateTime datetime) async{
+  Future addData(String entry, String datetime) async{
     return await journalCollection.doc().set(
       {'entry': entry, 'datetime': datetime}
     );
