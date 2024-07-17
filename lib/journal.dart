@@ -1,5 +1,5 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'fetch.dart';
@@ -14,13 +14,10 @@ class JournalDiaryEntry extends StatefulWidget {
 class _MyJournalEntryState extends State<JournalDiaryEntry> {
   TextEditingController recordController = TextEditingController();
 
-  // late DatabaseReference dbRef;
 
   @override
   void initState(){
     super.initState();
-    // dbRef = FirebaseDatabase.instance.ref().child("JournalEntry");
-    // dbRef = FirebaseFirestore.instance.collection('JournalEntry');
   }
 
   @override
@@ -44,7 +41,6 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
             child: Center(
               child: TextField(
                 controller: recordController,
-                // keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -58,14 +54,8 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
             child: ElevatedButton(
               child: const Text('Push to Firebase!'),
               onPressed: () async {
-                // Navigator.pushNamed(context, '/second');
-                // Map<String, String> journalEntry = {
-                //   'entry': recordController.text
-                // };
-                // dbRef.push().set(journalEntry);
-                // dbRef.add().set(journalEntry); //added
-
-                // await DatabaseService().addData(recordController.text);
+                await DatabaseService().addData(recordController.text, DateTime.now());
+                recordController.clear();
               },
             ),
           ),
