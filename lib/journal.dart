@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'fetch.dart';
@@ -65,7 +65,7 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
                 // dbRef.push().set(journalEntry);
                 // dbRef.add().set(journalEntry); //added
 
-                await DatabaseService().addData(recordController.text);
+                // await DatabaseService().addData(recordController.text);
               },
             ),
           ),

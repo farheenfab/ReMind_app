@@ -38,17 +38,18 @@ dependencies:
   cupertino_icons: ^1.0.6
   http: ^1.2.1
   provider: ^6.1.2
-  flutter_tts:
+  flutter_dotenv: ^5.0.2
   speech_to_text:
   highlight_text:
   avatar_glow:
-  google_generative_ai:
-  intl:
-  firebase_core:
-  firebase_core_web:
-  firebase_database:
-  cloud_firestore_platform_interface:
-  cloud_firestore: ^5.1.0
+  google_generative_ai: ^0.4.3
+  flutter_tts: ^4.0.2
+  # intl:
+  # firebase_core:
+  # firebase_core_web:
+  # firebase_database:
+  # cloud_firestore_platform_interface:
+  # cloud_firestore: 
 
 dev_dependencies:
   flutter_test:
@@ -59,7 +60,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

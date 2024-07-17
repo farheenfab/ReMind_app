@@ -3,7 +3,7 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
-    id 'com.google.gms.google-services'
+    // id 'com.google.gms.google-services'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
@@ -63,16 +63,24 @@ flutter {
 }
 
 dependencies {
-    constraints {
-        implementation("com.google.ai.client.generativeai:generativeai:0.7.0") //added
-        implementation platform('com.google.firebase:firebase-bom:33.1.2')
-        implementation("com.google.firebase:firebase-analytics:22.0.2")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22") {
-            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
-        }
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22") {
-            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-        }
+    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
+    // implementation("com.google.firebase:firebase-analytics:22.0.2")
+   
+         //added
+        // implementation platform('com.google.firebase:firebase-bom:33.1.2')
+        // implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22") {
+        //     because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        // }
+        // implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22") {
+        //     because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        // }
+
+    implementation "com.google.ai.client.generativeai:generativeai:0.7.0" {
+        exclude group: "org.jetbrains.kotlin"
     }
+    implementation "com.google.ai.client.generativeai:common:0.6.0" {
+        exclude group: "org.jetbrains.kotlin"
+    }
+    
 }
 
