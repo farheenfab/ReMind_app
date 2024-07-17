@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'database.dart';
-import 'fetch.dart';
+import 'journal_listview.dart';
 
 class JournalDiaryEntry extends StatefulWidget {
   const JournalDiaryEntry({super.key});
@@ -26,7 +27,7 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
         leading:
         IconButton(onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const DisplayData()),
+          MaterialPageRoute(builder: (context) =>  DisplayData()),
         ), icon: const Icon(Icons.add_circle))
         ,
         centerTitle: true,
@@ -52,8 +53,7 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
             child: ElevatedButton(
               child: const Text('Push to Firebase!'),
               onPressed: () async {
-                await DatabaseService().addData(recordController.text, DateTime.now().toString());
-                print(DateTime.now());
+                await DatabaseService().addData(recordController.text, DateTime.now() );
                 recordController.clear();
               },
             ),
