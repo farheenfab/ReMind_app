@@ -1,10 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/foundation.dart';
-
 import 'journal.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:async';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'messages.dart';
@@ -63,16 +61,16 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _initSpeechState();
 
-    // flutterTts.setCompletionHandler(() {
-    //   setState(() {
-    //     isSpeaking = false;
-    //   });
-    // });
-    // flutterTts.setCancelHandler(() {
-    //   setState(() {
-    //     isSpeaking = false;
-    //   });
-    // });
+    flutterTts.setCompletionHandler(() {
+      setState(() {
+        isSpeaking = false;
+      });
+    });
+    flutterTts.setCancelHandler(() {
+      setState(() {
+        isSpeaking = false;
+      });
+    });
   }
 
   void _initSpeechState() async {
@@ -109,13 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  // // Text to Speech
-  // double volume = 1.0;
-  // double pitch = 1.0;
-  // double speechRate = 0.5;
-  // List<String> ? languages;
-  // String langCode = "en-US";
-  // // late final response;
+  // Text to Speech
+  double volume = 1.0;
+  double pitch = 1.0;
+  double speechRate = 0.5;
+  List<String> ? languages;
+  String langCode = "en-US";
+  // late final response;
 
   bool isSpeaking = false;
 
@@ -291,16 +289,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // FlutterTts flutterTts = FlutterTts();
+  FlutterTts flutterTts = FlutterTts();
   void _speak(String text) async {
-    // await flutterTts.speak(text);
+    await flutterTts.speak(text);
     setState(() {
       isSpeaking = true;
     });
   }
 
   void _stop() async{
-    // await flutterTts.stop();
+    await flutterTts.stop();
     setState(() {
       isSpeaking = false;
     });
