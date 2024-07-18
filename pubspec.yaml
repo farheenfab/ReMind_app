@@ -38,13 +38,13 @@ dependencies:
   http: ^1.2.1
   provider: ^6.1.2
   flutter_dotenv: ^5.0.2
-  speech_to_text:
   highlight_text:
   avatar_glow:
   firebase_core: ^3.2.0
   cloud_firestore: ^5.1.0
   firebase_database: ^11.0.3
   google_generative_ai: ^0.4.3
+  speech_to_text: ^6.6.2
   # intl:
   # firebase_core_web:
   # cloud_firestore_platform_interface:
