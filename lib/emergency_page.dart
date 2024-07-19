@@ -15,7 +15,8 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  PhoneNumber? _phoneNumber;
+  final TextEditingController _ageController = TextEditingController();
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'AE'); // Default to UAE
   String? _selectedGender;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -28,8 +29,19 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
     if (pickedDate != null) {
       setState(() {
         _dobController.text = "${pickedDate.toLocal()}".split(' ')[0];
+        _ageController.text = _calculateAge(pickedDate).toString();
       });
     }
+  }
+
+  int _calculateAge(DateTime dob) {
+    final now = DateTime.now();
+    int age = now.year - dob.year;
+    if (now.month < dob.month ||
+        (now.month == dob.month && now.day < dob.day)) {
+      age--;
+    }
+    return age;
   }
 
   bool _isNextButtonEnabled = false;
@@ -75,43 +87,44 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 },
               ),
               const SizedBox(height: 20),
-              InternationalPhoneNumberInput(
-                onInputChanged: (PhoneNumber number) {
-                  setState(() {
-                    _phoneNumber = number;
-                  });
-                },
-                selectorConfig: const SelectorConfig(
-                  selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                  useEmoji: false,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white),
                 ),
-                ignoreBlank: true,
-                autoValidateMode: AutovalidateMode.disabled,
-                initialValue: _phoneNumber,
-                inputBorder: const OutlineInputBorder(),
-                inputDecoration: const InputDecoration(
-                  labelText: 'Phone Number',
-                  labelStyle: TextStyle(color: Colors.white),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                child: InternationalPhoneNumberInput(
+                  onInputChanged: (PhoneNumber number) {
+                    setState(() {
+                      _phoneNumber = number;
+                    });
+                  },
+                  selectorConfig: const SelectorConfig(
+                    selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                    useEmoji: false,
+                    leadingPadding: 12.0,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                  ignoreBlank: true,
+                  autoValidateMode: AutovalidateMode.disabled,
+                  initialValue: _phoneNumber,
+                  inputBorder: InputBorder.none,
+                  inputDecoration: const InputDecoration(
+                    labelText: 'Phone Number',
+                    labelStyle: TextStyle(color: Colors.white),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
                   ),
-                  hintStyle: TextStyle(color: Colors.white),
+                  textStyle: const TextStyle(color: Colors.white),
+                  selectorTextStyle: const TextStyle(color: Colors.white),
+                  formatInput:
+                      false, // Allow free input without formatting constraint
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number';
+                    }
+                    return null;
+                  },
                 ),
-                textStyle: const TextStyle(color: Colors.white),
-                selectorTextStyle: const TextStyle(color: Colors.white),
-                formatInput:
-                    false, // Allow free input without formatting constraint
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
-                  }
-                  // Add any custom validation logic if needed
-                  return null;
-                },
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField<String>(
@@ -127,9 +140,11 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                   labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                 ),
                 items: const [
@@ -159,20 +174,6 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 },
               ),
               const SizedBox(height: 20),
-              const TextField(
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Age',
-                  labelStyle: TextStyle(color: Colors.white),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
               TextField(
                 controller: _dobController,
                 style: const TextStyle(color: Colors.white),
@@ -181,9 +182,11 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                   labelStyle: const TextStyle(color: Colors.white),
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.calendar_today, color: Colors.white),
@@ -193,6 +196,24 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 readOnly: true,
               ),
               const SizedBox(height: 20),
+              TextField(
+                controller: _ageController,
+                readOnly: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  labelText: 'Age',
+                  labelStyle: TextStyle(color: Colors.white),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               const TextField(
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
@@ -200,9 +221,11 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                   labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                 ),
               ),

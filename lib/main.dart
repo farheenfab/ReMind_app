@@ -1,6 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
+import 'welcome_screen.dart';
+import 'settings.dart';
+import 'login_page.dart';
+import 'signup_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,14 +19,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ReMind',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.deepPurple,
-        ).copyWith(secondary: Colors.white),
-        useMaterial3: true,
-      ),
-      home: const SplashScreen(),
-    );
+        title: 'ReMind',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.deepPurple,
+          ).copyWith(secondary: Colors.white),
+          useMaterial3: true,
+        ),
+        home: const SplashScreen(),
+        initialRoute: '/welcome',
+        routes: {
+          '/welcome': (context) => const WelcomeScreen(),
+          '/settings': (context) => SettingsPage(),
+          '/login': (context) => const LoginPage(),
+          '/signup': (context) => const SignUpPage(),
+        });
   }
 }
