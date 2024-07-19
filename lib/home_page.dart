@@ -3,6 +3,7 @@ import 'profile_page.dart';
 import 'settings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'calender_page.dart';
+import 'chat_page.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -126,8 +127,15 @@ class _HomePageState extends State<HomePage> {
                       icon: Icons.chat,
                       label: 'Let\'s Chat',
                       onTap: () {
-                        // Handle Let's Chat button tap
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ChatPage(), // Navigate to ChatPage
+                          ),
+                        );
                       },
+                      // Handle Let's Chat button ta
                       color: Colors.blue,
                     ),
                     HomeButton(
