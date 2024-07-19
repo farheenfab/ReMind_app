@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 import 'settings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
- 
+import 'calender_page.dart';
+
 class HomePage extends StatefulWidget {
   final String username;
- 
+
   const HomePage({Key? key, required this.username}) : super(key: key);
- 
+
   @override
   _HomePageState createState() => _HomePageState();
 }
- 
+
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
- 
+
   final List<Widget> _children = [
     PlaceholderWidget(),
     PlaceholderWidget(),
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     PlaceholderWidget(),
     SettingsPage(),
   ];
- 
+
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -103,6 +104,12 @@ class _HomePageState extends State<HomePage> {
                       icon: Icons.calendar_today,
                       label: 'Calendar',
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CalendarPage(),
+                          ),
+                        );
                         // Handle Calendar button tap
                       },
                       color: Colors.green,
@@ -169,7 +176,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
- 
+
 class PlaceholderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -178,13 +185,13 @@ class PlaceholderWidget extends StatelessWidget {
     );
   }
 }
- 
+
 class HomeButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
   final Color color;
- 
+
   const HomeButton({
     Key? key,
     required this.icon,
@@ -192,7 +199,7 @@ class HomeButton extends StatelessWidget {
     required this.onTap,
     required this.color,
   }) : super(key: key);
- 
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
