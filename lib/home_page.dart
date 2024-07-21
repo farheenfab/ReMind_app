@@ -225,9 +225,16 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'profile_page.dart';
 import 'settings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'calender_page.dart';
+import 'chat_page.dart';
+import 'medication_page.dart';
+import 'sos_page.dart';
+import 'games_page.dart';
+import 'memory_log_page.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -247,28 +254,43 @@ class _HomePageState extends State<HomePage> {
     PlaceholderWidget(),
     PlaceholderWidget(),
     SettingsPage(),
+    GamesPage(),
+    MemoryLogPage()
   ];
 
   void onTabTapped(int index) {
+  if (index == 1) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => GamesPage()),
+    );
+  } else if (index == 3) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MemoryLogPage()),
+    );
+  } else if (index == 4) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsPage()),
+    ).then((_) {
+      setState(() {
+        _currentIndex = 0;
+      });
+    });
+  } else {
     setState(() {
       _currentIndex = index;
     });
-    if (index == 4) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SettingsPage(),
-        ),
-      ).then((_) {
-        setState(() {
-          _currentIndex = 0;
-        });
-      });
-    }
   }
+}
 
   @override
   Widget build(BuildContext context) {
+    final DateTime now = DateTime.now();
+    final String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    final String formattedTime = DateFormat('HH:mm').format(now);
+
     return WillPopScope(
       onWillPop: () async {
         if (_currentIndex != 0) {
@@ -323,12 +345,32 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Text(
-                      'Hello, ${widget.username}',
+                      'Hello, ${widget.username} !',
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Date: $formattedDate',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Time: $formattedTime',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -342,6 +384,12 @@ class _HomePageState extends State<HomePage> {
                       icon: Icons.calendar_today,
                       label: 'Calendar',
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CalendarPage(),
+                          ),
+                        );
                         // Handle Calendar button tap
                       },
                       color: Colors.green,
@@ -352,9 +400,15 @@ class _HomePageState extends State<HomePage> {
                       icon: Icons.medical_services,
                       label: 'Medication',
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MedicationPage(),
+                          ),
+                        );
                         // Handle Medication button tap
                       },
-                      color: Colors.yellow,
+                      color: Color.fromARGB(255, 255, 235, 52),
                       iconSize: 50,
                       fontSize: 18,
                     ),
@@ -362,8 +416,15 @@ class _HomePageState extends State<HomePage> {
                       icon: Icons.chat,
                       label: 'Let\'s Chat',
                       onTap: () {
-                        // Handle Let's Chat button tap
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ChatPage(), // Navigate to ChatPage
+                          ),
+                        );
                       },
+                      // Handle Let's Chat button ta
                       color: Colors.blue,
                       iconSize: 50,
                       fontSize: 18,
@@ -372,6 +433,12 @@ class _HomePageState extends State<HomePage> {
                       icon: Icons.warning,
                       label: 'SOS',
                       onTap: () {
+                        Navigator.push(
+                        context,
+                          MaterialPageRoute(
+                            builder: (context) => SOSPage(),
+                          ),
+                        );
                         // Handle SOS button tap
                       },
                       color: Colors.red,
@@ -438,6 +505,7 @@ class HomeButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
   final Color color;
+
   final double iconSize;
   final double fontSize;
 

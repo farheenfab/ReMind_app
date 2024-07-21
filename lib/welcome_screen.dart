@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
+import 'settings.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -36,9 +36,7 @@ class WelcomeScreen extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const LoginPage()),
-                );
+                Navigator.of(context).pushNamed('/login');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF382973),
@@ -49,9 +47,7 @@ class WelcomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const SignUpPage()),
-                );
+                Navigator.of(context).pushNamed('/signup');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF382973),

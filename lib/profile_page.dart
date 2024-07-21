@@ -6,8 +6,16 @@ class ProfileDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Details'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Divider(
+            height: 2.0,
+            color: Colors.black,
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        color: Colors.white,  // Set the background color of the entire page
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -16,20 +24,27 @@ class ProfileDetailsPage extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 20.0),
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: const Color(0xFF382973),  // Container background color
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    'Patient Details',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      'Patient Details',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  // Add patient details widgets here (scrollable container)
                 ],
               ),
             ),
@@ -37,40 +52,54 @@ class ProfileDetailsPage extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 20.0),
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: const Color(0xFF382973),  // Container background color
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    'Caretaker Details',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      'Caretaker Details',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  // Add caretaker details widgets here (scrollable container)
                 ],
               ),
             ),
             Container(
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: const Color(0xFF382973),  // Container background color
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    'Emergency Contact Details',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Icon(
+                    Icons.phone,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      'Emergency Contact Details',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  // Add emergency contact details widgets here (scrollable container)
                 ],
               ),
             ),
