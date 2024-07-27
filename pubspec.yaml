@@ -37,6 +37,10 @@ dependencies:
   table_calendar: ^3.0.0
   sqflite: ^2.0.0+4
   path_provider: ^2.0.2
+  image_picker: ^0.8.4+8
+  lottie: ^1.0.1
+  confetti: ^0.6.0
+  just_audio: ^0.9.22
  
 
   # The following adds the Cupertino Icons font to your application.
@@ -62,6 +66,7 @@ dev_dependencies:
 flutter:
   assets:
     - lib/assets/logo.png
+    - lib/assets/confetti_sound.mp3
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

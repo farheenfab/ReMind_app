@@ -5,6 +5,8 @@ import 'welcome_screen.dart';
 import 'settings.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
+import 'home_page.dart';
+import 'memory_game.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,9 +32,11 @@ class MyApp extends StatelessWidget {
         initialRoute: '/welcome',
         routes: {
           '/welcome': (context) => const WelcomeScreen(),
-          '/settings': (context) => SettingsPage(),
-          '/login': (context) => const LoginPage(),
-          '/signup': (context) => const SignUpPage(),
+          '/login': (context) => MemoryGameHome(),
+          // '/settings': (context) => SettingsPage(),
+          // '/login': (context) => const LoginPage(),
+          // '/signup': (context) => const SignUpPage(),
+          // '/home': (context) => const HomePage(username: 'John'),
         });
   }
 }
