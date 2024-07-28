@@ -28,6 +28,7 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+
   String _generateResponse(String userInput) {
     final lowerCaseInput = userInput.toLowerCase();
 
