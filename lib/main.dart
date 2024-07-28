@@ -15,12 +15,18 @@ Future<void> main() async{
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     // Run the app
-    runApp(const MyApp());
+    runApp(MyApp(voice: const {"name": "en-us-x-tpf-local", "locale": "en-US"}, volume: 1.0, pitch: 1.0, speechRate: 0.5,));
   
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  
+  final Map<String, String> voice;
+  final double volume;
+  final double pitch;
+  final double speechRate;
+  
+  MyApp({super.key, required this.voice , required this.volume, required this.pitch, required this.speechRate});
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +37,33 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: const SplashScreen(),
-      home: const MyHomePage(),
+      home: MyHomePage(
+        voice: voice,
+        volume: volume,
+        pitch: pitch,
+        speechRate: speechRate,
+      ),
       // home: const JournalDiaryEntry(),
       // home: VoiceSettings(),
+
     );
 
   }
 }
 class MyHomePage extends StatefulWidget {
-  const MyHomePage ({super.key});
+  final Map<String, String> voice;
+  final double volume;
+  final double pitch;
+  final double speechRate;
+
+  const MyHomePage({
+    super.key,
+    required this.voice,
+    required this.volume,
+    required this.pitch,
+    required this.speechRate,
+  });
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -70,16 +94,16 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _initSpeechState();
 
-    // flutterTts.setCompletionHandler(() {
-    //   setState(() {
-    //     isSpeaking = false;
-    //   });
-    // });
-    // flutterTts.setCancelHandler(() {
-    //   setState(() {
-    //     isSpeaking = false;
-    //   });
-    // });
+    flutterTts.setCompletionHandler(() {
+      setState(() {
+        isSpeaking = false;
+      });
+    });
+    flutterTts.setCancelHandler(() {
+      setState(() {
+        isSpeaking = false;
+      });
+    });
   }
 
   void _initSpeechState() async {
@@ -106,7 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void clearRecognizedText() {
     setState(() {
       _recognizedText = "";
-      // _speechConfidence = 0.0; // Assuming you want to reset confidence as well
       _userInput.clear(); // Clear the text field
     });
   }
@@ -185,7 +208,8 @@ class _MyHomePageState extends State<MyHomePage> {
         leading:
         IconButton(onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const JournalDiaryEntry()),
+          // MaterialPageRoute(builder: (context) => const JournalDiaryEntry()),
+          MaterialPageRoute(builder: (context) => VoiceSettings()),
         ), icon: const Icon(Icons.add_circle))
         ,
         title: const Text('Chat with Gemini'),
@@ -294,6 +318,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   FlutterTts flutterTts = FlutterTts();
   void _speak(String text) async {
+    // await flutterTts.setVoice({"name": "es-us-x-sfb-local", "locale": "en-US"});
+    // await flutterTts.setVoice({'name': 'en-us-x-iol-local', 'locale': 'en-US'});
+    await flutterTts.setVoice(widget.voice);
+    await flutterTts.setVolume(widget.volume);
+    await flutterTts.setPitch(widget.pitch);
+    await flutterTts.setSpeechRate(widget.speechRate);
+    // print(flutterTts.getDefaultVoice);
     await flutterTts.speak(text);
     setState(() {
       isSpeaking = true;

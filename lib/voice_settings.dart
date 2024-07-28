@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:developer';
+import 'main.dart';
 
 class VoiceSettings extends StatefulWidget{
+  
   @override
   State<VoiceSettings> createState() => VoiceSettingsState();
   
@@ -13,49 +15,52 @@ class VoiceSettingsState extends State<VoiceSettings>{
   double volume = 1;
   double pitch = 1.0;
   double speechRate = 1;
-  // Map<String,String> languages = {"English": "en-US"};
-  List<String>? languages;
-  Map<String, String> langCode = {"name": "en-us-x-sfg#male_1-local", "locale": "en-US"};
+
   String defaultText = "Hi There";
 
-  FlutterTts text_to_speech = FlutterTts();
-  List<Map> _voices = [];
-  Map? _currentVoice;
-  bool isMale = true;
+  bool isFemale = true;
+  bool isMale = false;
 
-    @override
+  Map<String,String> voice = {"name": "en-us-x-tpf-local", "locale": "en-US"};
+
+  FlutterTts text_to_speech = FlutterTts();
+  
+
+  @override
   void initState(){
     super.initState();
-    init();
   }
 
-  void init() async{
-    // languages = List<String>.from(await text_to_speech.getLanguages);
-    text_to_speech.getVoices.then((data){
-      try{
-        _voices = List<Map>.from(data);
-        log("${_voices}");
-        setState(() {
-          _updateVoiceList();
-          //  _voices = _voices.where((_voice) => _voice["name"].contains("en")).toList();
-           _currentVoice = _voices[0];
-           setVoice(_currentVoice!);
-        });
-       
-      }catch(e){
-        print(e);
+
+  void _selectButton(int buttonNumber) {
+    setState(() {
+      if (buttonNumber == 1) {
+        isFemale = true;
+        isMale = false;
+        voice = {"name": "en-us-x-tpf-local", "locale": "en-US"}; 
+      } else if (buttonNumber == 2) {
+        isFemale = false;
+        isMale = true;
+        voice = {'name': 'en-us-x-iol-local', 'locale': 'en-US'};
       }
     });
   }
 
-  void _updateVoiceList() {
-    _voices = _voices.where((voice) {
-      return voice['locale'] == langCode && voice['gender'] == (isMale ? 'male' : 'female');
-    }).toList();
-  }
-
-  void setVoice(Map voice){
-    text_to_speech.setVoice({"name":voice["name"], "locale":voice["locale"]});
+  // Method to navigate to another page
+  void _navigateToNextPage(BuildContext context) {
+    // Pass the selected option to the next page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyHomePage(
+          voice: isFemale ? {"name": "en-us-x-tpf-local", "locale": "en-US"} : {'name': 'en-us-x-iol-local', 'locale': 'en-US'},
+          // voice: voice,
+          volume: volume,
+          pitch: pitch,
+          speechRate: speechRate
+        ),
+      ),
+    );
   }
  
   @override
@@ -114,71 +119,33 @@ class VoiceSettingsState extends State<VoiceSettings>{
               ],
             ),
 
-            ElevatedButton(onPressed: (){
-                text_to_speech.getVoices.then((data){
-              _voices = List<Map>.from(data);
-              print(_voices);});
-            }, child: const Text("Save voice settings")),
-
-            Row(
-            children: [
-              const Text(
-                "Languages: ",
-                style: TextStyle(fontSize: 17),
+            ElevatedButton(
+              onPressed: () => _selectButton(1),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isFemale ? Colors.blue : Colors.grey,
               ),
-              const SizedBox(width: 10),
-              DropdownButton(
-                value: langCode,
-                items: const [
-                  DropdownMenuItem(value: {"name": "es-us-x-sfb-local", "locale": "es-US"}, child: Text("US")),
-                  DropdownMenuItem(value: {"name": "cy-gb-x-cyf-network", "locale": "cy-GB"}, child: Text("UK")),
-                  DropdownMenuItem(value: {"name": "en-in-x-end-network", "locale": "en-IN"}, child: Text("India")),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    langCode = value!;
-                    _updateVoiceList();
-                    if (_voices.isNotEmpty) {
-                      _currentVoice = _voices[0];
-                      setVoice(_currentVoice!);
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-
-          Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isMale = true;
-                      _updateVoiceList();
-                      if (_voices.isNotEmpty) {
-                        _currentVoice = _voices[0];
-                        setVoice(_currentVoice!);
-                      }
-                    });
-                  },
-                  child: const Text("Male Voice"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isMale = false;
-                      _updateVoiceList();
-                      if (_voices.isNotEmpty) {
-                        _currentVoice = _voices[0];
-                        setVoice(_currentVoice!);
-                      }
-                    });
-                  },
-                  child: const Text("Female Voice"),
-                ),
-              ],
+              child: const Text('Female'),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => 
+              _selectButton(2),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isMale ? Colors.blue : Colors.grey,
+              ),
+              child: const Text('Male'),
+            ),
+
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () => _navigateToNextPage(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+              child: const Text('Save Voice Settings'),
+            ),
+
+
           ],
         )
       )
@@ -186,26 +153,18 @@ class VoiceSettingsState extends State<VoiceSettings>{
   }
 
   @override
-  void initSetting() async {
-    await text_to_speech.setVolume(volume);
-    await text_to_speech.setPitch(pitch);
-    await text_to_speech.setSpeechRate(speechRate);
-    await text_to_speech.setVoice(langCode);
+  void initSetting() {
+    text_to_speech.setVolume(volume);
+    text_to_speech.setPitch(pitch);
+    text_to_speech.setSpeechRate(speechRate);
+    text_to_speech.setVoice(voice); 
   }
 
   void _speak() async{
     initSetting();
-    await text_to_speech.speak(defaultText);
-  }
+    text_to_speech.speak(defaultText);
 
-  // Widget speakerSelector(){
-  //   return DropdownButton(
-  //     value: _currentVoice,
-  //     items: _voices.map((_voice) => DropdownMenuItem(
-  //       value: _voice,
-  //       child: Text(_voice["name"]))).toList(), 
-  //     onChanged: (value){});
-  // }
+  }
 
 
 }
