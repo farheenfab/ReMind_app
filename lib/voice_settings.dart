@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'dart:developer';
 
 class VoiceSettings extends StatefulWidget{
   @override
@@ -14,12 +15,13 @@ class VoiceSettingsState extends State<VoiceSettings>{
   double speechRate = 1;
   // Map<String,String> languages = {"English": "en-US"};
   List<String>? languages;
-  String langCode = "en-US";
+  Map<String, String> langCode = {"name": "en-us-x-sfg#male_1-local", "locale": "en-US"};
   String defaultText = "Hi There";
 
   FlutterTts text_to_speech = FlutterTts();
   List<Map> _voices = [];
   Map? _currentVoice;
+  bool isMale = true;
 
     @override
   void initState(){
@@ -32,9 +34,10 @@ class VoiceSettingsState extends State<VoiceSettings>{
     text_to_speech.getVoices.then((data){
       try{
         _voices = List<Map>.from(data);
-        
+        log("${_voices}");
         setState(() {
-           _voices = _voices.where((_voice) => _voice["name"].contains("en")).toList();
+          _updateVoiceList();
+          //  _voices = _voices.where((_voice) => _voice["name"].contains("en")).toList();
            _currentVoice = _voices[0];
            setVoice(_currentVoice!);
         });
@@ -43,6 +46,12 @@ class VoiceSettingsState extends State<VoiceSettings>{
         print(e);
       }
     });
+  }
+
+  void _updateVoiceList() {
+    _voices = _voices.where((voice) {
+      return voice['locale'] == langCode && voice['gender'] == (isMale ? 'male' : 'female');
+    }).toList();
   }
 
   void setVoice(Map voice){
@@ -105,33 +114,83 @@ class VoiceSettingsState extends State<VoiceSettings>{
               ],
             ),
 
-            ElevatedButton(onPressed: (){}, child: const Text("Save voice settings")),
-            //on pressed, add the settings to Firebase
+            ElevatedButton(onPressed: (){
+                text_to_speech.getVoices.then((data){
+              _voices = List<Map>.from(data);
+              print(_voices);});
+            }, child: const Text("Save voice settings")),
 
-            const Row(
+            Row(
+            children: [
+              const Text(
+                "Languages: ",
+                style: TextStyle(fontSize: 17),
+              ),
+              const SizedBox(width: 10),
+              DropdownButton(
+                value: langCode,
+                items: const [
+                  DropdownMenuItem(value: {"name": "es-us-x-sfb-local", "locale": "es-US"}, child: Text("US")),
+                  DropdownMenuItem(value: {"name": "cy-gb-x-cyf-network", "locale": "cy-GB"}, child: Text("UK")),
+                  DropdownMenuItem(value: {"name": "en-in-x-end-network", "locale": "en-IN"}, child: Text("India")),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    langCode = value!;
+                    _updateVoiceList();
+                    if (_voices.isNotEmpty) {
+                      _currentVoice = _voices[0];
+                      setVoice(_currentVoice!);
+                    }
+                  });
+                },
+              ),
+            ],
+          ),
+
+          Row(
               children: [
-                Text("Languages: ", style: TextStyle(fontSize: 17),),
-                SizedBox(width: 10,),
-                // DropdownButton(
-                //   value: _currentVoice,
-                //   items: _voices.map((_voice) => DropdownMenuItem(
-                //     value: _voice,
-                //     child: Text(_voice["name"]))).toList(), 
-                //   onChanged: (value){})
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isMale = true;
+                      _updateVoiceList();
+                      if (_voices.isNotEmpty) {
+                        _currentVoice = _voices[0];
+                        setVoice(_currentVoice!);
+                      }
+                    });
+                  },
+                  child: const Text("Male Voice"),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isMale = false;
+                      _updateVoiceList();
+                      if (_voices.isNotEmpty) {
+                        _currentVoice = _voices[0];
+                        setVoice(_currentVoice!);
+                      }
+                    });
+                  },
+                  child: const Text("Female Voice"),
+                ),
               ],
-            )
+            ),
           ],
         )
       )
     );
   }
 
-    @override
+  @override
   void initSetting() async {
     await text_to_speech.setVolume(volume);
     await text_to_speech.setPitch(pitch);
     await text_to_speech.setSpeechRate(speechRate);
-
+    await text_to_speech.setVoice(langCode);
   }
 
   void _speak() async{
