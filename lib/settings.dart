@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'welcome_screen.dart';
+import 'microphone_settings.dart'; // Import the new MicrophoneSettingsPage
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -16,15 +16,16 @@ class SettingsPage extends StatelessWidget {
           ),
           const Divider(color: Colors.black),
           const SizedBox(height: 16.0),
-          const SettingsTile(
-            icon: Icons.notifications,
-            title: 'Notifications',
-          ),
-          const Divider(color: Colors.black),
-          const SizedBox(height: 16.0),
-          const SettingsTile(
+          SettingsTile(
             icon: Icons.mic,
             title: 'Microphone Voice Settings',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MicrophoneSettingsPage()),
+              );
+            },
           ),
           const Divider(color: Colors.black),
           const SizedBox(height: 16.0),

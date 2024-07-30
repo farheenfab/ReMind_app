@@ -2,19 +2,19 @@
 // import 'profile_page.dart';
 // import 'settings.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
- 
+
 // class HomePage extends StatefulWidget {
 //   final String username;
- 
+
 //   const HomePage({Key? key, required this.username}) : super(key: key);
- 
+
 //   @override
 //   _HomePageState createState() => _HomePageState();
 // }
- 
+
 // class _HomePageState extends State<HomePage> {
 //   int _currentIndex = 0;
- 
+
 //   final List<Widget> _children = [
 //     PlaceholderWidget(),
 //     PlaceholderWidget(),
@@ -22,7 +22,7 @@
 //     PlaceholderWidget(),
 //     SettingsPage(),
 //   ];
- 
+
 //   void onTabTapped(int index) {
 //     setState(() {
 //       _currentIndex = index;
@@ -40,7 +40,7 @@
 //       });
 //     }
 //   }
- 
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return WillPopScope(
@@ -169,7 +169,7 @@
 //     );
 //   }
 // }
- 
+
 // class PlaceholderWidget extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -178,13 +178,13 @@
 //     );
 //   }
 // }
- 
+
 // class HomeButton extends StatelessWidget {
 //   final IconData icon;
 //   final String label;
 //   final VoidCallback onTap;
 //   final Color color;
- 
+
 //   const HomeButton({
 //     Key? key,
 //     required this.icon,
@@ -192,7 +192,7 @@
 //     required this.onTap,
 //     required this.color,
 //   }) : super(key: key);
- 
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return GestureDetector(
@@ -259,31 +259,31 @@ class _HomePageState extends State<HomePage> {
   ];
 
   void onTabTapped(int index) {
-  if (index == 1) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => GamesPage()),
-    );
-  } else if (index == 3) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MemoryLogPage()),
-    );
-  } else if (index == 4) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsPage()),
-    ).then((_) {
-      setState(() {
-        _currentIndex = 0;
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => GamesPage()),
+      );
+    } else if (index == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MemoryLogPage()),
+      );
+    } else if (index == 4) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsPage()),
+      ).then((_) {
+        setState(() {
+          _currentIndex = 0;
+        });
       });
-    });
-  } else {
-    setState(() {
-      _currentIndex = index;
-    });
+    } else {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -333,9 +333,9 @@ class _HomePageState extends State<HomePage> {
               Container(
                 padding: const EdgeInsets.all(20.0),
                 constraints: BoxConstraints(
-                  minWidth: 500,  // Minimum width
+                  minWidth: 500, // Minimum width
                   minHeight: 150, // Minimum height
-                  maxWidth: 900,  // Maximum width
+                  maxWidth: 900, // Maximum width
                   maxHeight: 150, // Maximum height
                 ),
                 decoration: BoxDecoration(
@@ -434,7 +434,7 @@ class _HomePageState extends State<HomePage> {
                       label: 'SOS',
                       onTap: () {
                         Navigator.push(
-                        context,
+                          context,
                           MaterialPageRoute(
                             builder: (context) => SOSPage(),
                           ),
