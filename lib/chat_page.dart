@@ -39,7 +39,8 @@ class _ChatPageState extends State<ChatPage> {
       return "Sure, I’m here to help. What do you need assistance with?";
     } else if (lowerCaseInput.contains('what is your name')) {
       return "I'm a simple chatbot created to assist you.";
-    } else if (lowerCaseInput.contains('bye') || lowerCaseInput.contains('goodbye')) {
+    } else if (lowerCaseInput.contains('bye') ||
+        lowerCaseInput.contains('goodbye')) {
       return "Goodbye! Have a great day!";
     } else {
       return "Sorry, I didn't understand that. Can you ask something else?";
@@ -53,7 +54,8 @@ class _ChatPageState extends State<ChatPage> {
         title: Text('Chat'),
       ),
       body: Container(
-        color: Color.fromARGB(255, 183, 183, 183),  // Grey background color for the whole page
+        color: Color.fromARGB(255, 255, 255,
+            255), // Grey background color for the whole page Color.fromARGB(255, 183, 183, 183)
         child: Column(
           children: [
             Expanded(
@@ -70,13 +72,17 @@ class _ChatPageState extends State<ChatPage> {
                     child: Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: isUserMessage ? const Color(0xFF382973) : Colors.white,
+                        color: isUserMessage
+                            ? const Color(0xFF382973)
+                            : Color.fromARGB(255, 183, 183, 183),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         message['text']!,
                         style: TextStyle(
-                          color: isUserMessage ? Colors.white : Colors.black,
+                          color: isUserMessage
+                              ? Color.fromARGB(255, 255, 255, 255)
+                              : Colors.black,
                         ),
                       ),
                     ),
@@ -85,7 +91,7 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             Container(
-              color: Colors.white,  // White background for the input container
+              color: Colors.white, // White background for the input container
               padding: EdgeInsets.all(8.0),
               child: Row(
                 children: [
@@ -102,7 +108,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   IconButton(
                     icon: Icon(Icons.send),
-                    color: const Color(0xFF382973),  // Send button color
+                    color: const Color(0xFF382973), // Send button color
                     onPressed: () {
                       _sendMessage(_controller.text);
                     },
