@@ -32,7 +32,7 @@ class ProfileDetailsPage extends StatelessWidget {
                   Icon(
                     Icons.person,
                     color: Colors.white,
-                    size: 50,
+                    size: 70,
                   ),
                   SizedBox(width: 16),
                   Expanded(
@@ -60,7 +60,7 @@ class ProfileDetailsPage extends StatelessWidget {
                   Icon(
                     Icons.person,
                     color: Colors.white,
-                    size: 50,
+                    size: 70,
                   ),
                   SizedBox(width: 16),
                   Expanded(
@@ -87,7 +87,7 @@ class ProfileDetailsPage extends StatelessWidget {
                   Icon(
                     Icons.phone,
                     color: Colors.white,
-                    size: 50,
+                    size: 70,
                   ),
                   SizedBox(width: 16),
                   Expanded(

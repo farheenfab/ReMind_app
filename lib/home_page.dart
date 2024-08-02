@@ -33,31 +33,31 @@ class _HomePageState extends State<HomePage> {
   ];
 
   void onTabTapped(int index) {
-  if (index == 1) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => GamesPage()),
-    );
-  } else if (index == 3) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MemoryLogPage()),
-    );
-  } else if (index == 4) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsPage()),
-    ).then((_) {
-      setState(() {
-        _currentIndex = 0;
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => GamesPage()),
+      );
+    } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MemoryLogPage()),
+      );
+    } else if (index == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsPage()),
+      ).then((_) {
+        setState(() {
+          _currentIndex = 0;
+        });
       });
-    });
-  } else {
-    setState(() {
-      _currentIndex = index;
-    });
+    } else {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +107,9 @@ class _HomePageState extends State<HomePage> {
               Container(
                 padding: const EdgeInsets.all(20.0),
                 constraints: BoxConstraints(
-                  minWidth: 500,  // Minimum width
+                  minWidth: 500, // Minimum width
                   minHeight: 150, // Minimum height
-                  maxWidth: 900,  // Maximum width
+                  maxWidth: 900, // Maximum width
                   maxHeight: 150, // Maximum height
                 ),
                 decoration: BoxDecoration(
@@ -153,6 +153,8 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
+                  mainAxisSpacing: 20, // Vertical space between the items
+                  crossAxisSpacing: 20, // Horizontal space between the items
                   children: <Widget>[
                     HomeButton(
                       icon: Icons.calendar_today,
@@ -164,7 +166,6 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => CalendarPage(),
                           ),
                         );
-                        // Handle Calendar button tap
                       },
                       color: Color.fromARGB(255, 195, 255, 186),
                       iconSize: 50,
@@ -180,7 +181,6 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => MedicationPage(),
                           ),
                         );
-                        // Handle Medication button tap
                       },
                       color: Color.fromARGB(255, 255, 241, 113),
                       iconSize: 50,
@@ -193,12 +193,10 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ChatPage(), // Navigate to ChatPage
+                            builder: (context) => ChatPage(),
                           ),
                         );
                       },
-                      // Handle Let's Chat button ta
                       color: Color.fromARGB(255, 142, 199, 246),
                       iconSize: 50,
                       fontSize: 18,
@@ -208,12 +206,11 @@ class _HomePageState extends State<HomePage> {
                       label: 'SOS',
                       onTap: () {
                         Navigator.push(
-                        context,
+                          context,
                           MaterialPageRoute(
                             builder: (context) => SOSPage(),
                           ),
                         );
-                        // Handle SOS button tap
                       },
                       color: Color.fromARGB(255, 235, 142, 136),
                       iconSize: 50,
@@ -232,6 +229,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
@@ -240,10 +238,6 @@ class _HomePageState extends State<HomePage> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.games),
                 label: 'Games',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.mic),
-                label: 'Microphone',
               ),
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.brain),
@@ -258,6 +252,7 @@ class _HomePageState extends State<HomePage> {
             selectedItemColor: const Color(0xFF382973),
             unselectedItemColor: Colors.black,
             onTap: onTabTapped,
+            backgroundColor: Colors.white,
           ),
         ),
       ),

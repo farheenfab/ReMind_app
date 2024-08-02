@@ -14,7 +14,7 @@ class _SOSPageState extends State<SOSPage> {
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
-            height: 3.0,
+            height: 5.0,
             color: Colors.black,
           ),
         ),
@@ -47,7 +47,7 @@ class _SOSPageState extends State<SOSPage> {
                 );
               },
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 30),
             SOSContainer(
               icon: Icons.location_on,
               text: 'Lost? click here to find your way back home.',
@@ -55,7 +55,7 @@ class _SOSPageState extends State<SOSPage> {
                 // Add your desired functionality here
               },
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 30),
             SOSContainer(
               icon: Icons.local_hospital,
               text: 'Medical emergency? Click here to send alert to nearby clinic.',
@@ -97,7 +97,7 @@ class SOSContainer extends StatelessWidget {
             Icon(
               icon,
               color: Colors.white,
-              size: 50,
+              size: 80,
             ),
             SizedBox(width: 15),
             Expanded(
