@@ -52,10 +52,16 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Divider(
+            height: 1.0,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Container(
-        color: Color.fromARGB(255, 255, 255,
-            255), // Grey background color for the whole page Color.fromARGB(255, 183, 183, 183)
+        color: Colors.white, // Grey background color for the whole page
         child: Column(
           children: [
             Expanded(
@@ -74,15 +80,13 @@ class _ChatPageState extends State<ChatPage> {
                       decoration: BoxDecoration(
                         color: isUserMessage
                             ? const Color(0xFF382973)
-                            : Color.fromARGB(255, 183, 183, 183),
+                            : Color.fromARGB(255, 199, 197, 197),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         message['text']!,
                         style: TextStyle(
-                          color: isUserMessage
-                              ? Color.fromARGB(255, 255, 255, 255)
-                              : Colors.black,
+                          color: isUserMessage ? Colors.white : Colors.black,
                         ),
                       ),
                     ),
@@ -90,8 +94,17 @@ class _ChatPageState extends State<ChatPage> {
                 },
               ),
             ),
+            Divider(
+              height: 1.0,
+              color: const Color.fromARGB(255, 31, 31, 31),
+            ),
             Container(
-              color: Colors.white, // White background for the input container
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Color.fromARGB(255, 45, 44, 44),
+                ),
+                // width: 1.0), // Black border
+              ),
               padding: EdgeInsets.all(8.0),
               child: Row(
                 children: [
@@ -100,10 +113,11 @@ class _ChatPageState extends State<ChatPage> {
                       controller: _controller,
                       decoration: InputDecoration(
                         hintText: 'Type your message...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        hintStyle:
+                            TextStyle(color: Colors.grey), // Hint text color
+                        border: InputBorder.none, // Removes the default border
                       ),
+                      style: TextStyle(color: Colors.black), // Text input color
                     ),
                   ),
                   IconButton(
