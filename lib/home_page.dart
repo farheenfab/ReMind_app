@@ -6,6 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'calender_page.dart';
 import 'chat_page.dart';
 import 'medication_page.dart';
+import 'Screen/medicineView.dart';
+import 'Screen/sos.dart';
 import 'sos_page.dart';
 import 'games_page.dart';
 import 'memory_log_page.dart';
@@ -178,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MedicationPage(),
+                            builder: (context) => MedicineViewPage(),
                           ),
                         );
                       },
