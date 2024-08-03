@@ -14,6 +14,7 @@ class _CalendarPageState extends State<CalendarPage> {
   List<String> _selectedEvents = [];
   DateTime _selectedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
 
   @override
   void initState() {
@@ -78,6 +79,7 @@ class _CalendarPageState extends State<CalendarPage> {
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _selectedDay = selectedDay;
+      _focusedDay = focusedDay;
       _selectedEvents = _events[selectedDay] ?? [];
     });
   }
@@ -112,7 +114,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   TableCalendar(
                     firstDay: DateTime.utc(2000, 1, 1),
                     lastDay: DateTime.utc(2100, 12, 31),
-                    focusedDay: _selectedDay,
+                    focusedDay: _focusedDay,
                     selectedDayPredicate: (day) {
                       return isSameDay(_selectedDay, day);
                     },
@@ -126,23 +128,38 @@ class _CalendarPageState extends State<CalendarPage> {
                       outsideDaysVisible: false,
                       defaultTextStyle: TextStyle(color: Colors.black),
                       weekendTextStyle: TextStyle(color: Colors.black),
+                      selectedTextStyle: TextStyle(
+                        color: Colors.black,
+                      ),
                       selectedDecoration: BoxDecoration(
-                        color: const Color(0xFF382973),
                         shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2.0,
+                        ),
+                        color: isSameDay(_selectedDay, DateTime.now())
+                            ? Colors.transparent
+                            : Colors.transparent,
                       ),
                       todayDecoration: BoxDecoration(
-                        color: Colors.green,
+                        color: Color.fromARGB(255, 190, 180, 227),
                         shape: BoxShape.circle,
                       ),
                     ),
                     headerStyle: HeaderStyle(
                       formatButtonVisible: true,
-                      titleTextStyle: TextStyle(color: Colors.black, fontSize: 16),
-                      leftChevronIcon: Icon(Icons.chevron_left, color: const Color(0xFF382973)),
-                      rightChevronIcon: Icon(Icons.chevron_right, color: const Color(0xFF382973)),
+                      titleTextStyle:
+                          TextStyle(color: Colors.black, fontSize: 16),
+                      leftChevronIcon: Icon(Icons.chevron_left,
+                          color: Color.fromARGB(255, 174, 161, 226)),
+                      rightChevronIcon: Icon(Icons.chevron_right,
+                          color: const Color(0xFF382973)),
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: Colors.black, width: 1.0), // Black line under the title
+                          bottom: BorderSide(
+                            color: Colors.black,
+                            width: 1.0, // Black line under the title
+                          ),
                         ),
                       ),
                     ),
@@ -164,8 +181,10 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add, color: Colors.white),  // Ensure the icon is visible with the button color
-        backgroundColor: const Color(0xFF382973),  // Button color
+        child: Icon(Icons.add,
+            color: Colors
+                .white), // Ensure the icon is visible with the button color
+        backgroundColor: const Color(0xFF382973), // Button color
         onPressed: () {
           _showAddEventDialog();
         },
@@ -174,55 +193,56 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _showAddEventDialog() {
-  final TextEditingController controller = TextEditingController();
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: const Color(0xFF382973), // Background color of the dialog
-      title: Text(
-        'Add Event',
-        style: TextStyle(color: Colors.white), // Title text color
-      ),
-      content: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: 'Enter event',
-          hintStyle: TextStyle(color: Colors.white54), // Hint text color
-          border: InputBorder.none, // Remove underline
+    final TextEditingController controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor:
+            const Color(0xFF382973), // Background color of the dialog
+        title: Text(
+          'Add Event',
+          style: TextStyle(color: Colors.white), // Title text color
         ),
-        style: TextStyle(color: Colors.white), // Text field input color
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'Cancel',
-            style: TextStyle(color: Colors.white), // Cancel button text color
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: 'Enter event',
+            hintStyle: TextStyle(color: Colors.white54), // Hint text color
+            border: InputBorder.none, // Remove underline
           ),
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.red, // Cancel button background color
-          ),
+          style: TextStyle(color: Colors.white), // Text field input color
         ),
-        TextButton(
-          onPressed: () {
-            final event = controller.text;
-            if (event.isNotEmpty) {
-              _addEvent(event);
+        actions: [
+          TextButton(
+            onPressed: () {
               Navigator.of(context).pop();
-            }
-          },
-          child: Text(
-            'Add',
-            style: TextStyle(color: Colors.white), // Add button text color
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white), // Cancel button text color
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.red, // Cancel button background color
+            ),
           ),
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.green, // Add button background color
+          TextButton(
+            onPressed: () {
+              final event = controller.text;
+              if (event.isNotEmpty) {
+                _addEvent(event);
+                Navigator.of(context).pop();
+              }
+            },
+            child: Text(
+              'Add',
+              style: TextStyle(color: Colors.white), // Add button text color
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.green, // Add button background color
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }
