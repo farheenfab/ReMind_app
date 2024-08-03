@@ -13,13 +13,22 @@ class SOSPage extends StatelessWidget {
         title: const Text('SOS Page'),
       ),
       body: Container(
-        color: const Color.fromARGB(255, 212, 212, 212), // Light grey background color
+        color: Color.fromARGB(255, 250, 165, 165), // Light grey background color
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                const Text(
+                  'PLEASE, CHOOSE THE EMERGENCY FROM BELOW',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 40), // Space between the text and buttons
                 SOSButton(
                   icon: Icons.phone,
                   text: 'Send alert to caretaker & emergency contact',
@@ -30,7 +39,7 @@ class SOSPage extends StatelessWidget {
                 const SizedBox(height: 40),
                 SOSButton(
                   icon: Icons.location_on,
-                  text: 'Lost! Find me!',
+                  text: 'Lost? Click here for your way back home!',
                   onPressed: () async {
                     double latitude = 37.7749;
                     double longitude = -122.4194;
@@ -40,7 +49,7 @@ class SOSPage extends StatelessWidget {
                 const SizedBox(height: 40),
                 SOSButton(
                   icon: Icons.local_hospital,
-                  text: 'Medical Emergency! Call 911!',
+                  text: 'Medical Emergency? Click here to call 911!',
                   onPressed: () async {
                     await callEmergencyNumber(context, '911');
                   },

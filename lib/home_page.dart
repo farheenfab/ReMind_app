@@ -102,11 +102,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(15.0),
+                // padding: const EdgeInsets.all(0),
                 constraints: BoxConstraints(
                   minWidth: 500, // Minimum width
                   minHeight: 50, // Minimum height reduced
@@ -114,8 +114,8 @@ class _HomePageState extends State<HomePage> {
                   maxHeight: 70, // Maximum height reduced
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 187, 193, 255),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Color.fromARGB(255, 29, 6, 65),
+                  // borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -125,10 +125,10 @@ class _HomePageState extends State<HomePage> {
                       style: const TextStyle(
                         fontSize: 24, // Reduced font size
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    // const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 204, 251, 196),
+                      color: Color.fromARGB(255, 151, 210, 140),
                       iconSize: 50,
                       fontSize: 18,
                     ),
@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                   maxHeight: 170, // Fixed height for the task container
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 6, 17, 65),
+                  color: Color.fromARGB(255, 29, 6, 65),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
