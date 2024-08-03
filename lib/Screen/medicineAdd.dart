@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'medicineview.dart'; // Import the MedicineViewPage
 
 class AddMedicineScreen extends StatefulWidget {
   @override
@@ -55,14 +56,14 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               Text('Days of the Week'),
               SizedBox(height: 10),
               Wrap(
-                spacing: 8.0,
+                spacing: 4.0,
                 children: List<Widget>.generate(_daysOfWeek.length, (int index) {
                   return ChoiceChip(
                     label: Text(_daysOfWeek[index]),
                     selected: _selectedDays.contains(_fullDaysOfWeek[index]),
                     shape: CircleBorder(),
                     backgroundColor: Colors.grey.shade200,
-                    selectedColor: Colors.blue,
+                    selectedColor: Colors.grey.shade300, // Changed to remove the tick mark appearance
                     onSelected: (bool selected) {
                       setState(() {
                         if (selected) {
@@ -190,6 +191,14 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                         _selectedFoodOption = null;
                         _isSelectedFoodOption = [true, false];
                       });
+
+                      // Navigate to MedicineViewPage
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MedicineViewPage(),
+                        ),
+                      );
                     } else {
                       // Show a message if the pill already exists
                       ScaffoldMessenger.of(context).showSnackBar(

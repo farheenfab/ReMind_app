@@ -16,12 +16,12 @@ class MedicineViewPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.add, color: Colors.black),
               onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddMedicineScreen(),
-                          ),
-                        );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddMedicineScreen(),
+                  ),
+                );
               },
             ),
           ],
@@ -67,7 +67,6 @@ class MedicineList extends StatelessWidget {
     );
   }
 }
-
 
 class MedicineCard extends StatelessWidget {
   final String id;
@@ -131,10 +130,7 @@ class MedicineCard extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
-                        FirebaseFirestore.instance
-                            .collection('Medicine')
-                            .doc(id)
-                            .delete();
+                        _showDeleteConfirmationDialog(context, id);
                       },
                     ),
                   ],
@@ -154,6 +150,43 @@ class MedicineCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Deletion'),
+          content: Text('Are you sure you want to delete this medicine?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('Medicine')
+                    .doc(id)
+                    .delete()
+                    .then((_) {
+                  Navigator.of(context).pop(); // Close the dialog
+                }).catchError((error) {
+                  // Handle any errors here
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to delete medicine: $error')),
+                  );
+                });
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

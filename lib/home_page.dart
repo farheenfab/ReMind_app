@@ -8,7 +8,6 @@ import 'chat_page.dart';
 import 'medication_page.dart';
 import 'Screen/medicineView.dart';
 import 'Screen/sos.dart';
-import 'sos_page.dart';
 import 'games_page.dart';
 import 'memory_log_page.dart';
 
@@ -103,46 +102,47 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(15.0),
                 constraints: BoxConstraints(
                   minWidth: 500, // Minimum width
-                  minHeight: 150, // Minimum height
+                  minHeight: 120, // Minimum height reduced
                   maxWidth: 900, // Maximum width
-                  maxHeight: 150, // Maximum height
+                  maxHeight: 120, // Maximum height reduced
                 ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF382973),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Hello, ${widget.username} !',
+                      'Hello, ${widget.username}!',
                       style: const TextStyle(
-                        fontSize: 28,
+                        fontSize: 24, // Reduced font size
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Date: $formattedDate',
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 16, // Reduced font size
                             color: Colors.white,
                           ),
                         ),
                         Text(
                           'Time: $formattedTime',
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 16, // Reduced font size
                             color: Colors.white,
                           ),
                         ),
@@ -151,12 +151,12 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 20, // Vertical space between the items
-                  crossAxisSpacing: 20, // Horizontal space between the items
+                  mainAxisSpacing: 8, // Vertical space between the items
+                  crossAxisSpacing: 8, // Horizontal space between the items
                   children: <Widget>[
                     HomeButton(
                       icon: Icons.calendar_today,
@@ -217,6 +217,50 @@ class _HomePageState extends State<HomePage> {
                       color: Color.fromARGB(255, 235, 142, 136),
                       iconSize: 50,
                       fontSize: 18,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                constraints: BoxConstraints(
+                  minWidth: 500, // Minimum width
+                  minHeight: 100, // Minimum height
+                  maxWidth: 900, // Maximum width
+                  maxHeight: 120, // Fixed height for the task container
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF382973),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+
+                  children: [
+                    Text(
+                      'Tasks For The Day',
+                      style: const TextStyle(
+                        fontSize: 22, // Reduced font size
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Expanded(
+                      child: ListView(
+                        children: List.generate(
+                          10, // Replace this with your dynamic task list length
+                          (index) => Text(
+                            'Task ${index + 1}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
