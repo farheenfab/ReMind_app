@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'editMedicine.dart';
 import 'medicineAdd.dart';
 
@@ -28,6 +27,7 @@ class MedicineViewPage extends StatelessWidget {
         ),
       ),
       body: MedicineList(),
+      backgroundColor: Colors.white, // Set the background color of the page to white
     );
   }
 }
@@ -89,8 +89,13 @@ class MedicineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       margin: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: _getPastelColor(), // Set the container color to a pastel color
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.black, width: 1), // Black border
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -153,6 +158,18 @@ class MedicineCard extends StatelessWidget {
     );
   }
 
+  // Helper function to get a random pastel color
+  Color _getPastelColor() {
+    final pastelColors = [
+      Color(0xFFFFF1E6), // Light Peach
+      Color(0xFFE0F7FA), // Light Cyan
+      Color(0xFFFFF9C4), // Light Yellow
+      Color(0xFFE1BEE7), // Light Lavender
+      Color(0xFFC8E6C9), // Light Green
+    ];
+    return pastelColors[id.hashCode % pastelColors.length];
+  }
+
   void _showDeleteConfirmationDialog(BuildContext context, String id) {
     showDialog(
       context: context,
@@ -187,6 +204,6 @@ class MedicineCard extends StatelessWidget {
           ],
         );
       },
-    );
+    );                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
   }
 }

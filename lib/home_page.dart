@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                   maxHeight: 120, // Maximum height reduced
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF382973),
+                  color: Color.fromARGB(255, 202, 190, 252),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                       style: const TextStyle(
                         fontSize: 24, // Reduced font size
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 5),
@@ -136,14 +136,14 @@ class _HomePageState extends State<HomePage> {
                           'Date: $formattedDate',
                           style: const TextStyle(
                             fontSize: 16, // Reduced font size
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         Text(
                           'Time: $formattedTime',
                           style: const TextStyle(
                             fontSize: 16, // Reduced font size
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 195, 255, 186),
+                      color: Color.fromARGB(255, 204, 251, 196),
                       iconSize: 50,
                       fontSize: 18,
                     ),
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 255, 241, 113),
+                      color: Color.fromARGB(255, 253, 242, 139),
                       iconSize: 50,
                       fontSize: 18,
                     ),
@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 142, 199, 246),
+                      color: Color.fromARGB(255, 168, 213, 250),
                       iconSize: 50,
                       fontSize: 18,
                     ),
@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 235, 142, 136),
+                      color: Color.fromARGB(255, 255, 161, 154),
                       iconSize: 50,
                       fontSize: 18,
                     ),
@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                   maxHeight: 120, // Fixed height for the task container
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF382973),
+                  color: Color.fromARGB(255, 90, 79, 134),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       'Tasks For The Day',
                       style: const TextStyle(
-                        fontSize: 22, // Reduced font size
+                        fontSize: 20, // Reduced font size
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -255,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                           (index) => Text(
                             'Task ${index + 1}',
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               color: Colors.white,
                             ),
                           ),
