@@ -10,6 +10,7 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'voice_settings.dart';
 import 'database.dart';
 import 'journal_listview.dart';
+import 'calanderEvent.dart';
 
 
 Future<void> main() async{
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
   final double pitch;
   final double speechRate;
   
-  MyApp({super.key, required this.voice , required this.volume, required this.pitch, required this.speechRate});
+  const MyApp({super.key, required this.voice , required this.volume, required this.pitch, required this.speechRate});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: const JournalDiaryEntry(),
       // home: VoiceSettings(),
-
+      // home: const CalendarEvent(),
     );
 
   }
