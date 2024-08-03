@@ -62,9 +62,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime now = DateTime.now();
-    final String formattedDate = DateFormat('yyyy-MM-dd').format(now);
-    final String formattedTime = DateFormat('HH:mm').format(now);
+    // final DateTime now = DateTime.now();
+    // final String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    // final String formattedTime = DateFormat('HH:mm').format(now);
 
     return WillPopScope(
       onWillPop: () async {
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
           title: const Text('Home'),
           actions: [
@@ -109,12 +109,12 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(15.0),
                 constraints: BoxConstraints(
                   minWidth: 500, // Minimum width
-                  minHeight: 120, // Minimum height reduced
+                  minHeight: 50, // Minimum height reduced
                   maxWidth: 900, // Maximum width
-                  maxHeight: 120, // Maximum height reduced
+                  maxHeight: 70, // Maximum height reduced
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 202, 190, 252),
+                  color: Color.fromARGB(255, 187, 193, 255),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -132,20 +132,20 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Date: $formattedDate',
-                          style: const TextStyle(
-                            fontSize: 16, // Reduced font size
-                            color: Colors.black,
-                          ),
-                        ),
-                        Text(
-                          'Time: $formattedTime',
-                          style: const TextStyle(
-                            fontSize: 16, // Reduced font size
-                            color: Colors.black,
-                          ),
-                        ),
+                        // Text(
+                        //   'Date: $formattedDate',
+                        //   style: const TextStyle(
+                        //     fontSize: 16, // Reduced font size
+                        //     color: Colors.black,
+                        //   ),
+                        // ),
+                        // Text(
+                        //   'Time: $formattedTime',
+                        //   style: const TextStyle(
+                        //     fontSize: 16, // Reduced font size
+                        //     color: Colors.black,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],
@@ -221,23 +221,22 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 5),
               Container(
                 padding: const EdgeInsets.all(15.0),
                 constraints: BoxConstraints(
                   minWidth: 500, // Minimum width
                   minHeight: 100, // Minimum height
                   maxWidth: 900, // Maximum width
-                  maxHeight: 120, // Fixed height for the task container
+                  maxHeight: 170, // Fixed height for the task container
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 90, 79, 134),
+                  color: Color.fromARGB(255, 6, 17, 65),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: [
                     Text(
                       'Tasks For The Day',
