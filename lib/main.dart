@@ -9,6 +9,7 @@ import 'messages.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'voice_settings.dart';
 import 'database.dart';
+import 'journal_listview.dart';
 
 
 Future<void> main() async{
@@ -209,7 +210,8 @@ class _MyHomePageState extends State<MyHomePage> {
         IconButton(onPressed: () => Navigator.push(
           context,
           // MaterialPageRoute(builder: (context) => const JournalDiaryEntry()),
-          MaterialPageRoute(builder: (context) => VoiceSettings()),
+          MaterialPageRoute(builder: (context) => DisplayData()),        // Journal list page
+          // MaterialPageRoute(builder: (context) => VoiceSettings()),   // Voice settings page
         ), icon: const Icon(Icons.add_circle))
         ,
         title: const Text('Chat with Gemini'),
