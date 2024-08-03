@@ -39,6 +39,18 @@ dependencies:
   url_launcher: ^6.3.0
   permission_handler: ^11.3.1
   background_sms: ^0.0.4
+  firebase_database: ^11.0.3
+  cloud_firestore_platform_interface: ^6.2.9
+  cloud_firestore: ^5.1.0
+  alarm: ^3.1.4
+  flutter_local_notifications: ^17.2.1+2
+  timezone: ^0.9.4
+  image_picker: ^1.1.2
+  firebase_storage: ^12.1.1
+  file_picker: ^8.0.6
+  firebase_messaging: ^15.0.4
+  # android_alarm_manager_plus: ^4.0.3
+  # flutter_local_notifications: ^17.2.1+2
 
 dev_dependencies:
   flutter_test:
