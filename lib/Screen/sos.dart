@@ -13,7 +13,17 @@ class SOSPage extends StatelessWidget {
         title: const Text('SOS Page'),
       ),
       body: Container(
-        color: Color.fromARGB(255, 250, 165, 165), // Light grey background color
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromARGB(255, 180, 54, 54), // Dark red
+              Color.fromARGB(255, 219, 99, 99), // Red
+              Color(0xFFFFA07A), // Light red (light salmon)
+            ],
+          ),
+        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -25,7 +35,7 @@ class SOSPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 40), // Space between the text and buttons
