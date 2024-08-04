@@ -94,7 +94,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendar'),
+        title: Text('Calendar', style: TextStyle(fontWeight: FontWeight.bold)),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
@@ -104,11 +104,23 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
       body: Container(
-        color: Colors.white, // White background for the entire page
+        color: Colors.white, // Background for the entire page
         child: Column(
           children: [
             Container(
-              color: Colors.white, // Ensure background color is white
+              padding: EdgeInsets.all(16.0), // Adjust padding as needed
+              margin: EdgeInsets.all(
+                  16.0), // Add margin to create space around the container
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 238, 232,
+                    250), // Pastel purple background for the calendar container
+                borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                border: Border.all(
+                  color: Colors.black
+                      .withOpacity(0.5), // Border color with opacity
+                  width: 1.5, // Border width
+                ),
+              ),
               child: Column(
                 children: [
                   TableCalendar(
@@ -126,8 +138,10 @@ class _CalendarPageState extends State<CalendarPage> {
                     onFormatChanged: _onFormatChanged,
                     calendarStyle: CalendarStyle(
                       outsideDaysVisible: false,
-                      defaultTextStyle: TextStyle(color: Colors.black),
-                      weekendTextStyle: TextStyle(color: Colors.black),
+                      defaultTextStyle: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                      weekendTextStyle: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
                       selectedTextStyle: TextStyle(
                         color: Colors.black,
                       ),
@@ -142,14 +156,16 @@ class _CalendarPageState extends State<CalendarPage> {
                             : Colors.transparent,
                       ),
                       todayDecoration: BoxDecoration(
-                        color: Color.fromARGB(255, 190, 180, 227),
+                        color: Color.fromARGB(255, 64, 50, 118),
                         shape: BoxShape.circle,
                       ),
                     ),
                     headerStyle: HeaderStyle(
                       formatButtonVisible: true,
-                      titleTextStyle:
-                          TextStyle(color: Colors.black, fontSize: 16),
+                      titleTextStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                       leftChevronIcon: Icon(Icons.chevron_left,
                           color: Color.fromARGB(255, 174, 161, 226)),
                       rightChevronIcon: Icon(Icons.chevron_right,
@@ -171,9 +187,7 @@ class _CalendarPageState extends State<CalendarPage> {
             Expanded(
               child: ListView(
                 children: _selectedEvents
-                    .map((event) => ListTile(
-                          title: Text(event),
-                        ))
+                    .map((event) => _buildEventTile(event))
                     .toList(),
               ),
             ),
@@ -192,6 +206,39 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  Widget _buildEventTile(String event) {
+    final List<Color> pastelColors = [
+      Color.fromARGB(255, 243, 219, 238), // Pastel pink
+      Color(0xFFBBDEFB), // Pastel blue
+      Color(0xFFC8E6C9), // Pastel green
+      Color(0xFFFFF9C4), // Pastel yellow
+      Color(0xFFD1C4E9), // Pastel purple
+    ];
+
+    final Color color =
+        pastelColors[_selectedEvents.indexOf(event) % pastelColors.length];
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 6.0,
+            spreadRadius: 2.0,
+          ),
+        ],
+      ),
+      child: Text(
+        event,
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
   void _showAddEventDialog() {
     final TextEditingController controller = TextEditingController();
     showDialog(
@@ -201,7 +248,9 @@ class _CalendarPageState extends State<CalendarPage> {
             const Color(0xFF382973), // Background color of the dialog
         title: Text(
           'Add Event',
-          style: TextStyle(color: Colors.white), // Title text color
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold), // Title text color
         ),
         content: TextField(
           controller: controller,

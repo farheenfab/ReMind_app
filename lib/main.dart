@@ -14,7 +14,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); 
+  await Firebase.initializeApp();
 //   await Firebase.initializeApp(
 //    options: DefaultFirebaseOptions.currentPlatform,
 //  );
@@ -27,7 +27,6 @@ void main() async {
 
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -80,7 +79,8 @@ class HomeScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                navigateToMedicineView(context);  // Add navigation to MedicineViewPage
+                navigateToMedicineView(
+                    context); // Add navigation to MedicineViewPage
               },
               child: const Text('View Medicines'),
             ),
@@ -110,7 +110,7 @@ void navigateToMedicineReminder(BuildContext context) {
 void navigateToMedicineView(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => MedicineViewPage(),  
+      builder: (context) => MedicineViewPage(),
     ),
   );
 }
