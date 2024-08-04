@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'profile_page.dart';
 import 'settings.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'calender_page.dart';
 import 'chat_page.dart';
 import 'medication_page.dart';
@@ -62,10 +61,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final DateTime now = DateTime.now();
-    // final String formattedDate = DateFormat('yyyy-MM-dd').format(now);
-    // final String formattedTime = DateFormat('HH:mm').format(now);
-
     return WillPopScope(
       onWillPop: () async {
         if (_currentIndex != 0) {
@@ -77,7 +72,7 @@ class _HomePageState extends State<HomePage> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Home'),
           actions: [
@@ -106,16 +101,15 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Container(
-                // padding: const EdgeInsets.all(0),
                 constraints: BoxConstraints(
-                  minWidth: 500, // Minimum width
-                  minHeight: 50, // Minimum height reduced
-                  maxWidth: 900, // Maximum width
-                  maxHeight: 70, // Maximum height reduced
+                  minWidth: 500,
+                  minHeight: 50,
+                  maxWidth: 900,
+                  maxHeight: 70,
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 29, 6, 65),
-                  // borderRadius: BorderRadius.circular(10),
+                  color: Color.fromARGB(255, 41, 19, 76),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -123,30 +117,10 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       'Hello, ${widget.username}!',
                       style: const TextStyle(
-                        fontSize: 24, // Reduced font size
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
-                    ),
-                    // const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Text(
-                        //   'Date: $formattedDate',
-                        //   style: const TextStyle(
-                        //     fontSize: 16, // Reduced font size
-                        //     color: Colors.black,
-                        //   ),
-                        // ),
-                        // Text(
-                        //   'Time: $formattedTime',
-                        //   style: const TextStyle(
-                        //     fontSize: 16, // Reduced font size
-                        //     color: Colors.black,
-                        //   ),
-                        // ),
-                      ],
                     ),
                   ],
                 ),
@@ -155,8 +129,8 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 8, // Vertical space between the items
-                  crossAxisSpacing: 8, // Horizontal space between the items
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
                   children: <Widget>[
                     HomeButton(
                       icon: Icons.calendar_today,
@@ -169,8 +143,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 151, 210, 140),
-                      iconSize: 50,
+                      color: Color.fromARGB(255, 180, 224, 173),
+                      iconColor: Color.fromARGB(255, 0, 100, 0), // Dark green
+                      iconSize: 60,
                       fontSize: 18,
                     ),
                     HomeButton(
@@ -184,8 +159,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 253, 242, 139),
-                      iconSize: 50,
+                      color: Color.fromARGB(255, 252, 233, 156),
+                      iconColor: Color.fromARGB(255, 223, 180, 39), // Custom color for medication icon
+                      iconSize: 60,
                       fontSize: 18,
                     ),
                     HomeButton(
@@ -200,7 +176,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 168, 213, 250),
-                      iconSize: 50,
+                      iconColor: const Color.fromARGB(255, 30, 110, 175), // Custom color for chat icon
+                      iconSize: 60,
                       fontSize: 18,
                     ),
                     HomeButton(
@@ -214,8 +191,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      color: Color.fromARGB(255, 255, 161, 154),
-                      iconSize: 50,
+                      color: Color.fromARGB(255, 255, 174, 174),
+                      iconColor: Color.fromARGB(255, 222, 38, 5), // Custom color for SOS icon
+                      iconSize: 60,
                       fontSize: 18,
                     ),
                   ],
@@ -225,23 +203,22 @@ class _HomePageState extends State<HomePage> {
               Container(
                 padding: const EdgeInsets.all(15.0),
                 constraints: BoxConstraints(
-                  minWidth: 500, // Minimum width
-                  minHeight: 100, // Minimum height
-                  maxWidth: 900, // Maximum width
-                  maxHeight: 170, // Fixed height for the task container
+                  minWidth: 500,
+                  minHeight: 100,
+                  maxWidth: 900,
+                  maxHeight: 170,
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 29, 6, 65),
+                  color: Color.fromARGB(255, 41, 19, 76),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Tasks For The Day',
                       style: const TextStyle(
-                        fontSize: 20, // Reduced font size
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -250,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: ListView(
                         children: List.generate(
-                          10, // Replace this with your dynamic task list length
+                          10,
                           (index) => Text(
                             'Task ${index + 1}',
                             style: const TextStyle(
@@ -294,7 +271,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
             currentIndex: _currentIndex,
-            selectedItemColor: const Color(0xFF382973),
+            selectedItemColor: Color.fromARGB(255, 59, 45, 114),
             unselectedItemColor: Colors.black,
             onTap: onTabTapped,
             backgroundColor: Colors.white,
@@ -319,6 +296,7 @@ class HomeButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
   final Color color;
+  final Color iconColor;
 
   final double iconSize;
   final double fontSize;
@@ -329,6 +307,7 @@ class HomeButton extends StatelessWidget {
     required this.label,
     required this.onTap,
     required this.color,
+    required this.iconColor,
     required this.iconSize,
     required this.fontSize,
   }) : super(key: key);
@@ -346,7 +325,7 @@ class HomeButton extends StatelessWidget {
               Icon(
                 icon,
                 size: iconSize,
-                color: Colors.black,
+                color: iconColor, // Use the passed color
               ),
               const SizedBox(height: 10),
               Text(

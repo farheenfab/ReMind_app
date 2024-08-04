@@ -88,7 +88,7 @@ class SOSButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
           child: Row(
             children: [
-              Icon(icon, color: Color.fromARGB(255, 255, 110, 100), size: 70.0), // Red icon on the left
+              Icon(icon, color: Color.fromARGB(255, 191, 46, 35), size: 70.0), // Red icon on the left
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
