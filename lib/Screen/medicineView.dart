@@ -8,12 +8,13 @@ class MedicineViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Medicine View'),
+            Text('Medicine View', style: TextStyle(color: Colors.white)),
             IconButton(
-              icon: Icon(Icons.add, color: Colors.black),
+              icon: Icon(Icons.add, color: Colors.white), // White icon color
               onPressed: () {
                 Navigator.push(
                   context,
@@ -27,7 +28,7 @@ class MedicineViewPage extends StatelessWidget {
         ),
       ),
       body: MedicineList(),
-      backgroundColor: Colors.white, // Set the background color of the page to white
+      backgroundColor: Color(0xFFFFFFFF), // Set the background color of the page to white
     );
   }
 }
@@ -94,7 +95,7 @@ class MedicineCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: _getPastelColor(), // Set the container color to a pastel color
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black, width: 1), // Black border
+        border: Border.all(color: Colors.black.withOpacity(0.1), width: 1), // Subtle border
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -109,12 +110,13 @@ class MedicineCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 0, 0, 0), // Dark Purple text color
                   ),
                 ),
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: Icon(Icons.edit, color: Color.fromARGB(255, 21, 94, 37)), // Dark Purple icon color
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -133,7 +135,7 @@ class MedicineCard extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: Icon(Icons.delete, color: Color(0xFFB71C1C)), // Red icon color for delete
                       onPressed: () {
                         _showDeleteConfirmationDialog(context, id);
                       },
@@ -143,15 +145,15 @@ class MedicineCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 8),
-            Text('Strength: $strength'),
+            Text('Strength: $strength', style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
-            Text('Days: ${days.join(', ')}'),
+            Text('Days: ${days.join(', ')}', style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
-            Text('Frequency: $frequency'),
+            Text('Frequency: $frequency', style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
-            Text('Food Option: $foodOption'),
+            Text('Food Option: $foodOption', style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
-            Text('Reminder Time: $remainderTime'),
+            Text('Reminder Time: $remainderTime', style: TextStyle(fontSize: 16)),
           ],
         ),
       ),
@@ -175,14 +177,14 @@ class MedicineCard extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Deletion'),
+          title: Text('Confirm Deletion', style: TextStyle(color: Color(0xFF3B155E))),
           content: Text('Are you sure you want to delete this medicine?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(color: Color(0xFF3B155E))),
             ),
             TextButton(
               onPressed: () {
@@ -199,11 +201,11 @@ class MedicineCard extends StatelessWidget {
                   );
                 });
               },
-              child: Text('Yes'),
+              child: Text('Yes', style: TextStyle(color: Color(0xFFB71C1C))),
             ),
           ],
         );
       },
-    );                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+    );
   }
 }

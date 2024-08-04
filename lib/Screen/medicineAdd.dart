@@ -63,7 +63,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                     selected: _selectedDays.contains(_fullDaysOfWeek[index]),
                     shape: CircleBorder(),
                     backgroundColor: Colors.grey.shade200,
-                    selectedColor: Colors.grey.shade300, // Changed to remove the tick mark appearance
+                    selectedColor: Color.fromARGB(255, 59, 21, 94), // Changed to remove the tick mark appearance
                     onSelected: (bool selected) {
                       setState(() {
                         if (selected) {

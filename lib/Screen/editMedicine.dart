@@ -61,41 +61,64 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Medicine'),
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Purple background color
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: pillNameController,
-              decoration: InputDecoration(labelText: 'Pill Name'),
-            ),
-            TextField(
-              controller: strengthController,
-              decoration: InputDecoration(labelText: 'Strength'),
-            ),
-            TextField(
-              controller: daysController,
-              decoration: InputDecoration(labelText: 'Days'),
-            ),
-            TextField(
-              controller: frequencyController,
-              decoration: InputDecoration(labelText: 'Frequency'),
-            ),
-            TextField(
-              controller: foodOptionController,
-              decoration: InputDecoration(labelText: 'Food Option'),
-            ),
-            TextField(
-              controller: remainderTimeController,
-              decoration: InputDecoration(labelText: 'Reminder Time'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: updateMedicine,
-              child: Text('Update Medicine'),
-            ),
-          ],
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView( // Added SingleChildScrollView to prevent overflow
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTextField(pillNameController, 'Pill Name', Icons.medication),
+              SizedBox(height: 15),
+              _buildTextField(strengthController, 'Strength', Icons.info_outline),
+              SizedBox(height: 15),
+              _buildTextField(daysController, 'Days', Icons.calendar_today),
+              SizedBox(height: 15),
+              _buildTextField(frequencyController, 'Frequency', Icons.schedule),
+              SizedBox(height: 15),
+              _buildTextField(foodOptionController, 'Food Option', Icons.restaurant),
+              SizedBox(height: 15),
+              _buildTextField(remainderTimeController, 'Reminder Time', Icons.alarm),
+              SizedBox(height: 30),
+              Center(
+                child: ElevatedButton(
+                  onPressed: updateMedicine,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 41, 19, 76), // Purple color
+                    foregroundColor : Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // Rounded corners
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  ),
+                  child: Text(
+                    'Update Medicine',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      TextEditingController controller, String labelText, IconData icon) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: Icon(icon, color: Color.fromARGB(255, 59, 21, 94)), // Purple icon color
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10), // Rounded corners
+          borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Purple border
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10), // Rounded corners
+          borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Purple border when focused
         ),
       ),
     );
