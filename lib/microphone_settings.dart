@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bottom_navigation.dart'; // Import the custom navigation bar
+import 'home_page.dart';
+import 'settings.dart';
+import 'games_page.dart';
+import 'memory_log_page.dart';
 
 class MicrophoneSettingsPage extends StatefulWidget {
   @override
@@ -53,21 +58,31 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Microphone Voice Settings'),
+        title: Text('Microphone Voice Settings',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Color(0xFF382973)), // Dark purple icons
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Voice Type', style: TextStyle(fontSize: 18)),
+            Text('Voice Type',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold)),
             Row(
               children: [
                 Expanded(
                   child: RadioListTile<String>(
-                    title: const Text('Male'),
+                    title: const Text('Male',
+                        style: TextStyle(color: Colors.black)),
                     value: 'male',
                     groupValue: _voiceType,
+                    activeColor: Color(0xFF382973), // Dark purple
                     onChanged: (String? value) {
                       if (value != null) {
                         setState(() {
@@ -80,9 +95,11 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
                 ),
                 Expanded(
                   child: RadioListTile<String>(
-                    title: const Text('Female'),
+                    title: const Text('Female',
+                        style: TextStyle(color: Colors.black)),
                     value: 'female',
                     groupValue: _voiceType,
+                    activeColor: Color(0xFF382973), // Dark purple
                     onChanged: (String? value) {
                       if (value != null) {
                         setState(() {
@@ -96,13 +113,20 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
               ],
             ),
             SizedBox(height: 20),
-            Text('Speech Rate', style: TextStyle(fontSize: 18)),
+            Text('Speech Rate',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold)),
             Slider(
               value: _speechRate,
               min: 0.5,
               max: 2.0,
               divisions: 6,
               label: _speechRate.toStringAsFixed(1),
+              activeColor: Color(0xFF382973), // Dark purple
+              inactiveColor:
+                  Color(0xFF382973).withOpacity(0.3), // Lighter purple
               onChanged: (double value) {
                 setState(() {
                   _speechRate = value;
@@ -112,6 +136,30 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 3, // Set to a default value; adjust as needed
+        onTap: (index) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                switch (index) {
+                  case 0:
+                    return HomePage(username: 'User');
+                  case 1:
+                    return GamesPage();
+                  case 2:
+                    return MemoryLogPage();
+                  case 3:
+                    return SettingsPage();
+                  default:
+                    return MicrophoneSettingsPage();
+                }
+              },
+            ),
+          );
+        },
       ),
     );
   }

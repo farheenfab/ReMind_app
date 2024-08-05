@@ -1,3 +1,4 @@
+// home.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'profile_page.dart';
@@ -9,6 +10,7 @@ import 'Screen/medicineView.dart';
 import 'Screen/sos.dart';
 import 'games_page.dart';
 import 'memory_log_page.dart';
+import 'bottom_navigation.dart'; // Import the new bottom navigation bar
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -161,7 +163,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 252, 233, 156),
-                      iconColor: Color.fromARGB(255, 223, 180, 39), // Custom color for medication icon
+                      iconColor: Color.fromARGB(255, 223, 180,
+                          39), // Custom color for medication icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -177,7 +180,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 168, 213, 250),
-                      iconColor: const Color.fromARGB(255, 30, 110, 175), // Custom color for chat icon
+                      iconColor: const Color.fromARGB(
+                          255, 30, 110, 175), // Custom color for chat icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -193,7 +197,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 255, 174, 174),
-                      iconColor: Color.fromARGB(255, 222, 38, 5), // Custom color for SOS icon
+                      iconColor: Color.fromARGB(
+                          255, 222, 38, 5), // Custom color for SOS icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -245,39 +250,9 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border(
-            top: BorderSide(color: Colors.black, width: 1.0),
-            ),
-          ),
-          child: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.games),
-                label: 'Games',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.brain),
-                label: 'Memory Log',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-            ],
-            currentIndex: _currentIndex,
-            selectedItemColor: Color.fromARGB(255, 255, 255, 255),
-            unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
-            onTap: onTabTapped,
-            // backgroundColor: Colors.white,
-          ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: onTabTapped,
         ),
       ),
     );
@@ -310,35 +285,38 @@ class HomeButton extends StatelessWidget {
     required this.onTap,
     required this.color,
     required this.iconColor,
-    required this.iconSize,
-    required this.fontSize,
+    this.iconSize = 50,
+    this.fontSize = 16,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        color: color,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: iconSize,
-                color: iconColor, // Use the passed color
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: iconSize,
+              color: iconColor,
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-              const SizedBox(height: 10),
-              Text(
-                label,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: fontSize,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
