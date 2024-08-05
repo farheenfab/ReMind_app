@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
           title: const Text('Home'),
           actions: [
             IconButton(
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                   maxHeight: 70,
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 41, 19, 76),
+                  color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 59, 45, 114),
                       ),
                     ),
                   ],
@@ -209,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                   maxHeight: 170,
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 41, 19, 76),
+                  color: Color.fromARGB(255, 218, 200, 247),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -220,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 0, 0, 0),
                       ),
                     ),
                     const SizedBox(height: 5),
@@ -232,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                             'Task ${index + 1}',
                             style: const TextStyle(
                               fontSize: 15,
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                         ),
@@ -247,10 +248,11 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: Colors.black, width: 1.0),
+            top: BorderSide(color: Colors.black, width: 1.0),
             ),
           ),
           child: BottomNavigationBar(
+            backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
             type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(
@@ -271,10 +273,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
             currentIndex: _currentIndex,
-            selectedItemColor: Color.fromARGB(255, 59, 45, 114),
-            unselectedItemColor: Colors.black,
+            selectedItemColor: Color.fromARGB(255, 255, 255, 255),
+            unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
             onTap: onTabTapped,
-            backgroundColor: Colors.white,
+            // backgroundColor: Colors.white,
           ),
         ),
       ),

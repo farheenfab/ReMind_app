@@ -24,6 +24,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+                backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
         title: Text('Add Medicine'),
       ),
       body: Padding(
