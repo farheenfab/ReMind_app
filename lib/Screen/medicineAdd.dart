@@ -24,23 +24,41 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-                backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
-        title: Text('Add Medicine'),
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple
+        title: Text(
+          'Add Medicine',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: IconThemeData(color: Colors.white), // Back icon color
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+        child: Container(
+          color: Colors.white, // Background color
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Pill Name Input
               TextField(
                 controller: _pillNameController,
-                decoration: InputDecoration(labelText: 'Pill Name'),
+                decoration: InputDecoration(
+                  labelText: 'Pill Name',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
               ),
               SizedBox(height: 20),
+
+              // Strength Dropdown
               DropdownButtonFormField<String>(
                 value: _selectedStrength,
-                decoration: InputDecoration(labelText: 'Strength'),
+                decoration: InputDecoration(
+                  labelText: 'Strength',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
                 items: _strengthOptions.map((String strength) {
                   return DropdownMenuItem<String>(
                     value: strength,
@@ -54,7 +72,9 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 },
               ),
               SizedBox(height: 20),
-              Text('Days of the Week'),
+
+              // Days of the Week
+              Text('Days of the Week', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 10),
               Wrap(
                 spacing: 4.0,
@@ -64,7 +84,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                     selected: _selectedDays.contains(_fullDaysOfWeek[index]),
                     shape: CircleBorder(),
                     backgroundColor: Colors.grey.shade200,
-                    selectedColor: Color.fromARGB(255, 59, 21, 94), // Changed to remove the tick mark appearance
+                    selectedColor: Color.fromARGB(255, 59, 21, 94),
                     onSelected: (bool selected) {
                       setState(() {
                         if (selected) {
@@ -78,9 +98,16 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 }).toList(),
               ),
               SizedBox(height: 20),
+
+              // Frequency Dropdown
               DropdownButtonFormField<String>(
                 value: _selectedFrequency,
-                decoration: InputDecoration(labelText: 'Frequency'),
+                decoration: InputDecoration(
+                  labelText: 'Frequency',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
                 items: _frequencyOptions.map((String frequency) {
                   return DropdownMenuItem<String>(
                     value: frequency,
@@ -94,9 +121,12 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 },
               ),
               SizedBox(height: 20),
-              Text('Food Preference'),
+
+              // Food Preference
+              Text('Food Preference', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 10),
               ToggleButtons(
+                borderRadius: BorderRadius.circular(8.0),
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -118,6 +148,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 },
               ),
               SizedBox(height: 20),
+
+              // Select Reminder Time
               GestureDetector(
                 onTap: () async {
                   final TimeOfDay? picked = await showTimePicker(
@@ -144,71 +176,82 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  final String pillName = _pillNameController.text;
-                  final String? strength = _selectedStrength;
-                  final List<String> days = _selectedDays;
-                  final String? frequency = _selectedFrequency;
-                  final String? foodOption = _selectedFoodOption;
 
-                  if (pillName.isNotEmpty && strength != null && days.isNotEmpty && frequency != null && _selectedTime != null && foodOption != null) {
-                    // Check if the pill already exists in the database
-                    final QuerySnapshot result = await FirebaseFirestore.instance
-                        .collection('Medicine')
-                        .where('pillName', isEqualTo: pillName)
-                        .get();
+              // Add Medicine Button
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final String pillName = _pillNameController.text;
+                    final String? strength = _selectedStrength;
+                    final List<String> days = _selectedDays;
+                    final String? frequency = _selectedFrequency;
+                    final String? foodOption = _selectedFoodOption;
 
-                    final List<DocumentSnapshot> documents = result.docs;
+                    if (pillName.isNotEmpty && strength != null && days.isNotEmpty && frequency != null && _selectedTime != null && foodOption != null) {
+                      // Check if the pill already exists in the database
+                      final QuerySnapshot result = await FirebaseFirestore.instance
+                          .collection('Medicine')
+                          .where('pillName', isEqualTo: pillName)
+                          .get();
 
-                    if (documents.isEmpty) {
-                      // Sort the days based on the predefined order
-                      List<String> sortedDays = days..sort((a, b) {
-                        int indexA = _fullDaysOfWeek.indexOf(a);
-                        int indexB = _fullDaysOfWeek.indexOf(b);
-                        return indexA.compareTo(indexB);
-                      });
+                      final List<DocumentSnapshot> documents = result.docs;
 
-                      // Add the new medicine if it doesn't exist
-                      await FirebaseFirestore.instance.collection('Medicine').add({
-                        'pillName': pillName,
-                        'strength': strength,
-                        'days': sortedDays,
-                        'frequency': frequency,
-                        'foodOption': foodOption,
-                        'remainderTime': '${_selectedTime!.hour}:${_selectedTime!.minute}',
-                      });
+                      if (documents.isEmpty) {
+                        // Sort the days based on the predefined order
+                        List<String> sortedDays = days..sort((a, b) {
+                          int indexA = _fullDaysOfWeek.indexOf(a);
+                          int indexB = _fullDaysOfWeek.indexOf(b);
+                          return indexA.compareTo(indexB);
+                        });
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Medicine added successfully!')),
-                      );
+                        // Add the new medicine if it doesn't exist
+                        await FirebaseFirestore.instance.collection('Medicine').add({
+                          'pillName': pillName,
+                          'strength': strength,
+                          'days': sortedDays,
+                          'frequency': frequency,
+                          'foodOption': foodOption,
+                          'remainderTime': '${_selectedTime!.hour}:${_selectedTime!.minute}',
+                        });
 
-                      _pillNameController.clear();
-                      setState(() {
-                        _selectedStrength = null;
-                        _selectedDays = [];
-                        _selectedFrequency = null;
-                        _selectedTime = null;
-                        _selectedFoodOption = null;
-                        _isSelectedFoodOption = [true, false];
-                      });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Medicine added successfully!')),
+                        );
 
-                      // Navigate to MedicineViewPage
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MedicineViewPage(),
-                        ),
-                      );
-                    } else {
-                      // Show a message if the pill already exists
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('This medicine already exists.')),
-                      );
+                        _pillNameController.clear();
+                        setState(() {
+                          _selectedStrength = null;
+                          _selectedDays = [];
+                          _selectedFrequency = null;
+                          _selectedTime = null;
+                          _selectedFoodOption = null;
+                          _isSelectedFoodOption = [true, false];
+                        });
+
+                        // Navigate to MedicineViewPage
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MedicineViewPage(),
+                          ),
+                        );
+                      } else {
+                        // Show a message if the pill already exists
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('This medicine already exists.')),
+                        );
+                      }
                     }
-                  }
-                },
-                child: Text('Add Medicine'),
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  ),
+                  child: Text('Add Medicine', style: TextStyle(color: Colors.white)), // White text color
+                ),
               ),
             ],
           ),

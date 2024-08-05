@@ -1,4 +1,3 @@
-// home.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'profile_page.dart';
@@ -76,11 +75,15 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          automaticallyImplyLeading: false, // Remove the back button
           backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
-          title: const Text('Home'),
+          title: const Text(
+            'Home',
+            style: TextStyle(color: Colors.white), // Set title color to white
+          ),
           actions: [
             IconButton(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.person, color: Colors.white), // White profile icon
               onPressed: () {
                 Navigator.push(
                   context,
@@ -163,8 +166,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 252, 233, 156),
-                      iconColor: Color.fromARGB(255, 223, 180,
-                          39), // Custom color for medication icon
+                      iconColor: Color.fromARGB(255, 223, 180, 39), // Custom color for medication icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -180,8 +182,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 168, 213, 250),
-                      iconColor: const Color.fromARGB(
-                          255, 30, 110, 175), // Custom color for chat icon
+                      iconColor: const Color.fromARGB(255, 30, 110, 175), // Custom color for chat icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -197,8 +198,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 255, 174, 174),
-                      iconColor: Color.fromARGB(
-                          255, 222, 38, 5), // Custom color for SOS icon
+                      iconColor: Color.fromARGB(255, 222, 38, 5), // Custom color for SOS icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                   maxHeight: 190,
                 ),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 218, 200, 247),
+                  color: Color.fromARGB(255, 231, 217, 252),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
