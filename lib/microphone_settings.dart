@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bottom_navigation.dart'; // Import the custom navigation bar
+import 'home_page.dart';
+import 'settings.dart';
+import 'games_page.dart';
+import 'memory_log_page.dart';
 
 class MicrophoneSettingsPage extends StatefulWidget {
   @override
@@ -131,6 +136,30 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 3, // Set to a default value; adjust as needed
+        onTap: (index) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                switch (index) {
+                  case 0:
+                    return HomePage(username: 'User');
+                  case 1:
+                    return GamesPage();
+                  case 2:
+                    return MemoryLogPage();
+                  case 3:
+                    return SettingsPage();
+                  default:
+                    return MicrophoneSettingsPage();
+                }
+              },
+            ),
+          );
+        },
       ),
     );
   }

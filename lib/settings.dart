@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'microphone_settings.dart'; // Import the new MicrophoneSettingsPage
+import 'bottom_navigation.dart'; // Import the custom navigation bar
+import 'home_page.dart';
+import 'settings.dart';
+import 'games_page.dart';
+import 'memory_log_page.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -29,39 +34,78 @@ class SettingsPage extends StatelessWidget {
         color: Colors.white, // Background color for the entire page
         child: ListView(
           children: [
-            const SettingsTile(
-              icon: Icons.info,
-              title: 'About',
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: SettingsTile(
+                icon: Icons.info,
+                title: 'About',
+              ),
             ),
-            const Divider(color: Colors.black),
-            const SizedBox(height: 16.0),
-            SettingsTile(
-              icon: Icons.mic,
-              title: 'Microphone Voice Settings',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MicrophoneSettingsPage()),
-                );
-              },
+            Divider(color: Colors.black),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: SettingsTile(
+                icon: Icons.mic,
+                title: 'Microphone Voice Settings',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MicrophoneSettingsPage(),
+                    ),
+                  );
+                },
+              ),
             ),
-            const Divider(color: Colors.black),
-            const SizedBox(height: 16.0),
-            const SettingsTile(
-              icon: Icons.lock,
-              title: 'Privacy and Security',
+            Divider(color: Colors.black),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: SettingsTile(
+                icon: Icons.lock,
+                title: 'Privacy and Security',
+              ),
             ),
-            const Divider(color: Colors.black),
-            const SizedBox(height: 16.0),
-            SettingsTile(
-              icon: Icons.exit_to_app,
-              title: 'Log Out',
-              onTap: () => _showLogoutDialog(context),
+            Divider(color: Colors.black),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: SettingsTile(
+                icon: Icons.exit_to_app,
+                title: 'Log Out',
+                onTap: () => _showLogoutDialog(context),
+              ),
             ),
-            const Divider(color: Colors.black),
+            Divider(color: Colors.black),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 3,
+        onTap: (index) {
+          // Define your navigation logic here
+          if (index != 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  switch (index) {
+                    case 0:
+                      return HomePage(
+                          username:
+                              'User'); // Replace 'User' with actual username if needed
+                    case 1:
+                      return GamesPage();
+                    case 2:
+                      return MemoryLogPage();
+                    case 3:
+                      return SettingsPage();
+                    default:
+                      return SettingsPage();
+                  }
+                },
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -76,7 +120,7 @@ class SettingsPage extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 'Are you sure you want to log out?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -85,9 +129,9 @@ class SettingsPage extends StatelessWidget {
                   color: Colors.black, // Text color
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               TextButton(
-                child: const Text(
+                child: Text(
                   'Log Out',
                   style: TextStyle(
                     color: Colors.red,
@@ -104,7 +148,7 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.black, // Divider color
               ),
               TextButton(
-                child: const Text(
+                child: Text(
                   'Cancel',
                   style: TextStyle(
                     color: Colors.black,
@@ -141,7 +185,8 @@ class SettingsTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: Color(0xFF382973), // Dark purple color for the icon
+        color: Color(0xFF382973),
+        size: 32.0, // Dark purple color for the icon
       ),
       title: Text(
         title,
@@ -150,7 +195,7 @@ class SettingsTile extends StatelessWidget {
           color: Colors.black, // Black color for the text
         ),
       ),
-      trailing: const Icon(
+      trailing: Icon(
         Icons.arrow_forward_ios,
         color: Color(0xFF382973), // Dark purple color for the arrow icon
       ),
