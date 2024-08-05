@@ -30,7 +30,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  dio: ^5.0.0  
+  intl: ^0.17.0
+  flutter_tts: ^3.2.2
+  shared_preferences: ^2.0.15
+  intl_phone_number_input: ^0.7.4
+  font_awesome_flutter: ^10.0.0
+  table_calendar: ^3.0.0
+  sqflite: ^2.0.0+4
+  path_provider: ^2.0.2
+ 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -41,6 +50,7 @@ dependencies:
   highlight_text:
   avatar_glow:
   firebase_core: ^3.2.0
+<<<<<<< HEAD
   cloud_firestore: ^5.1.0
   firebase_database: ^11.0.3
   google_generative_ai: ^0.4.3
@@ -50,6 +60,23 @@ dependencies:
   # firebase_core_web:
   # cloud_firestore_platform_interface:
   
+=======
+  url_launcher: ^6.3.0
+  permission_handler: ^11.3.1
+  background_sms: ^0.0.4
+  firebase_database: ^11.0.3
+  cloud_firestore_platform_interface: ^6.2.9
+  cloud_firestore: ^5.1.0
+  alarm: ^3.1.4
+  flutter_local_notifications: ^17.2.1+2
+  timezone: ^0.9.4
+  image_picker: ^1.1.2
+  firebase_storage: ^12.1.1
+  file_picker: ^8.0.6
+  firebase_messaging: ^15.0.4
+  # android_alarm_manager_plus: ^4.0.3
+  # flutter_local_notifications: ^17.2.1+2
+>>>>>>> 50745d24be20ecaa0259d5908cd48202eeef8043
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +94,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - lib/assets/logo.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
