@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'journal.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
+
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:async';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -13,32 +13,7 @@ import 'database.dart';
 import 'journal_listview.dart';
 import 'calanderEvent.dart';
 
-=======
-import 'splash_screen.dart';
-import 'welcome_screen.dart';
-import 'settings.dart';
-import 'login_page.dart';
-import 'signup_page.dart';
-import '/Screen/sos.dart';
-import 'package:flutter/foundation.dart';
-import 'package:alz_app/Screen/medicineAdd.dart';
-// import 'package:alz_app/Screen/notification.dart';
-import 'package:alz_app/Screen/medicineView.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-//   await Firebase.initializeApp(
-//    options: DefaultFirebaseOptions.currentPlatform,
-//  );
-
-  // await NotificationService().init();
-
-  await FirebaseMessaging.instance.subscribeToTopic("topic");
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  // print("FCM Token: $fcmToken");
->>>>>>> 50745d24be20ecaa0259d5908cd48202eeef8043
 
 Future<void> main() async{
     WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +24,6 @@ Future<void> main() async{
 }
 
 class MyApp extends StatelessWidget {
-<<<<<<< HEAD
   
   final Map<String, String> voice;
   final double volume;
@@ -57,14 +31,11 @@ class MyApp extends StatelessWidget {
   final double speechRate;
   
   const MyApp({super.key, required this.voice , required this.volume, required this.pitch, required this.speechRate});
-=======
-  const MyApp({Key? key}) : super(key: key);
->>>>>>> 50745d24be20ecaa0259d5908cd48202eeef8043
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-<<<<<<< HEAD
+
       title: 'Alzheimer\'s App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -139,28 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
-=======
-        title: 'ReMind',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.deepPurple,
-          ).copyWith(secondary: Colors.white),
-          useMaterial3: true,
-        ),
-        home: const SplashScreen(),
-        initialRoute: '/welcome',
-        routes: {
-          '/welcome': (context) => const WelcomeScreen(),
-          '/settings': (context) => SettingsPage(),
-          '/login': (context) => const LoginPage(),
-          '/signup': (context) => const SignUpPage(),
-        });
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
->>>>>>> 50745d24be20ecaa0259d5908cd48202eeef8043
 
   void _initSpeechState() async {
     _isListening = await _speech.initialize();
@@ -261,7 +210,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
         leading:
         IconButton(onPressed: () => Navigator.push(
           context,
@@ -306,32 +254,6 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-=======
-        title: const Text('Home Screen'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                navigateToSOS(context);
-              },
-              child: const Text('Go to SOS Page'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                navigateToMedicineReminder(context);
-              },
-              child: const Text('Medicine Reminder'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                navigateToMedicineView(
-                    context); // Add navigation to MedicineViewPage
-              },
-              child: const Text('View Medicines'),
->>>>>>> 50745d24be20ecaa0259d5908cd48202eeef8043
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -424,29 +346,3 @@ class HomeScreen extends StatelessWidget {
 
 }
 
-<<<<<<< HEAD
-=======
-void navigateToSOS(BuildContext context) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => const SOSPage(),
-    ),
-  );
-}
-
-void navigateToMedicineReminder(BuildContext context) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => AddMedicineScreen(),
-    ),
-  );
-}
-
-void navigateToMedicineView(BuildContext context) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => MedicineViewPage(),
-    ),
-  );
-}
->>>>>>> 50745d24be20ecaa0259d5908cd48202eeef8043
