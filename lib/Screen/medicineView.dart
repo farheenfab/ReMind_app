@@ -177,14 +177,14 @@ class MedicineCard extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Deletion', style: TextStyle(color: Color(0xFF3B155E))),
+          title: Text('Confirm Deletion', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
           content: Text('Are you sure you want to delete this medicine?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel', style: TextStyle(color: Color(0xFF3B155E))),
+              child: Text('Cancel', style: TextStyle(color: Color.fromARGB(255, 115, 115, 115))),
             ),
             TextButton(
               onPressed: () {
