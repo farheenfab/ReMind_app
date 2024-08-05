@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                   minWidth: 500,
                   minHeight: 50,
                   maxWidth: 900,
-                  maxHeight: 70,
+                  maxHeight: 50,
                 ),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                   minWidth: 500,
                   minHeight: 100,
                   maxWidth: 900,
-                  maxHeight: 170,
+                  maxHeight: 190,
                 ),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 218, 200, 247),
@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                           (index) => Text(
                             'Task ${index + 1}',
                             style: const TextStyle(
-                              fontSize: 15,
+                              fontSize: 16,
                               color: Colors.black,
                             ),
                           ),
