@@ -4,6 +4,7 @@ import 'settings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'calender_page.dart';
 import 'chat_page.dart';
+import 'games_selection_screen.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -29,6 +30,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentIndex = index;
     });
+    if (index == 1) {
+      // Navigate to Games Selection Screen
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GamesSelectionScreen(),
+          ),
+      ).then((_) {
+        setState(() {
+          _currentIndex = 0;
+        });
+      });
+    }
     if (index == 4) {
       Navigator.push(
         context,

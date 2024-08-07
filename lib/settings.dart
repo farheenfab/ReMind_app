@@ -1,7 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'welcome_screen.dart';
+import 'quiz_form_page.dart';  // Ensure this is correctly imported
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  bool hasQuiz = false;  // State to track if a quiz exists
+
+  @override
+  void initState() {
+    super.initState();
+    checkForQuiz();
+  }
+
+  Future<void> checkForQuiz() async {
+    // Collection Group query across all 'questions' subcollections in the database
+    var querySnapshot = await FirebaseFirestore.instance.collectionGroup('questions').limit(1).get();
+    print(querySnapshot.docs);
+
+    if (querySnapshot.docs.isNotEmpty) {
+      print("Quiz exists: Found questions.");
+      setState(() {
+        hasQuiz = true;
+      });
+    } else {
+      print("No quizzes found.");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,25 +46,33 @@ class SettingsPage extends StatelessWidget {
             title: 'About',
           ),
           const Divider(color: Colors.black),
-          const SizedBox(height: 16.0),
           const SettingsTile(
             icon: Icons.notifications,
             title: 'Notifications',
           ),
           const Divider(color: Colors.black),
-          const SizedBox(height: 16.0),
           const SettingsTile(
             icon: Icons.mic,
             title: 'Microphone Voice Settings',
           ),
           const Divider(color: Colors.black),
-          const SizedBox(height: 16.0),
           const SettingsTile(
             icon: Icons.lock,
             title: 'Privacy and Security',
           ),
           const Divider(color: Colors.black),
-          const SizedBox(height: 16.0),
+          SettingsTile(
+            icon: hasQuiz ? Icons.edit : Icons.add,
+            title: hasQuiz ? 'Edit Quiz' : 'Create Quiz',
+            onTap: () {
+              // Navigate to QuizFormPage or QuizEditPage
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => QuizFormPage()), // Adjust if there's a specific edit page
+              );
+            },
+          ),
+          const Divider(color: Colors.black),
           SettingsTile(
             icon: Icons.exit_to_app,
             title: 'Log Out',
