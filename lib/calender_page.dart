@@ -94,6 +94,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
         title: Text('Calendar', style: TextStyle(fontWeight: FontWeight.bold)),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),

@@ -5,7 +5,12 @@ class ProfileDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile Details'),
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
+        title: Text(
+          'Profile Details',
+          style: TextStyle(color: Colors.white), // Set title color to white
+        ),
+        iconTheme: IconThemeData(color: Colors.white), // Set back arrow color to white
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
@@ -15,7 +20,7 @@ class ProfileDetailsPage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Colors.white,  // Set the background color of the entire page
+        color: Colors.white, // Set the background color of the entire page
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +29,7 @@ class ProfileDetailsPage extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 20.0),
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF382973),  // Container background color
+                color: const Color.fromARGB(255, 41, 19, 76), // Container background color
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
@@ -52,7 +57,7 @@ class ProfileDetailsPage extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 20.0),
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF382973),  // Container background color
+                color: const Color.fromARGB(255, 41, 19, 76), // Container background color
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
@@ -79,7 +84,7 @@ class ProfileDetailsPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF382973),  // Container background color
+                color: const Color.fromARGB(255, 41, 19, 76), // Container background color
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(

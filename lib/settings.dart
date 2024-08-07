@@ -15,12 +15,12 @@ class SettingsPage extends StatelessWidget {
           'Settings',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black, // Black color for the title text
+            color: Colors.white, // White color for the title text
           ),
         ),
-        backgroundColor: Colors.white, // White background for the AppBar
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
         iconTheme: IconThemeData(
-          color: Color(0xFF382973), // Dark purple color for the AppBar icons
+          color: Colors.white, // White color for the AppBar icons
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),

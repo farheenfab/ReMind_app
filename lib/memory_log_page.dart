@@ -15,6 +15,7 @@ class _MemoryLogPageState extends State<MemoryLogPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+                  backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
         title: Text('Memory'),
       ),
       body: Center(

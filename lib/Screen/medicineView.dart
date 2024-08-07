@@ -26,6 +26,7 @@ class MedicineViewPage extends StatelessWidget {
             ),
           ],
         ),
+                iconTheme: IconThemeData(color: Colors.white), // Set back arrow color to white
       ),
       body: MedicineList(),
       backgroundColor: Color(0xFFFFFFFF), // Set the background color of the page to white
