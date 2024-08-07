@@ -60,9 +60,16 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Medicine'),
+        title: Text(
+          'Edit Medicine',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Color.fromARGB(255, 41, 19, 76), // Purple background color
+        iconTheme: IconThemeData(
+          color: Colors.white, // White color for the back arrow icon
+        ),
       ),
+      backgroundColor: Colors.white, // Background color of the whole screen set to white
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView( // Added SingleChildScrollView to prevent overflow
@@ -86,7 +93,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                   onPressed: updateMedicine,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 41, 19, 76), // Purple color
-                    foregroundColor : Colors.white,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10), // Rounded corners
                     ),
@@ -112,13 +119,13 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
       decoration: InputDecoration(
         labelText: labelText,
         prefixIcon: Icon(icon, color: Color.fromARGB(255, 59, 21, 94)), // Purple icon color
-        border: OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10), // Rounded corners
-          borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Purple border
+          borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10), // Rounded corners
-          borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Purple border when focused
+          borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border when focused
         ),
       ),
     );

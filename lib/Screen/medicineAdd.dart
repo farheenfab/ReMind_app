@@ -31,230 +31,290 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
         ),
         iconTheme: IconThemeData(color: Colors.white), // Back icon color
       ),
+      backgroundColor: Colors.white, // Set the background color of the entire screen to white
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Container(
-          color: Colors.white, // Background color
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Pill Name Input
-              TextField(
-                controller: _pillNameController,
-                decoration: InputDecoration(
-                  labelText: 'Pill Name',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Pill Name Input
+            TextField(
+              controller: _pillNameController,
+              decoration: InputDecoration(
+                labelText: 'Pill Name',
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
                 ),
-              ),
-              SizedBox(height: 20),
-
-              // Strength Dropdown
-              DropdownButtonFormField<String>(
-                value: _selectedStrength,
-                decoration: InputDecoration(
-                  labelText: 'Strength',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
                 ),
-                items: _strengthOptions.map((String strength) {
-                  return DropdownMenuItem<String>(
-                    value: strength,
-                    child: Text(strength),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedStrength = newValue;
-                  });
-                },
+                filled: true,
+                fillColor: Colors.white,
               ),
-              SizedBox(height: 20),
+            ),
+            SizedBox(height: 20),
 
-              // Days of the Week
-              Text('Days of the Week', style: TextStyle(fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
-              Wrap(
-                spacing: 4.0,
-                children: List<Widget>.generate(_daysOfWeek.length, (int index) {
-                  return ChoiceChip(
-                    label: Text(_daysOfWeek[index]),
-                    selected: _selectedDays.contains(_fullDaysOfWeek[index]),
-                    shape: CircleBorder(),
-                    backgroundColor: Colors.grey.shade200,
-                    selectedColor: Color.fromARGB(255, 59, 21, 94),
-                    onSelected: (bool selected) {
-                      setState(() {
-                        if (selected) {
-                          _selectedDays.add(_fullDaysOfWeek[index]);
-                        } else {
-                          _selectedDays.remove(_fullDaysOfWeek[index]);
-                        }
-                      });
-                    },
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 20),
-
-              // Frequency Dropdown
-              DropdownButtonFormField<String>(
-                value: _selectedFrequency,
-                decoration: InputDecoration(
-                  labelText: 'Frequency',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
+            // Strength Dropdown
+            DropdownButtonFormField<String>(
+              value: _selectedStrength,
+              decoration: InputDecoration(
+                labelText: 'Strength',
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
                 ),
-                items: _frequencyOptions.map((String frequency) {
-                  return DropdownMenuItem<String>(
-                    value: frequency,
-                    child: Text(frequency),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedFrequency = newValue;
-                  });
-                },
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                ),
+                filled: true,
+                fillColor: Colors.white,
               ),
-              SizedBox(height: 20),
+              items: _strengthOptions.map((String strength) {
+                return DropdownMenuItem<String>(
+                  value: strength,
+                  child: Text(strength),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedStrength = newValue;
+                });
+              },
+            ),
+            SizedBox(height: 20),
 
-              // Food Preference
-              Text('Food Preference', style: TextStyle(fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
-              ToggleButtons(
-                borderRadius: BorderRadius.circular(8.0),
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text('Before Food'),
+            // Days of the Week
+            Text('Days of the Week', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: List<Widget>.generate(_daysOfWeek.length, (int index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_selectedDays.contains(_fullDaysOfWeek[index])) {
+                        _selectedDays.remove(_fullDaysOfWeek[index]);
+                      } else {
+                        _selectedDays.add(_fullDaysOfWeek[index]);
+                      }
+                    });
+                  },
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: _selectedDays.contains(_fullDaysOfWeek[index])
+                          ? Color.fromARGB(255, 59, 21, 94)
+                          : Colors.grey.shade200,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Color.fromARGB(255, 59, 21, 94),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      _daysOfWeek[index],
+                      style: TextStyle(
+                        color: _selectedDays.contains(_fullDaysOfWeek[index])
+                            ? Colors.white
+                            : Color.fromARGB(255, 59, 21, 94),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text('After Food'),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20),
+
+            // Frequency Dropdown
+            DropdownButtonFormField<String>(
+              value: _selectedFrequency,
+              decoration: InputDecoration(
+                labelText: 'Frequency',
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              items: _frequencyOptions.map((String frequency) {
+                return DropdownMenuItem<String>(
+                  value: frequency,
+                  child: Text(frequency),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedFrequency = newValue;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+
+            // Food Preference
+            Text('Food Preference', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            ToggleButtons(
+              borderRadius: BorderRadius.circular(8.0),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text('Before Food'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text('After Food'),
+                ),
+              ],
+              isSelected: _isSelectedFoodOption,
+              onPressed: (int index) {
+                setState(() {
+                  for (int i = 0; i < _isSelectedFoodOption.length; i++) {
+                    _isSelectedFoodOption[i] = i == index;
+                  }
+                  _selectedFoodOption = index == 0 ? 'Before Food' : 'After Food';
+                });
+              },
+            ),
+            SizedBox(height: 20),
+
+            // Select Reminder Time
+            GestureDetector(
+              onTap: () async {
+                final TimeOfDay? picked = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                  builder: (BuildContext context, Widget? child) {
+                    return Theme(
+                      data: ThemeData.light().copyWith(
+                        colorScheme: ColorScheme.light(
+                          primary: Color.fromARGB(255, 41, 19, 76), // Dark Purple
+                          onSurface: Color.fromARGB(255, 59, 21, 94), // Dark Purple
+                        ),
+                        buttonTheme: ButtonThemeData(
+                          colorScheme: ColorScheme.light(primary: Color.fromARGB(255, 41, 19, 76)), // Dark Purple
+                        ),
+                      ),
+                      child: child!,
+                    );
+                  },
+                );
+                if (picked != null) {
+                  setState(() {
+                    _selectedTime = picked;
+                  });
+                }
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.access_time, color: Color.fromARGB(255, 41, 19, 76)), // Dark Purple
+                  SizedBox(width: 10),
+                  Text(
+                    _selectedTime == null
+                        ? 'Select Reminder Time'
+                        : 'Reminder Time: ${_selectedTime!.format(context)}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 41, 19, 76), // Dark Purple
+                    ),
                   ),
                 ],
-                isSelected: _isSelectedFoodOption,
-                onPressed: (int index) {
-                  setState(() {
-                    for (int i = 0; i < _isSelectedFoodOption.length; i++) {
-                      _isSelectedFoodOption[i] = i == index;
-                    }
-                    _selectedFoodOption = index == 0 ? 'Before Food' : 'After Food';
-                  });
-                },
               ),
-              SizedBox(height: 20),
+            ),
+            SizedBox(height: 20),
 
-              // Select Reminder Time
-              GestureDetector(
-                onTap: () async {
-                  final TimeOfDay? picked = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                  );
-                  if (picked != null) {
-                    setState(() {
-                      _selectedTime = picked;
-                    });
+            // Add Medicine Button
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  final String pillName = _pillNameController.text;
+                  final String? strength = _selectedStrength;
+                  final List<String> days = _selectedDays;
+                  final String? frequency = _selectedFrequency;
+                  final String? foodOption = _selectedFoodOption;
+
+                  if (pillName.isNotEmpty && strength != null && days.isNotEmpty && frequency != null && _selectedTime != null && foodOption != null) {
+                    // Check if the pill already exists in the database
+                    final QuerySnapshot result = await FirebaseFirestore.instance
+                        .collection('Medicine')
+                        .where('pillName', isEqualTo: pillName)
+                        .get();
+
+                    final List<DocumentSnapshot> documents = result.docs;
+
+                    if (documents.isEmpty) {
+                      // Sort the days based on the predefined order
+                      List<String> sortedDays = days..sort((a, b) {
+                        int indexA = _fullDaysOfWeek.indexOf(a);
+                        int indexB = _fullDaysOfWeek.indexOf(b);
+                        return indexA.compareTo(indexB);
+                      });
+
+                      // Add the new medicine if it doesn't exist
+                      await FirebaseFirestore.instance.collection('Medicine').add({
+                        'pillName': pillName,
+                        'strength': strength,
+                        'days': sortedDays,
+                        'frequency': frequency,
+                        'foodOption': foodOption,
+                        'remainderTime': '${_selectedTime!.hour}:${_selectedTime!.minute}',
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Medicine added successfully!')),
+                      );
+
+                      _pillNameController.clear();
+                      setState(() {
+                        _selectedStrength = null;
+                        _selectedDays = [];
+                        _selectedFrequency = null;
+                        _selectedTime = null;
+                        _selectedFoodOption = null;
+                        _isSelectedFoodOption = [true, false];
+                      });
+
+                      // Navigate to MedicineViewPage
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MedicineViewPage(),
+                        ),
+                      );
+                    } else {
+                      // Show a message if the pill already exists
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('This medicine already exists.')),
+                      );
+                    }
                   }
                 },
-                child: Row(
-                  children: [
-                    Icon(Icons.access_time),
-                    SizedBox(width: 10),
-                    Text(
-                      _selectedTime == null
-                          ? 'Select Reminder Time'
-                          : 'Reminder Time: ${_selectedTime!.format(context)}',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-
-              // Add Medicine Button
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final String pillName = _pillNameController.text;
-                    final String? strength = _selectedStrength;
-                    final List<String> days = _selectedDays;
-                    final String? frequency = _selectedFrequency;
-                    final String? foodOption = _selectedFoodOption;
-
-                    if (pillName.isNotEmpty && strength != null && days.isNotEmpty && frequency != null && _selectedTime != null && foodOption != null) {
-                      // Check if the pill already exists in the database
-                      final QuerySnapshot result = await FirebaseFirestore.instance
-                          .collection('Medicine')
-                          .where('pillName', isEqualTo: pillName)
-                          .get();
-
-                      final List<DocumentSnapshot> documents = result.docs;
-
-                      if (documents.isEmpty) {
-                        // Sort the days based on the predefined order
-                        List<String> sortedDays = days..sort((a, b) {
-                          int indexA = _fullDaysOfWeek.indexOf(a);
-                          int indexB = _fullDaysOfWeek.indexOf(b);
-                          return indexA.compareTo(indexB);
-                        });
-
-                        // Add the new medicine if it doesn't exist
-                        await FirebaseFirestore.instance.collection('Medicine').add({
-                          'pillName': pillName,
-                          'strength': strength,
-                          'days': sortedDays,
-                          'frequency': frequency,
-                          'foodOption': foodOption,
-                          'remainderTime': '${_selectedTime!.hour}:${_selectedTime!.minute}',
-                        });
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Medicine added successfully!')),
-                        );
-
-                        _pillNameController.clear();
-                        setState(() {
-                          _selectedStrength = null;
-                          _selectedDays = [];
-                          _selectedFrequency = null;
-                          _selectedTime = null;
-                          _selectedFoodOption = null;
-                          _isSelectedFoodOption = [true, false];
-                        });
-
-                        // Navigate to MedicineViewPage
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MedicineViewPage(),
-                          ),
-                        );
-                      } else {
-                        // Show a message if the pill already exists
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('This medicine already exists.')),
-                        );
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: Text('Add Medicine', style: TextStyle(color: Colors.white)), // White text color
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
+                child: Text('Add Medicine', style: TextStyle(color: Colors.white)), // White text color
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

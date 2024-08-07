@@ -28,7 +28,6 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-
   String _generateResponse(String userInput) {
     final lowerCaseInput = userInput.toLowerCase();
 
@@ -52,8 +51,14 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-                  backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
-        title: Text('Chat'),
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
+        title: Text(
+          'Chat',
+          style: TextStyle(color: Colors.white), // White color for the title
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // White color for the back arrow
+        ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(

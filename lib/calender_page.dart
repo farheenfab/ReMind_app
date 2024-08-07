@@ -95,7 +95,13 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
-        title: Text('Calendar', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          'Calendar',
+          style: TextStyle(color: Colors.white), // White color for the title
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // White color for the back arrow
+        ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
@@ -117,8 +123,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     250), // Pastel purple background for the calendar container
                 borderRadius: BorderRadius.circular(12.0), // Rounded corners
                 border: Border.all(
-                  color: Colors.black
-                      .withOpacity(0.5), // Border color with opacity
+                  color: Colors.black.withOpacity(0.5), // Border color with opacity
                   width: 1.5, // Border width
                 ),
               ),
@@ -164,13 +169,13 @@ class _CalendarPageState extends State<CalendarPage> {
                     headerStyle: HeaderStyle(
                       formatButtonVisible: true,
                       titleTextStyle: TextStyle(
-                          color: Colors.black,
+                          color: const Color.fromARGB(255, 0, 0, 0), // White color for the title in header
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                       leftChevronIcon: Icon(Icons.chevron_left,
-                          color: Color.fromARGB(255, 174, 161, 226)),
+                          color: const Color.fromARGB(255, 0, 0, 0)), // White color for left chevron
                       rightChevronIcon: Icon(Icons.chevron_right,
-                          color: const Color(0xFF382973)),
+                          color: const Color.fromARGB(255, 0, 0, 0)), // White color for right chevron
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
@@ -196,9 +201,7 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add,
-            color: Colors
-                .white), // Ensure the icon is visible with the button color
+        child: Icon(Icons.add, color: Colors.white), // Ensure the icon is visible with the button color
         backgroundColor: const Color(0xFF382973), // Button color
         onPressed: () {
           _showAddEventDialog();
