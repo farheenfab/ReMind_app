@@ -4,6 +4,7 @@ import 'bottom_navigation.dart'; // Import the custom navigation bar
 import 'home_page.dart';
 import 'settings.dart';
 import 'games_page.dart';
+import 'games_selection_screen.dart';
 import 'memory_log_page.dart';
 
 class MicrophoneSettingsPage extends StatefulWidget {
@@ -148,7 +149,7 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
                   case 0:
                     return HomePage(username: 'User');
                   case 1:
-                    return GamesPage();
+                    return GamesSelectionScreen();
                   case 2:
                     return MemoryLogPage();
                   case 3:

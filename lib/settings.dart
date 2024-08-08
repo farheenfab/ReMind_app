@@ -2,11 +2,58 @@ import 'package:flutter/material.dart';
 import 'microphone_settings.dart'; // Import the new MicrophoneSettingsPage
 import 'bottom_navigation.dart'; // Import the custom navigation bar
 import 'home_page.dart';
+import 'games_selection_screen.dart';
 import 'settings.dart';
 import 'games_page.dart';
+import 'quiz_form_page.dart';  // Ensure this is correctly imported
 import 'memory_log_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';  // Import for Firebase
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  bool hasQuiz = false;  // State to track if a quiz exists
+  String latestDateTime = '';
+
+  @override
+  void initState() {
+    super.initState();
+    checkForQuiz();
+    fetchLatestQuizDateTime();
+  }
+
+  Future<void> fetchLatestQuizDateTime() async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('quiz_details')
+        .orderBy('datetime', descending: true)
+        .get();
+    if (snapshot.docs.isNotEmpty) {
+      setState(() {
+        latestDateTime = snapshot.docs.first.data()['datetime'].toString();
+      });
+    }
+  }
+
+  Future<void> checkForQuiz() async {
+    var querySnapshot = await FirebaseFirestore.instance
+        .collection('quiz_details')
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      setState(() {
+        hasQuiz = true;
+      });
+    } else {
+      setState(() {
+        hasQuiz = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +112,19 @@ class SettingsPage extends StatelessWidget {
                 title: 'Privacy and Security',
               ),
             ),
-            Divider(color: Colors.black),
+            const Divider(color: Colors.black),
+            SettingsTile(
+              icon: hasQuiz ? Icons.edit : Icons.add,
+              title: hasQuiz ? 'Edit Quiz' : 'Create Quiz',
+              onTap: () {
+                // Navigate to QuizFormPage or QuizEditPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QuizFormPage(latestDateTime: latestDateTime)), // Adjust if there's a specific edit page
+                );
+              },
+            ),
+            const Divider(color: Colors.black),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: SettingsTile(
@@ -89,11 +148,9 @@ class SettingsPage extends StatelessWidget {
                 builder: (context) {
                   switch (index) {
                     case 0:
-                      return HomePage(
-                          username:
-                              'User'); // Replace 'User' with actual username if needed
+                      return HomePage(username: 'User'); // Replace 'User' with actual username if needed
                     case 1:
-                      return GamesPage();
+                      return GamesSelectionScreen();
                     case 2:
                       return MemoryLogPage();
                     case 3:
@@ -115,8 +172,7 @@ class SettingsPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor:
-              Color(0xFFD3D3D3), // Pastel grey color for background
+          backgroundColor: Color(0xFFD3D3D3), // Pastel grey color for background
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -144,9 +200,7 @@ class SettingsPage extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, '/welcome');
                 },
               ),
-              Divider(
-                color: Colors.black, // Divider color
-              ),
+              Divider(color: Colors.black), // Divider color
               TextButton(
                 child: Text(
                   'Cancel',

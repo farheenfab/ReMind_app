@@ -11,6 +11,10 @@ import 'package:alz_app/Screen/medicineAdd.dart';
 // import 'package:alz_app/Screen/notification.dart';
 import 'package:alz_app/Screen/medicineView.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'memory_game.dart';
+import 'memory_quiz_game.dart';
+import 'quiz_form_page.dart';
+import 'games_selection_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +52,10 @@ class MyApp extends StatelessWidget {
           '/settings': (context) => SettingsPage(),
           '/login': (context) => const LoginPage(),
           '/signup': (context) => const SignUpPage(),
+          '/games_selection': (context) => GamesSelectionScreen(),
+          '/memory_game': (context) => MemoryGameHome(),
+          '/memory_quiz_game': (context) => MemoryQuizGame(),
+          '/quiz_form_page': (context) => QuizFormPage(),
         });
   }
 }

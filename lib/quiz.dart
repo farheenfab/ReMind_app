@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'postlogin.dart';
 import 'memory_image.dart';
+import 'quiz_form_page.dart';
 
 class quizPage extends StatelessWidget {
   const quizPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class quizPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => MemoryPage()),
+                    MaterialPageRoute(builder: (_) => QuizFormPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

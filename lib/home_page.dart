@@ -8,6 +8,7 @@ import 'medication_page.dart';
 import 'Screen/medicineView.dart';
 import 'Screen/sos.dart';
 import 'games_page.dart';
+import 'games_selection_screen.dart';
 import 'memory_log_page.dart';
 import 'bottom_navigation.dart'; // Import the new bottom navigation bar
 
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     PlaceholderWidget(),
     PlaceholderWidget(),
     SettingsPage(),
-    GamesPage(),
+    GamesSelectionScreen(),
     MemoryLogPage()
   ];
 
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     if (index == 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GamesPage()),
+        MaterialPageRoute(builder: (context) => GamesSelectionScreen()),
       );
     } else if (index == 2) {
       Navigator.push(

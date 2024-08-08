@@ -3,6 +3,7 @@ import 'bottom_navigation.dart'; // Import the custom navigation bar
 import 'home_page.dart';
 import 'settings.dart';
 import 'games_page.dart';
+import 'games_selection_screen.dart';
 import 'memory_log_page.dart';
 
 class MemoryLogPage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _MemoryLogPageState extends State<MemoryLogPage> {
                           username:
                               'User'); // Replace 'User' with actual username if needed
                     case 1:
-                      return GamesPage();
+                      return GamesSelectionScreen();
                     case 2:
                       return MemoryLogPage();
                     case 3:
