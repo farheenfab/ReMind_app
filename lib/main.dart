@@ -10,6 +10,7 @@ import 'home_page.dart';
 import 'memory_game.dart';
 import 'memory_quiz_game.dart';
 import 'quiz_form_page.dart';
+import 'games_selection_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/welcome',
         routes: {
           '/welcome': (context) => const WelcomeScreen(),
-          // '/login': (context) => GamesSelectionScreen(),
+          '/games_selection': (context) => GamesSelectionScreen(),
           '/memory_game': (context) => MemoryGameHome(),
           '/memory_quiz_game': (context) => MemoryQuizGame(),
           '/quiz_form_page': (context) => QuizFormPage(),

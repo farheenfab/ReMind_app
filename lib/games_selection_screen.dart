@@ -20,7 +20,7 @@ class GamesSelectionScreen extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/quiz_form_page');
+                Navigator.pushNamed(context, '/memory_quiz_game');
               },
               child: Text('Quiz Game'),
             ),

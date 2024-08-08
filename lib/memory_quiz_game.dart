@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'gemini_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:confetti/confetti.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+class Question {
+  String imageUrl;
+  String questionText;
+  List<String> options;
+  int correctAnswerIndex;
+
+  Question({
+    required this.imageUrl,
+    required this.questionText,
+    required this.options,
+    required this.correctAnswerIndex,
+  });
+}
 
 class MemoryQuizGame extends StatefulWidget {
   @override
@@ -9,83 +23,98 @@ class MemoryQuizGame extends StatefulWidget {
 }
 
 class _MemoryQuizGameState extends State<MemoryQuizGame> {
-  List<XFile> _images = [];
-  int _currentImageIndex = 0;
+  List<Question> _questions = [];
+  int _currentQuestionIndex = 0;
   int _wrongGuesses = 0;
-  List<String> _options = [];
-  String _correctOption = '';
-  final ImagePicker _picker = ImagePicker();
-  final GeminiService _geminiService = GeminiService();
+  bool _isLoading = true;
+  late ConfettiController _confettiController;
+  Set<int> _wrongAnswers = {};
 
   @override
   void initState() {
     super.initState();
-    _selectImages();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 10));
+    fetchLatestQuizItems();
   }
 
-  Future<void> _selectImages() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
-    if (images != null) {
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  Future<void> fetchLatestQuizItems() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      // First, find the latest datetime value
+      var latestDatetimeSnapshot = await firestore.collection('quiz_details')
+          .orderBy('datetime', descending: true)
+          .limit(1)
+          .get();
+
+      if (latestDatetimeSnapshot.docs.isEmpty) {
+        print("No quiz entries found.");
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      // Extract the latest datetime
+      int latestDatetime = latestDatetimeSnapshot.docs.first.data()['datetime'] as int;
+      print("Latest datetime: $latestDatetime");
+
+      // Fetch all documents with the latest datetime
+      QuerySnapshot questionSnapshot = await firestore
+          .collection('quiz_details')
+          .where('datetime', isEqualTo: latestDatetime)
+          .get();
+
+      if (questionSnapshot.docs.isEmpty) {
+        print("No questions found with the latest datetime.");
+        setState(() => _isLoading = false);
+        return;
+      }
+
       setState(() {
-        _images = images.length > 10 ? images.sublist(0, 10) : images;
-        _loadQuestion();
+        _questions = questionSnapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          print("Loaded question data: $data");
+          return Question(
+            imageUrl: data['picture'] as String,
+            questionText: data['question'] as String,
+            options: List<String>.from(data['options']),
+            correctAnswerIndex: data['correctAnswerIndex'] as int,
+          );
+        }).toList();
+        _isLoading = false;
       });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Please select at least 1 image.'),
-      ));
-      Navigator.pop(context);
+    } catch (e) {
+      print('Error fetching quiz details: $e');
+      setState(() => _isLoading = false);
     }
   }
 
-  Future<void> _loadQuestion() async {
-    if (_currentImageIndex < _images.length) {
-      print("hello");
-      File imageFile = File(_images[_currentImageIndex].path);
-      String prompt = 'Generate four multiple-choice questions (very short description) based on this image for a memory quiz game for an Alzheimer patient. Each question should have one correct answer and three incorrect answers. The incorrect answers should be related but clearly distinguishable from the correct answer.';
-      final response = await _geminiService.getMCQOptions(imageFile, prompt);
-      print(response);
-      // Assuming the response contains 'options' and 'correct_option' keys
-      setState(() {
-        _options = List<String>.from(response['options']);
-        _correctOption = response['correct_option'];
-      });
-      // try {
-      //   print("hello");
-      //   File imageFile = File(_images[_currentImageIndex].path);
-      //   String prompt = 'Generate four multiple-choice questions (very short description) based on this image for a memory quiz game for an Alzheimer patient. Each question should have one correct answer and three incorrect answers. The incorrect answers should be related but clearly distinguishable from the correct answer.';
-      //   final response = await _geminiService.getMCQOptions(imageFile, prompt);
-      //   print(response);
-      //   // Assuming the response contains 'options' and 'correct_option' keys
-      //   setState(() {
-      //     _options = List<String>.from(response['options']);
-      //     _correctOption = response['correct_option'];
-      //   });
-      // } catch (e) {
-      //   print(e);
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text('Failed to load options: $e'),
-      //   ));
-      // }
-    } else {
-      _showCompletionDialog();
-    }
-  }
-
-  void _onOptionSelected(String option) {
-    if (option == _correctOption) {
-      _currentImageIndex++;
-      _wrongGuesses = 0;
-      _loadQuestion();
+  void _onOptionSelected(int selectedIndex) {
+    if (selectedIndex == _questions[_currentQuestionIndex].correctAnswerIndex) {
+      if (_currentQuestionIndex < _questions.length - 1) {
+        setState(() {
+          _currentQuestionIndex++;
+          _wrongGuesses = 0;
+          _wrongAnswers.clear();
+        });
+      } else {
+        _showCompletionDialog();
+        _confettiController.play();
+      }
     } else {
       setState(() {
         _wrongGuesses++;
+        _wrongAnswers.add(selectedIndex);
+        if (_wrongGuesses >= 2) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Hint: The correct answer is ${_questions[_currentQuestionIndex].options[_questions[_currentQuestionIndex].correctAnswerIndex]}'),
+          ));
+        }
       });
-      if (_wrongGuesses >= 3) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Hint: The correct answer is $_correctOption'),
-        ));
-      }
     }
   }
 
@@ -99,7 +128,7 @@ class _MemoryQuizGameState extends State<MemoryQuizGame> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/games_selection');
             },
             child: Text('Go Back'),
           ),
@@ -113,19 +142,78 @@ class _MemoryQuizGameState extends State<MemoryQuizGame> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Memory Quiz Game'),
+        backgroundColor: Colors.deepPurple,
       ),
-      body: _images.isEmpty
+      body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.file(File(_images[_currentImageIndex].path)),
-          SizedBox(height: 20),
-          ..._options.map((option) => ElevatedButton(
-            onPressed: () => _onOptionSelected(option),
-            child: Text(option),
-          )),
-        ],
+          : SingleChildScrollView(
+        child: Center( // Center the column
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (_questions.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: _questions[_currentQuestionIndex].imageUrl,
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _questions[_currentQuestionIndex].questionText,
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                          ),
+                        ),
+                        Column( // Display options in a column
+                          children: _questions[_currentQuestionIndex].options.map((option) {
+                            int idx = _questions[_currentQuestionIndex].options.indexOf(option);
+                            bool isWrong = _wrongAnswers.contains(idx);
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: ChoiceChip(
+                                label: Text(option),
+                                selected: false,
+                                onSelected: (_) => _onOptionSelected(idx),
+                                backgroundColor: isWrong ? Colors.red[200] : Colors.deepPurple[50],
+                                selectedColor: Colors.deepPurple[300],
+                                labelStyle: TextStyle(color: isWrong ? Colors.white : Colors.deepPurple[900]),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: ConfettiWidget(
+                    confettiController: _confettiController,
+                    blastDirectionality: BlastDirectionality.explosive,
+                    particleDrag: 0.05,
+                    emissionFrequency: 0.05,
+                    numberOfParticles: 50,
+                    gravity: 0.05,
+                    shouldLoop: false,
+                    colors: const [
+                      Colors.green,
+                      Colors.blue,
+                      Colors.pink,
+                      Colors.orange,
+                      Colors.purple
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

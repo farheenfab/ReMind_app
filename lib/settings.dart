@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'welcome_screen.dart';
 import 'quiz_form_page.dart';  // Ensure this is correctly imported
 
 class SettingsPage extends StatefulWidget {
@@ -10,16 +9,27 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool hasQuiz = false;  // State to track if a quiz exists
+  String latestDateTime = '';
 
   @override
   void initState() {
     super.initState();
     checkForQuiz();
+    fetchLatestQuizDateTime();
+  }
+
+  Future<void> fetchLatestQuizDateTime() async {
+    var snapshot = await FirebaseFirestore.instance.collection('quiz_details').orderBy('datetime', descending: true).get();
+    if (snapshot.docs.isNotEmpty) {
+      setState(() {
+        latestDateTime = snapshot.docs.first.data()['datetime'].toString();
+      });
+    }
   }
 
   Future<void> checkForQuiz() async {
     // Collection Group query across all 'questions' subcollections in the database
-    var querySnapshot = await FirebaseFirestore.instance.collectionGroup('questions').limit(1).get();
+    var querySnapshot = await FirebaseFirestore.instance.collection('quiz_details').limit(1).get();
     print(querySnapshot.docs);
 
     if (querySnapshot.docs.isNotEmpty) {
@@ -68,7 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
               // Navigate to QuizFormPage or QuizEditPage
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => QuizFormPage()), // Adjust if there's a specific edit page
+                MaterialPageRoute(builder: (context) => QuizFormPage(latestDateTime: latestDateTime)), // Adjust if there's a specific edit page
               );
             },
           ),
