@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'voice_settings.dart';
 import 'profile_page.dart';
 import 'settings.dart';
 import 'calender_page.dart';
@@ -9,7 +10,11 @@ import 'Screen/medicineView.dart';
 import 'Screen/sos.dart';
 import 'games_page.dart';
 import 'memory_log_page.dart';
-import 'bottom_navigation.dart'; // Import the new bottom navigation bar
+import 'chat_screen.dart';
+import 'bottom_navigation.dart';
+import 'journal.dart';
+import 'journal_content.dart';
+import 'journal_listview.dart'; // Import the new bottom navigation bar
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -30,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     PlaceholderWidget(),
     SettingsPage(),
     GamesPage(),
-    MemoryLogPage()
+    DisplayData()
   ];
 
   void onTabTapped(int index) {
@@ -42,7 +47,7 @@ class _HomePageState extends State<HomePage> {
     } else if (index == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MemoryLogPage()),
+        MaterialPageRoute(builder: (context) => DisplayData()),
       );
     } else if (index == 3) {
       Navigator.push(
@@ -76,14 +81,16 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false, // Remove the back button
-          backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
+          backgroundColor: Color.fromARGB(
+              255, 41, 19, 76), // Dark Purple background color for AppBar
           title: const Text(
             'Home',
             style: TextStyle(color: Colors.white), // Set title color to white
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.person, color: Colors.white), // White profile icon
+              icon:
+                  Icon(Icons.person, color: Colors.white), // White profile icon
               onPressed: () {
                 Navigator.push(
                   context,
@@ -166,7 +173,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 252, 233, 156),
-                      iconColor: Color.fromARGB(255, 223, 180, 39), // Custom color for medication icon
+                      iconColor: Color.fromARGB(255, 223, 180,
+                          39), // Custom color for medication icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -177,12 +185,21 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ChatPage(),
+                            builder: (context) => ChatScreen(
+                              voice: const {
+                                "name": "en-us-x-tpf-local",
+                                "locale": "en-US"
+                              },
+                              volume: 1.0,
+                              pitch: 1.0,
+                              speechRate: 0.5,
+                            ),
                           ),
                         );
                       },
                       color: Color.fromARGB(255, 168, 213, 250),
-                      iconColor: const Color.fromARGB(255, 30, 110, 175), // Custom color for chat icon
+                      iconColor: const Color.fromARGB(
+                          255, 30, 110, 175), // Custom color for chat icon
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -198,7 +215,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 255, 174, 174),
-                      iconColor: Color.fromARGB(255, 222, 38, 5), // Custom color for SOS icon
+                      iconColor: Color.fromARGB(
+                          255, 222, 38, 5), // Custom color for SOS icon
                       iconSize: 60,
                       fontSize: 18,
                     ),

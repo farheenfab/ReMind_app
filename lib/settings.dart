@@ -1,10 +1,14 @@
+import 'package:alz_app/voice_settings.dart';
 import 'package:flutter/material.dart';
-import 'microphone_settings.dart'; // Import the new MicrophoneSettingsPage
+import 'voice_settings.dart'; // Import the new MicrophoneSettingsPage
 import 'bottom_navigation.dart'; // Import the custom navigation bar
 import 'home_page.dart';
 import 'settings.dart';
 import 'games_page.dart';
 import 'memory_log_page.dart';
+import 'journal.dart';
+import 'journal_content.dart';
+import 'journal_listview.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -46,12 +50,12 @@ class SettingsPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: SettingsTile(
                 icon: Icons.mic,
-                title: 'Microphone Voice Settings',
+                title: 'Voice Over Settings',
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MicrophoneSettingsPage(),
+                      builder: (context) => VoiceSettings(),
                     ),
                   );
                 },
@@ -95,7 +99,7 @@ class SettingsPage extends StatelessWidget {
                     case 1:
                       return GamesPage();
                     case 2:
-                      return MemoryLogPage();
+                      return DisplayData();
                     case 3:
                       return SettingsPage();
                     default:

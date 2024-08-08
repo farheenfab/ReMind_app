@@ -4,6 +4,9 @@ import 'home_page.dart';
 import 'settings.dart';
 import 'games_page.dart';
 import 'memory_log_page.dart';
+import 'journal.dart';
+import 'journal_content.dart';
+import 'journal_listview.dart';
 
 class GamesPage extends StatefulWidget {
   @override
@@ -37,7 +40,7 @@ class _GamesPageState extends State<GamesPage> {
                     case 1:
                       return GamesPage();
                     case 2:
-                      return MemoryLogPage();
+                      return DisplayData();
                     case 3:
                       return SettingsPage();
                     default:

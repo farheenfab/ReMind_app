@@ -1,5 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'journal.dart';
+import 'package:avatar_glow/avatar_glow.dart';
+
+import 'package:flutter_tts/flutter_tts.dart';
+import 'dart:async';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'messages.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'voice_settings.dart';
+import 'database.dart';
+import 'journal_listview.dart';
+import 'calanderEvent.dart';
 import 'splash_screen.dart';
 import 'welcome_screen.dart';
 import 'settings.dart';
@@ -10,6 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:alz_app/Screen/medicineAdd.dart';
 // import 'package:alz_app/Screen/notification.dart';
 import 'package:alz_app/Screen/medicineView.dart';
+import 'calanderEvent.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
@@ -42,6 +55,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const SplashScreen(),
+        // home: const CalendarEvent(),
         initialRoute: '/welcome',
         routes: {
           '/welcome': (context) => const WelcomeScreen(),
