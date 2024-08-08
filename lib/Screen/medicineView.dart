@@ -173,21 +173,34 @@ class MedicineCard extends StatelessWidget {
     return pastelColors[id.hashCode % pastelColors.length];
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context, String id) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Deletion', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-          content: Text('Are you sure you want to delete this medicine?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Cancel', style: TextStyle(color: Color.fromARGB(255, 115, 115, 115))),
+void _showDeleteConfirmationDialog(BuildContext context, String id) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Color(0xFFD3D3D3), // Pastel grey color for background
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Are you sure you want to delete this medicine?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold, // Bold text
+                fontSize: 17.0, // Increased text size
+                color: Colors.black, // Text color
+              ),
             ),
+            SizedBox(height: 20),
             TextButton(
+              child: Text(
+                'Delete',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0, // Bold text
+                ),
+              ),
               onPressed: () {
                 FirebaseFirestore.instance
                     .collection('Medicine')
@@ -202,11 +215,28 @@ class MedicineCard extends StatelessWidget {
                   );
                 });
               },
-              child: Text('Yes', style: TextStyle(color: Color(0xFFB71C1C))),
+            ),
+            Divider(
+              color: Colors.black, // Divider color
+            ),
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0, // Bold text
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
+
 }

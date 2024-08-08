@@ -202,7 +202,7 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add, color: Colors.white), // Ensure the icon is visible with the button color
-        backgroundColor: const Color(0xFF382973), // Button color
+        backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Button color
         onPressed: () {
           _showAddEventDialog();
         },
@@ -249,7 +249,7 @@ class _CalendarPageState extends State<CalendarPage> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor:
-            const Color(0xFF382973), // Background color of the dialog
+            const Color.fromARGB(255, 41, 19, 76), // Background color of the dialog
         title: Text(
           'Add Event',
           style: TextStyle(

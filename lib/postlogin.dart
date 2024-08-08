@@ -11,7 +11,7 @@ class PostLoginWelcomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Welcome'),
       ),
-      backgroundColor: const Color(0xFF382973),
+      backgroundColor: const Color.fromARGB(255, 41, 19, 76),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -42,7 +42,7 @@ class PostLoginWelcomePage extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF382973),
+                foregroundColor: const Color.fromARGB(255, 41, 19, 76),
               ),
               child: const Text('Let\'s Get Started'),
             ),

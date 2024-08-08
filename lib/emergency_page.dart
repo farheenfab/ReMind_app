@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'login_page.dart';
 import 'postlogin.dart';
+import 'quiz.dart';
 
 class EmergencyDetailsPage extends StatefulWidget {
   const EmergencyDetailsPage({Key? key}) : super(key: key);
@@ -58,7 +59,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
       appBar: AppBar(
         title: const Text('Emergency Contact Details'),
       ),
-      backgroundColor: const Color(0xFF382973),
+      backgroundColor: const Color.fromARGB(255, 41, 19, 76),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -133,7 +134,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                   color: Colors.white,
                 ), // Text color of selected item
                 dropdownColor:
-                    const Color(0xFF382973), // Background color of dropdown
+                    const Color.fromARGB(255, 41, 19, 76), // Background color of dropdown
                 iconEnabledColor: Colors.white, // Color of the dropdown icon
                 decoration: const InputDecoration(
                   labelText: 'Gender',
@@ -240,7 +241,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                     : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF382973),
+                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
                 ),
                 child: const Text('Next'),
               ),
@@ -249,12 +250,12 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (_) => const PostLoginWelcomePage()),
+                        builder: (_) => const quizPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF382973),
+                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
                 ),
                 child: const Text('Skip'),
               ),

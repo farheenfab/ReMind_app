@@ -23,7 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text('Sign Up'),
       ),
-      backgroundColor: const Color(0xFF382973),
+      backgroundColor: const Color.fromARGB(255, 41, 19, 76),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -124,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF382973),
+                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
                 ),
                 child: const Text('Next'),
               ),

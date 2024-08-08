@@ -86,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: isUserMessage
-                            ? const Color(0xFF382973)
+                            ? const Color.fromARGB(255, 41, 19, 76)
                             : Color.fromARGB(255, 199, 197, 197),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -129,7 +129,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   IconButton(
                     icon: Icon(Icons.send),
-                    color: const Color(0xFF382973), // Send button color
+                    color: const Color.fromARGB(255, 41, 19, 76), // Send button color
                     onPressed: () {
                       _sendMessage(_controller.text);
                     },

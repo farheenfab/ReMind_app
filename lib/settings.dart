@@ -185,7 +185,7 @@ class SettingsTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: Color(0xFF382973),
+        color: Color.fromARGB(255, 41, 19, 76),
         size: 32.0, // Dark purple color for the icon
       ),
       title: Text(
@@ -197,7 +197,7 @@ class SettingsTile extends StatelessWidget {
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
-        color: Color(0xFF382973), // Dark purple color for the arrow icon
+        color: Color.fromARGB(255, 41, 19, 76), // Dark purple color for the arrow icon
       ),
       onTap: onTap,
     );

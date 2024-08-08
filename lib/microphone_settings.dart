@@ -61,7 +61,7 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
         title: Text('Microphone Voice Settings',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Color(0xFF382973)), // Dark purple icons
+        iconTheme: IconThemeData(color: Color.fromARGB(255, 41, 19, 76)), // Dark purple icons
       ),
       body: Container(
         color: Colors.white,
@@ -82,7 +82,7 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
                         style: TextStyle(color: Colors.black)),
                     value: 'male',
                     groupValue: _voiceType,
-                    activeColor: Color(0xFF382973), // Dark purple
+                    activeColor: Color.fromARGB(255, 41, 19, 76), // Dark purple
                     onChanged: (String? value) {
                       if (value != null) {
                         setState(() {
@@ -99,7 +99,7 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
                         style: TextStyle(color: Colors.black)),
                     value: 'female',
                     groupValue: _voiceType,
-                    activeColor: Color(0xFF382973), // Dark purple
+                    activeColor: Color.fromARGB(255, 41, 19, 76), // Dark purple
                     onChanged: (String? value) {
                       if (value != null) {
                         setState(() {
@@ -124,9 +124,9 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
               max: 2.0,
               divisions: 6,
               label: _speechRate.toStringAsFixed(1),
-              activeColor: Color(0xFF382973), // Dark purple
+              activeColor: Color.fromARGB(255, 41, 19, 76), // Dark purple
               inactiveColor:
-                  Color(0xFF382973).withOpacity(0.3), // Lighter purple
+                  Color.fromARGB(255, 41, 19, 76).withOpacity(0.3), // Lighter purple
               onChanged: (double value) {
                 setState(() {
                   _speechRate = value;

@@ -60,7 +60,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
       appBar: AppBar(
         title: const Text('Caretaker Details'),
       ),
-      backgroundColor: const Color(0xFF382973),
+      backgroundColor: const Color.fromARGB(255, 41, 19, 76),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -135,7 +135,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                   color: Colors.white,
                 ), // Text color of selected item
                 dropdownColor:
-                    const Color(0xFF382973), // Background color of dropdown
+                    const Color.fromARGB(255, 41, 19, 76), // Background color of dropdown
                 iconEnabledColor: Colors.white, // Color of the dropdown icon
                 decoration: const InputDecoration(
                   labelText: 'Gender',
@@ -242,7 +242,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                     : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF382973),
+                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
                 ),
                 child: const Text('Next'),
               ),
@@ -256,7 +256,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF382973),
+                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
                 ),
                 child: const Text('Skip'),
               ),
