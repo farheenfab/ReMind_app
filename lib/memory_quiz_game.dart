@@ -141,79 +141,94 @@ class _MemoryQuizGameState extends State<MemoryQuizGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Memory Quiz Game'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple color
+        title: Text(
+          'Memory Quiz Game',
+          style: TextStyle(
+            color: Colors.white, // White color for title
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // White color for back arrow
+        ),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-        child: Center( // Center the column
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (_questions.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: _questions[_currentQuestionIndex].imageUrl,
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                        ),
+      body: Container(
+        // color: Colors.white, // White background color for the entire screen
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (_questions.isNotEmpty) ...[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _questions[_currentQuestionIndex].questionText,
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                          child: Card(
+                            elevation: 5,
+                            child: Column(
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl: _questions[_currentQuestionIndex].imageUrl,
+                                  placeholder: (context, url) => CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    _questions[_currentQuestionIndex].questionText,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.deepPurple,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  children: _questions[_currentQuestionIndex].options.map((option) {
+                                    int idx = _questions[_currentQuestionIndex].options.indexOf(option);
+                                    bool isWrong = _wrongAnswers.contains(idx);
+                                    return Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: ChoiceChip(
+                                        label: Text(option),
+                                        selected: false,
+                                        onSelected: (_) => _onOptionSelected(idx),
+                                        backgroundColor: isWrong ? Colors.red[200] : Colors.deepPurple[50],
+                                        selectedColor: Colors.deepPurple[300],
+                                        labelStyle: TextStyle(color: isWrong ? Colors.white : Colors.deepPurple[900]),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Column( // Display options in a column
-                          children: _questions[_currentQuestionIndex].options.map((option) {
-                            int idx = _questions[_currentQuestionIndex].options.indexOf(option);
-                            bool isWrong = _wrongAnswers.contains(idx);
-                            return Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: ChoiceChip(
-                                label: Text(option),
-                                selected: false,
-                                onSelected: (_) => _onOptionSelected(idx),
-                                backgroundColor: isWrong ? Colors.red[200] : Colors.deepPurple[50],
-                                selectedColor: Colors.deepPurple[300],
-                                labelStyle: TextStyle(color: isWrong ? Colors.white : Colors.deepPurple[900]),
-                              ),
-                            );
-                          }).toList(),
+                        Align(
+                          alignment: Alignment.center,
+                          child: ConfettiWidget(
+                            confettiController: _confettiController,
+                            blastDirectionality: BlastDirectionality.explosive,
+                            particleDrag: 0.05,
+                            emissionFrequency: 0.05,
+                            numberOfParticles: 50,
+                            gravity: 0.05,
+                            shouldLoop: false,
+                            colors: const [
+                              Colors.green,
+                              Colors.blue,
+                              Colors.pink,
+                              Colors.orange,
+                              Colors.purple
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: ConfettiWidget(
-                    confettiController: _confettiController,
-                    blastDirectionality: BlastDirectionality.explosive,
-                    particleDrag: 0.05,
-                    emissionFrequency: 0.05,
-                    numberOfParticles: 50,
-                    gravity: 0.05,
-                    shouldLoop: false,
-                    colors: const [
-                      Colors.green,
-                      Colors.blue,
-                      Colors.pink,
-                      Colors.orange,
-                      Colors.purple
                     ],
                   ),
                 ),
-              ],
-            ],
-          ),
-        ),
+              ),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'home_page.dart';
 
 class Question {
   File? image;
@@ -12,6 +13,7 @@ class Question {
   bool imageValidationFailed;
   int correctAnswerIndex;
   String imageUrl;
+
   Question({
     this.image,
     this.questionText = '',
@@ -24,7 +26,9 @@ class Question {
 
 class QuizFormPage extends StatefulWidget {
   final String? latestDateTime;
+
   QuizFormPage({this.latestDateTime});
+
   @override
   _QuizFormPageState createState() => _QuizFormPageState();
 }
@@ -36,6 +40,7 @@ class _QuizFormPageState extends State<QuizFormPage> {
   bool _isSaving = false;
   bool _showSuccess = false;
   late final int newTimeNow;
+
   @override
   void initState() {
     super.initState();
@@ -115,16 +120,28 @@ class _QuizFormPageState extends State<QuizFormPage> {
       _isSaving = false;
       _showSuccess = true;
     });
-// Show success screen for 2 seconds
+
+    // Show success screen for 2 seconds
     await Future.delayed(Duration(seconds: 2));
     setState(() => _showSuccess = false);
+
+    // Pop the current page
     Navigator.of(context).pop();
+
+    // Navigate to PostLoginWelcomePage
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(username: 'John'),
+      ),
+    );
   }
 
   Widget buildQuestionCard(int index) {
     Question question = questions[index];
     return Card(
       margin: EdgeInsets.all(10),
+      color: Colors.grey[300], // Set the card's background to grey
       child: Padding(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -194,8 +211,12 @@ class _QuizFormPageState extends State<QuizFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.latestDateTime == null ? 'Create Quiz' : 'Edit Quiz'),
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple AppBar
+        title: Text(
+          widget.latestDateTime == null ? 'Create Quiz' : 'Edit Quiz',
+          style: TextStyle(color: Colors.white), // White title
+        ),
+        iconTheme: IconThemeData(color: Colors.white), // White back arrow
       ),
       body: Form(
         key: _formKey,

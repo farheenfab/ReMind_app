@@ -138,70 +138,81 @@ class _MemoryGameHomeState extends State<MemoryGameHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Memory Game'),
-        backgroundColor: Colors.deepPurple,
-      ),
-      body: Stack(
-        children: [
-          _isSelectingImages
-              ? Center(child: CircularProgressIndicator())
-              : GridView.builder(
-            padding: EdgeInsets.all(16.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Adjusted for 4 images in pairs
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-            ),
-            itemCount: _images.length,
-            itemBuilder: (context, index) {
-              bool isSelected = _selectedIndexes.contains(index) || _matched[index];
-              return GestureDetector(
-                onTap: () => _onCardTapped(index),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  elevation: 5.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple[200],
-                      borderRadius: BorderRadius.circular(15.0),
-                      image: isSelected
-                          ? DecorationImage(
-                        image: FileImage(File(_images[index].path)),
-                        fit: BoxFit.cover,
-                      )
-                          : null,
-                    ),
-                    child: isSelected
-                        ? null
-                        : Center(
-                      child: Image.asset('lib/assets/logo.png', width: 100, height: 100),
-                    ),
-                  ),
-                ),
-              );
-            },
+        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple color
+        title: Text(
+          'Memory Game',
+          style: TextStyle(
+            color: Colors.white, // White color for title
           ),
-          Positioned(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirectionality: BlastDirectionality.explosive,
-                shouldLoop: false,
-                colors: const [
-                  Colors.red,
-                  Colors.blue,
-                  Colors.green,
-                  Colors.yellow,
-                  Colors.orange,
-                  Colors.purple,
-                ],
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // White color for back arrow
+        ),
+      ),
+      body: Container(
+        color: Colors.white, // White background color for the entire screen
+        child: Stack(
+          children: [
+            _isSelectingImages
+                ? Center(child: CircularProgressIndicator())
+                : GridView.builder(
+                    padding: EdgeInsets.all(16.0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Adjusted for 4 images in pairs
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                    ),
+                    itemCount: _images.length,
+                    itemBuilder: (context, index) {
+                      bool isSelected = _selectedIndexes.contains(index) || _matched[index];
+                      return GestureDetector(
+                        onTap: () => _onCardTapped(index),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          elevation: 5.0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurple[200],
+                              borderRadius: BorderRadius.circular(15.0),
+                              image: isSelected
+                                  ? DecorationImage(
+                                      image: FileImage(File(_images[index].path)),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                            ),
+                            child: isSelected
+                                ? null
+                                : Center(
+                                    child: Image.asset('lib/assets/logo.png', width: 100, height: 100),
+                                  ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+            Positioned(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConfettiWidget(
+                  confettiController: _confettiController,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  shouldLoop: false,
+                  colors: const [
+                    Colors.red,
+                    Colors.blue,
+                    Colors.green,
+                    Colors.yellow,
+                    Colors.orange,
+                    Colors.purple,
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
