@@ -62,7 +62,8 @@ class _CalendarPageState extends State<CalendarPage> {
       _selectedEvents = _events[_selectedDay] ?? [];
     });
 
-    print('Loaded events: $_events'); // Debug line
+    // Debug: Print loaded events
+    print('Loaded events: $_events');
   }
 
   Future<void> _addEvent(String event) async {
@@ -108,6 +109,9 @@ class _CalendarPageState extends State<CalendarPage> {
         .limit(1) // Limit to 1 to check existence
         .get();
 
+    // Debug: Print Firestore check result
+    print('Firestore Check: ${snapshot.docs.isNotEmpty}');
+
     return snapshot.docs.isNotEmpty;
   }
 
@@ -121,22 +125,103 @@ class _CalendarPageState extends State<CalendarPage> {
     final hasEvents = await _checkIfDateHasEvents(selectedDay);
 
     if (hasEvents) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CalendarEventViewPage(
-            selectedDay: selectedDay, // Pass the selected date
-          ),
-        ),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white, // Set the background color here
+            title: Stack(
+              children: [
+                Positioned(
+                  right: 0,
+                  top:
+                      -10, // Adjust the 'top' value to move the close button up
+                  child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'Event list',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            content: Container(
+              width: double.maxFinite,
+              height: 400,
+              color: Colors.white, // Ensure the color is applied here
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: CalendarEventViewPage(
+                      selectedDay: selectedDay,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 16.0,
+                    right: 16.0,
+                    child: FloatingActionButton(
+                      child: Icon(Icons.add, color: Colors.white),
+                      backgroundColor: const Color(0xFF382973),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CalendarEvent(
+                              selectedDate: selectedDay,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       );
     } else {
-      // Show a message or handle no events case
+      // // Show a message or handle no events case
       // ScaffoldMessenger.of(context).showSnackBar(
       //   SnackBar(
-      //       content: Text(
-      //           'No events found for ${selectedDay.toLocal().toString().split(' ')[0]}')),
+      //     content: Text(
+      //         'No events found for ${selectedDay.toLocal().toString().split(' ')[0]}'),
+      //   ),
       // );
     }
+  }
+
+  // Function to show a dialog when no events are found
+  void _showNoEventsDialog(BuildContext context, DateTime selectedDay) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('No Events'),
+          content: Text(
+              'No events found for ${selectedDay.toLocal().toString().split(' ')[0]}.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _onFormatChanged(CalendarFormat format) {
@@ -176,8 +261,9 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(16.0),
-              margin: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(20.0),
+              margin: EdgeInsets.all(20.0),
+              height: 600,
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 238, 232, 250),
                 borderRadius: BorderRadius.circular(12.0),
@@ -191,6 +277,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   TableCalendar(
                     firstDay: DateTime.utc(2000, 1, 1),
                     lastDay: DateTime.utc(2100, 12, 31),
+                    rowHeight: 90,
                     focusedDay: _focusedDay,
                     selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
                     eventLoader: (day) => _events[day.toLocal()] ?? [],
@@ -200,72 +287,99 @@ class _CalendarPageState extends State<CalendarPage> {
                     calendarStyle: CalendarStyle(
                       outsideDaysVisible: false,
                       defaultTextStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                       weekendTextStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                       selectedTextStyle: TextStyle(color: Colors.black),
+                      todayDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(
+                            0xFF382973), // Change to your desired color
+                      ),
                       selectedDecoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.black, width: 2.0),
                         color: isSameDay(_selectedDay, _focusedDay)
-                            ? Colors.white
+                            ? Color.fromARGB(255, 255, 255, 255)
                             : Colors.transparent,
                       ),
                     ),
+                    headerStyle: HeaderStyle(
+                      titleTextStyle: TextStyle(
+                        fontSize: 20, // Set your desired font size
+                        fontWeight: FontWeight.bold, // Make the text bold
+                      ),
+                      formatButtonVisible:
+                          false, // Hide the format button if not needed
+                      leftChevronIcon:
+                          Icon(Icons.chevron_left, color: Colors.black),
+                      rightChevronIcon:
+                          Icon(Icons.chevron_right, color: Colors.black),
+                      titleCentered: true, // Centers the title text
+                    ),
                     calendarBuilders: CalendarBuilders(
                       markerBuilder: (context, date, events) {
-                        if (events.isEmpty) {
-                          return SizedBox.shrink();
-                        }
-
-                        return Positioned(
-                          bottom: 5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(events.length, (index) {
-                              return Container(
-                                width: 6,
-                                height: 6,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal:
-                                        2), // Increased margin for visibility
-                                decoration: BoxDecoration(
-                                  color: Colors.purple,
-                                  shape: BoxShape.circle,
-                                ),
-                              );
-                            }),
-                          ),
-                        );
+                        // Return an empty widget if there are events
+                        return SizedBox.shrink();
                       },
                     ),
                   ),
-                  SizedBox(height: 16.0),
-                  ..._selectedEvents.map((event) => ListTile(
-                        title: Text(event),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () => _removeEvent(event),
+                  SizedBox(height: 10),
+                  if (_selectedEvents.isNotEmpty)
+                    ..._selectedEvents.map(
+                      (event) => Container(
+                        margin: EdgeInsets.only(bottom: 8.0),
+                        padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 233, 215, 235),
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(color: Colors.black),
                         ),
-                      )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                event,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.black),
+                              onPressed: () => _removeEvent(event),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            FloatingActionButton(
-              child: Icon(Icons.add, color: Colors.white),
-              backgroundColor: const Color(0xFF382973),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CalendarEvent(
-                    selectedDate: _selectedDay, // Pass the selected date
-                  ),
-                ),
-              ),
-            ),
+            SizedBox(height: 10), // Adjust the height as needed
+            Expanded(child: Container()), // Space filler
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: const Color(0xFF382973),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CalendarEvent(
+                selectedDate: _selectedDay,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
