@@ -43,9 +43,7 @@ class VoiceSettingsState extends State<VoiceSettings> {
     });
   }
 
-  // Method to navigate to another page
   void _navigateToNextPage(BuildContext context) {
-    // Pass the selected option to the next page
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -53,7 +51,6 @@ class VoiceSettingsState extends State<VoiceSettings> {
             voice: isFemale
                 ? {"name": "en-us-x-tpf-local", "locale": "en-US"}
                 : {'name': 'en-us-x-iol-local', 'locale': 'en-US'},
-            // voice: voice,
             volume: volume,
             pitch: pitch,
             speechRate: speechRate),
@@ -64,33 +61,42 @@ class VoiceSettingsState extends State<VoiceSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Voice Over Setting'),
-          centerTitle: true,
-        ),
-        body: Center(
-            child: Column(
-          children: [
-            Row(
-              children: [
-                const Text(
-                  "Default Text: Hi There!",
-                  style: TextStyle(fontSize: 21),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                    onPressed: _speak, child: const Text("Test voice"))
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  "Volume",
-                  style: TextStyle(fontSize: 17),
-                ),
-                Slider(
+      appBar: AppBar(
+        title: const Text('Voice Over Setting'),
+        centerTitle: true,
+        backgroundColor:
+            const Color(0xFF382973), // Dark purple color for AppBar
+      ),
+      body: Container(
+        color: Colors.white, // White background for the main content
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.center, // Align content to the center
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Default Text: Hi There!",
+                    style: TextStyle(fontSize: 21),
+                  ),
+                  const SizedBox(width: 30), // Increased width for spacing
+                  ElevatedButton(
+                    onPressed: _speak,
+                    child: const Text("Test voice"),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Volume",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Slider(
                     min: 0.0,
                     max: 1.0,
                     value: volume,
@@ -98,20 +104,22 @@ class VoiceSettingsState extends State<VoiceSettings> {
                       setState(() {
                         volume = value;
                       });
-                    }),
-                Text(
-                  "${volume.toStringAsFixed(1)}",
-                  style: TextStyle(fontSize: 17),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  "Pitch",
-                  style: TextStyle(fontSize: 17),
-                ),
-                Slider(
+                    },
+                  ),
+                  Text(
+                    "${volume.toStringAsFixed(1)}",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Pitch",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Slider(
                     min: 0.5,
                     max: 2.0,
                     value: pitch,
@@ -119,20 +127,22 @@ class VoiceSettingsState extends State<VoiceSettings> {
                       setState(() {
                         pitch = value;
                       });
-                    }),
-                Text(
-                  "${pitch.toStringAsFixed(1)}",
-                  style: TextStyle(fontSize: 17),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  "Speech Rate",
-                  style: TextStyle(fontSize: 17),
-                ),
-                Slider(
+                    },
+                  ),
+                  Text(
+                    "${pitch.toStringAsFixed(1)}",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Speech Rate",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Slider(
                     min: 0.0,
                     max: 1.0,
                     value: speechRate,
@@ -140,38 +150,72 @@ class VoiceSettingsState extends State<VoiceSettings> {
                       setState(() {
                         speechRate = value;
                       });
-                    }),
-                Text(
-                  "${speechRate.toStringAsFixed(1)}",
-                  style: TextStyle(fontSize: 17),
+                    },
+                  ),
+                  Text(
+                    "${speechRate.toStringAsFixed(1)}",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _selectButton(1),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isFemale
+                          ? Color.fromARGB(255, 255, 235, 254)
+                          : const Color.fromARGB(255, 0, 0, 0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15), // Increased button size
+                    ),
+                    child: const Text(
+                      'Female',
+                      style:
+                          TextStyle(color: Colors.black), // Text color to black
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () => _selectButton(2),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isMale
+                          ? const Color.fromARGB(255, 214, 221, 255)
+                          : Color.fromARGB(255, 219, 226, 250),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 50,
+                        vertical: 15, // Increased button size
+                      ),
+                    ),
+                    child: const Text(
+                      'Male',
+                      style:
+                          TextStyle(color: Colors.black), // Text color to black
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () => _navigateToNextPage(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 50, vertical: 15), // Increased button size
                 ),
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () => _selectButton(1),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isFemale ? Colors.blue : Colors.grey,
+                child: const Text(
+                  'Save Voice Settings',
+                  style: TextStyle(color: Colors.black), // Text color to black
+                ),
               ),
-              child: const Text('Female'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _selectButton(2),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isMale ? Colors.blue : Colors.grey,
-              ),
-              child: const Text('Male'),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () => _navigateToNextPage(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-              ),
-              child: const Text('Save Voice Settings'),
-            ),
-          ],
-        )));
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override

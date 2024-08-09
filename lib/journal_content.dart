@@ -32,18 +32,24 @@ class Display_Journal_Data extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Journal Entry: $date'),
-          centerTitle: true,
+      appBar: AppBar(
+        title: Text('Journal Entry: $date'),
+        centerTitle: true,
+      ),
+      body: Container(
+        color: Colors.white, // Set the background color to white
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("${daysOfWeek[DateTime.parse(date).weekday]}"),
+              Text(time),
+              const SizedBox(height: 20), // Space between elements
+              Text(content),
+            ],
+          ),
         ),
-        body: Center(
-            child: Column(
-          children: [
-            Text("${daysOfWeek[DateTime.parse(date).weekday]}"),
-            Text(time),
-            const Text(""),
-            Text(content)
-          ],
-        )));
+      ),
+    );
   }
 }

@@ -24,7 +24,9 @@ class DisplayData extends StatelessWidget {
         title: const Text('Display Data'),
         centerTitle: true,
       ),
-      body: StreamBuilder(
+      body: Container(
+        color: Colors.white, // Set the background color to white
+        child: StreamBuilder(
           stream:
               FirebaseFirestore.instance.collection('JournalEntry').snapshots(),
           builder: (context, snapshot) {
@@ -39,7 +41,15 @@ class DisplayData extends StatelessWidget {
 
                     return ListTile(
                       leading: CircleAvatar(
-                        child: Text("${index + 1}"),
+                        backgroundColor:
+                            const Color(0xFF382973), // Dark purple color
+                        child: Text(
+                          "${index + 1}",
+                          style: const TextStyle(
+                            color:
+                                Colors.white, // White text color for contrast
+                          ),
+                        ),
                       ),
                       title: Text(_date),
                       subtitle: Text(_time),
@@ -64,13 +74,15 @@ class DisplayData extends StatelessWidget {
                 return Center(child: Text(snapshot.hasError.toString()));
               } else {
                 return const Center(
-                  child: Text("Not Data Found"),
+                  child: Text("No Data Found"),
                 );
               }
             } else {
               return const Center(child: CircularProgressIndicator());
             }
-          }),
+          },
+        ),
+      ),
     );
   }
 }
