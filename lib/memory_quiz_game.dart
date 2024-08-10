@@ -46,7 +46,6 @@ class _MemoryQuizGameState extends State<MemoryQuizGame> {
   Future<void> fetchLatestQuizItems() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
-      // First, find the latest datetime value
       var latestDatetimeSnapshot = await firestore.collection('quiz_details')
           .orderBy('datetime', descending: true)
           .limit(1)
@@ -58,11 +57,9 @@ class _MemoryQuizGameState extends State<MemoryQuizGame> {
         return;
       }
 
-      // Extract the latest datetime
       int latestDatetime = latestDatetimeSnapshot.docs.first.data()['datetime'] as int;
       print("Latest datetime: $latestDatetime");
 
-      // Fetch all documents with the latest datetime
       QuerySnapshot questionSnapshot = await firestore
           .collection('quiz_details')
           .where('datetime', isEqualTo: latestDatetime)
@@ -103,7 +100,6 @@ class _MemoryQuizGameState extends State<MemoryQuizGame> {
         });
       } else {
         _showCompletionDialog();
-        _confettiController.play();
       }
     } else {
       setState(() {
@@ -119,115 +115,212 @@ class _MemoryQuizGameState extends State<MemoryQuizGame> {
   }
 
   void _showCompletionDialog() {
+    _confettiController.play(); // Start confetti when the dialog is shown
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Congratulations!'),
-        content: Text('You have completed the quiz.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/games_selection');
-            },
-            child: Text('Go Back'),
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white, // White background for the dialog
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0), // Rounded corners
           ),
-        ],
-      ),
+          contentPadding: EdgeInsets.all(20.0),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Congratulations!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: Color.fromARGB(255, 41, 19, 76),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'You have completed the quiz.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black87,
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _resetGame();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 41, 19, 76), // Button color
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                      ),
+                    ),
+                    child: Text(
+                      'Play Again',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacementNamed('/games_selection');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 41, 19, 76), // Button color
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                      ),
+                    ),
+                    child: Text(
+                      'Go Back',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
+  }
+
+  void _resetGame() {
+    setState(() {
+      _questions.clear();
+      _currentQuestionIndex = 0;
+      _wrongGuesses = 0;
+      _wrongAnswers.clear();
+      _isLoading = true;
+    });
+    fetchLatestQuizItems();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple color
+        backgroundColor: Color.fromARGB(255, 41, 19, 76),
         title: Text(
           'Memory Quiz Game',
           style: TextStyle(
-            color: Colors.white, // White color for title
+            color: Colors.white,
           ),
         ),
         iconTheme: IconThemeData(
-          color: Colors.white, // White color for back arrow
+          color: Colors.white,
         ),
       ),
       body: Container(
-        // color: Colors.white, // White background color for the entire screen
+        color: Colors.white, // White background color for the entire screen
         child: _isLoading
             ? Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (_questions.isNotEmpty) ...[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 5,
-                            child: Column(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: _questions[_currentQuestionIndex].imageUrl,
-                                  placeholder: (context, url) => CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) => Icon(Icons.error),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    _questions[_currentQuestionIndex].questionText,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.deepPurple,
+            : Stack(
+                alignment: Alignment.center,
+                children: [
+                  if (_questions.isNotEmpty) ...[
+                    Center(
+                      child: Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0), // Rounded corners
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: _questions[_currentQuestionIndex].imageUrl,
+                                placeholder: (context, url) => CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                                imageBuilder: (context, imageProvider) => Container(
+                                  width: double.infinity,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
-                                Column(
-                                  children: _questions[_currentQuestionIndex].options.map((option) {
-                                    int idx = _questions[_currentQuestionIndex].options.indexOf(option);
-                                    bool isWrong = _wrongAnswers.contains(idx);
-                                    return Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: ChoiceChip(
-                                        label: Text(option),
-                                        selected: false,
-                                        onSelected: (_) => _onOptionSelected(idx),
-                                        backgroundColor: isWrong ? Colors.red[200] : Colors.deepPurple[50],
-                                        selectedColor: Colors.deepPurple[300],
-                                        labelStyle: TextStyle(color: isWrong ? Colors.white : Colors.deepPurple[900]),
-                                      ),
-                                    );
-                                  }).toList(),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                _questions[_currentQuestionIndex].questionText,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: ConfettiWidget(
-                            confettiController: _confettiController,
-                            blastDirectionality: BlastDirectionality.explosive,
-                            particleDrag: 0.05,
-                            emissionFrequency: 0.05,
-                            numberOfParticles: 50,
-                            gravity: 0.05,
-                            shouldLoop: false,
-                            colors: const [
-                              Colors.green,
-                              Colors.blue,
-                              Colors.pink,
-                              Colors.orange,
-                              Colors.purple
+                              ),
+                              SizedBox(height: 20),
+                              Column(
+                                children: _questions[_currentQuestionIndex].options.map((option) {
+                                  int idx = _questions[_currentQuestionIndex].options.indexOf(option);
+                                  bool isWrong = _wrongAnswers.contains(idx);
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () => _onOptionSelected(idx),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: isWrong ? Colors.red[300] : Color.fromARGB(255, 41, 19, 76), // Button color
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                                          ),
+                                        ),
+                                        child: Text(
+                                          option,
+                                          style: TextStyle(
+                                            color: isWrong ? Colors.white : Color.fromARGB(255, 255, 255, 255),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
                             ],
                           ),
                         ),
+                      ),
+                    ),
+                  ],
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ConfettiWidget(
+                      confettiController: _confettiController,
+                      blastDirection: -3.14 / 2, // Top direction
+                      particleDrag: 0.05,
+                      emissionFrequency: 0.05,
+                      numberOfParticles: 50,
+                      gravity: 0.05,
+                      shouldLoop: false,
+                      colors: const [
+                        Color.fromARGB(255, 163, 215, 165),
+                        Color.fromARGB(255, 145, 183, 215),
+                        Color.fromARGB(255, 211, 143, 166),
+                        Color.fromARGB(255, 201, 177, 140),
+                        Color.fromARGB(255, 178, 136, 185),
                       ],
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
       ),
     );

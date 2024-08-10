@@ -39,6 +39,7 @@ class _QuizFormPageState extends State<QuizFormPage> {
   final picker = ImagePicker();
   bool _isSaving = false;
   bool _showSuccess = false;
+  bool _showLoading = false;
   late final int newTimeNow;
 
   @override
@@ -100,6 +101,7 @@ class _QuizFormPageState extends State<QuizFormPage> {
   Future<void> saveQuizDetails() async {
     setState(() {
       _isSaving = true;
+      _showLoading = true;
     });
     for (var question in questions) {
       if (question.image != null && !question.imageValidationFailed) {
@@ -116,19 +118,24 @@ class _QuizFormPageState extends State<QuizFormPage> {
           .collection('quiz_details')
           .add(quizDetails);
     }
+
+    // Show success screen after loading
+    await Future.delayed(Duration(seconds: 1)); // Adjust delay as needed
+
     setState(() {
-      _isSaving = false;
+      _showLoading = false;
       _showSuccess = true;
     });
 
-    // Show success screen for 2 seconds
-    await Future.delayed(Duration(seconds: 2));
-    setState(() => _showSuccess = false);
+    // Wait for the success screen to be visible
+    await Future.delayed(Duration(seconds: 2)); // Adjust delay as needed
 
-    // Pop the current page
+    setState(() {
+      _showSuccess = false;
+    });
+
+    // Navigate to home page
     Navigator.of(context).pop();
-
-    // Navigate to PostLoginWelcomePage
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -149,16 +156,16 @@ class _QuizFormPageState extends State<QuizFormPage> {
             GestureDetector(
               onTap: () => getImage(index),
               child: Container(
-                width: 200,
+                width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.grey, width: 2),
                 ),
                 child: question.image != null
                     ? ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(10),
                         child: Image.file(question.image!, fit: BoxFit.fill),
                       )
                     : question.imageUrl.isNotEmpty
@@ -218,46 +225,84 @@ class _QuizFormPageState extends State<QuizFormPage> {
         ),
         iconTheme: IconThemeData(color: Colors.white), // White back arrow
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ...questions
-                  .map((question) =>
-                      buildQuestionCard(questions.indexOf(question)))
-                  .toList(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          questions.add(Question(options: ['', '', '']));
-                        });
-                      },
-                      child: Icon(Icons.add),
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.all(20),
-                      ),
+      body: Stack(
+        children: [
+          Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ...questions
+                      .map((question) =>
+                          buildQuestionCard(questions.indexOf(question)))
+                      .toList(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  questions.add(Question(options: ['', '', '']));
+                                });
+                              },
+                              child: Text('Add'),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  await saveQuizDetails();
+                                }
+                              },
+                              child: Text('Save'),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          await saveQuizDetails();
-                        }
-                      },
-                      child: Text('Save'),
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_showLoading || _showSuccess)
+            AnimatedOpacity(
+              opacity: _showLoading || _showSuccess ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 300),
+              child: Container(
+                color: Colors.green,
+                child: Center(
+                  child: _showLoading
+                      ? CircularProgressIndicator()
+                      : _showSuccess
+                          ? Icon(Icons.check_circle, color: Colors.white, size: 100)
+                          : Container(),
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+        ],
       ),
     );
   }

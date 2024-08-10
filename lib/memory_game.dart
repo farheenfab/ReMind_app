@@ -91,31 +91,74 @@ class _MemoryGameHomeState extends State<MemoryGameHome> {
     });
   }
 
-  void _showCompletionDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Congratulations!'),
-        content: Text('You have matched all the pictures.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _resetGame();
-            },
-            child: Text('Play Again'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: Text('Go Back'),
-          ),
-        ],
-      ),
-    );
-  }
+void _showCompletionDialog() {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: Color(0xFFD3D3D3), // Pastel grey color for background
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Congratulations!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold, // Bold text
+                fontSize: 17.0, // Increased text size
+                color: Colors.black, // Text color
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'You have matched all the pictures.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15.0, // Text size
+                color: Colors.black, // Text color
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _resetGame();
+                  },
+                  child: Text(
+                    'Play Again',
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 41, 19, 76),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0, // Bold text
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Go Back',
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 41, 19, 76),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0, // Bold text
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
   void _resetGame() {
     setState(() {
@@ -201,12 +244,12 @@ class _MemoryGameHomeState extends State<MemoryGameHome> {
                   blastDirectionality: BlastDirectionality.explosive,
                   shouldLoop: false,
                   colors: const [
-                    Colors.red,
-                    Colors.blue,
-                    Colors.green,
+                    Color.fromARGB(255, 224, 131, 124),
+                    Color.fromARGB(255, 131, 187, 233),
+                    Color.fromARGB(255, 154, 227, 157),
                     Colors.yellow,
-                    Colors.orange,
-                    Colors.purple,
+                    Color.fromARGB(255, 219, 174, 105),
+                    Color.fromARGB(255, 200, 113, 215),
                   ],
                 ),
               ),
