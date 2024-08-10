@@ -26,7 +26,7 @@ class MedicineViewPage extends StatelessWidget {
             ),
           ],
         ),
-                iconTheme: IconThemeData(color: Colors.white), // Set back arrow color to white
+        iconTheme: IconThemeData(color: Colors.white), // Set back arrow color to white
       ),
       body: MedicineList(),
       backgroundColor: Color(0xFFFFFFFF), // Set the background color of the page to white
@@ -49,21 +49,61 @@ class MedicineList extends StatelessWidget {
 
         final medicines = snapshot.data!.docs;
 
-        return ListView.builder(
-          itemCount: medicines.length,
-          itemBuilder: (context, index) {
-            final medicine = medicines[index];
+        // Sort medicines by day of the week
+        final daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        final Map<String, List<QueryDocumentSnapshot>> sortedMedicines = {
+          for (var day in daysOfWeek) day: []
+        };
 
-            return MedicineCard(
-              id: medicine.id,
-              pillName: medicine['pillName'],
-              strength: medicine['strength'],
-              days: List<String>.from(medicine['days']),
-              frequency: medicine['frequency'],
-              foodOption: medicine['foodOption'],
-              remainderTime: medicine['remainderTime'],
+        for (var medicine in medicines) {
+          for (var day in medicine['days']) {
+            sortedMedicines[day]?.add(medicine);
+          }
+        }
+
+        return ListView(
+          children: daysOfWeek.map((day) {
+            final dayMedicines = sortedMedicines[day] ?? [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    day,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 41, 19, 76), // Dark Purple text color
+                    ),
+                  ),
+                ),
+                if (dayMedicines.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      'No medicines for the day',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
+                else
+                  ...dayMedicines.map((medicine) {
+                    return MedicineCard(
+                      id: medicine.id,
+                      pillName: medicine['pillName'],
+                      strength: medicine['strength'],
+                      days: List<String>.from(medicine['days']),
+                      frequency: medicine['frequency'],
+                      foodOption: medicine['foodOption'],
+                      remainderTime: medicine['remainderTime'],
+                    );
+                  }).toList(),
+              ],
             );
-          },
+          }).toList(),
         );
       },
     );
@@ -92,9 +132,9 @@ class MedicineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
-        color: _getPastelColor(), // Set the container color to a pastel color
+        color: Color.fromARGB(255, 224, 204, 240), // Light Pastel Purple color
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.black.withOpacity(0.1), width: 1), // Subtle border
       ),
@@ -106,18 +146,20 @@ class MedicineCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  pillName,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 0, 0, 0), // Dark Purple text color
+                Expanded(
+                  child: Text(
+                    pillName,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 41, 19, 76), // Dark Purple text color
+                    ),
                   ),
                 ),
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit, color: Color.fromARGB(255, 21, 94, 37)), // Dark Purple icon color
+                      icon: Icon(Icons.edit, color: Color.fromARGB(255, 21, 94, 37)), // Dark Green icon color for edit
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -161,82 +203,69 @@ class MedicineCard extends StatelessWidget {
     );
   }
 
-  // Helper function to get a random pastel color
-  Color _getPastelColor() {
-    final pastelColors = [
-      Color(0xFFFFF1E6), // Light Peach
-      Color(0xFFE0F7FA), // Light Cyan
-      Color(0xFFFFF9C4), // Light Yellow
-      Color(0xFFE1BEE7), // Light Lavender
-      Color(0xFFC8E6C9), // Light Green
-    ];
-    return pastelColors[id.hashCode % pastelColors.length];
+  void _showDeleteConfirmationDialog(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color(0xFFD3D3D3), // Pastel grey color for background
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Are you sure you want to delete this medicine?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, // Bold text
+                  fontSize: 17.0, // Increased text size
+                  color: Colors.black, // Text color
+                ),
+              ),
+              SizedBox(height: 20),
+              TextButton(
+                child: Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0, // Bold text
+                  ),
+                ),
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection('Medicine')
+                      .doc(id)
+                      .delete()
+                      .then((_) {
+                    Navigator.of(context).pop(); // Close the dialog
+                  }).catchError((error) {
+                    // Handle any errors here
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to delete medicine: $error')),
+                    );
+                  });
+                },
+              ),
+              Divider(
+                color: Colors.black, // Divider color
+              ),
+              TextButton(
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0, // Bold text
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
-
-void _showDeleteConfirmationDialog(BuildContext context, String id) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Color(0xFFD3D3D3), // Pastel grey color for background
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Are you sure you want to delete this medicine?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold, // Bold text
-                fontSize: 17.0, // Increased text size
-                color: Colors.black, // Text color
-              ),
-            ),
-            SizedBox(height: 20),
-            TextButton(
-              child: Text(
-                'Delete',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.0, // Bold text
-                ),
-              ),
-              onPressed: () {
-                FirebaseFirestore.instance
-                    .collection('Medicine')
-                    .doc(id)
-                    .delete()
-                    .then((_) {
-                  Navigator.of(context).pop(); // Close the dialog
-                }).catchError((error) {
-                  // Handle any errors here
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Failed to delete medicine: $error')),
-                  );
-                });
-              },
-            ),
-            Divider(
-              color: Colors.black, // Divider color
-            ),
-            TextButton(
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.0, // Bold text
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
 }

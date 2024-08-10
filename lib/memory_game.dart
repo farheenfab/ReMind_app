@@ -125,20 +125,6 @@ void _showCompletionDialog() {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    _resetGame();
-                  },
-                  child: Text(
-                    'Play Again',
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 41, 19, 76),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0, // Bold text
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
                   child: Text(
