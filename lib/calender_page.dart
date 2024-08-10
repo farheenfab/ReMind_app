@@ -219,8 +219,12 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF382973),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -232,12 +236,13 @@ class _CalendarPageState extends State<CalendarPage> {
             );
           },
         ),
-        title: Text('Calendar', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('Calendar',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
             height: 3.0,
-            color: Colors.black,
+            color: Color.fromARGB(255, 0, 0, 0),
           ),
         ),
       ),

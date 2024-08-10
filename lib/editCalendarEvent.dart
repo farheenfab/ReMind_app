@@ -54,31 +54,137 @@ class _EditEventPageState extends State<EditEventPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Event'),
+        title: const Text(
+          'Edit Event',
+          style:
+              TextStyle(color: Colors.white), // Set AppBar text color to white
+        ),
+        backgroundColor: Color(0xFF382973), // Dark purple background color
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white, // White color for back arrow
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
+      backgroundColor: Colors.white, // Set background color to white
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              controller: eventName,
-              decoration: const InputDecoration(labelText: 'Event Name'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                controller: eventName,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(0xFF382973)), // Dark purple outline
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when not focused
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when focused
+                  ),
+                  hintText: 'Enter Event Name',
+                ),
+              ),
             ),
-            TextField(
-              controller: eventDescription,
-              decoration: const InputDecoration(labelText: 'eventDescription'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                controller: eventDescription,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(0xFF382973)), // Dark purple outline
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when not focused
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when focused
+                  ),
+                  hintText: 'Enter Event Description',
+                ),
+              ),
             ),
-            TextField(
-              controller: eventLocation,
-              decoration: const InputDecoration(labelText: 'eventLocation'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                controller: eventLocation,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(0xFF382973)), // Dark purple outline
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when not focused
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when focused
+                  ),
+                  hintText: 'Enter Event Location',
+                ),
+              ),
             ),
-            TextField(
-              controller: eventTime,
-              decoration: const InputDecoration(labelText: 'eventTime'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                controller: eventTime,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(0xFF382973)), // Dark purple outline
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when not focused
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        color: Color(
+                            0xFF382973)), // Dark purple outline when focused
+                  ),
+                  hintText: 'Enter Event Time',
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: updateEvent,
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Color(0xFF382973), // Dark purple background color
+                foregroundColor: Colors.white, // White text color
+                minimumSize: Size(double.infinity, 40), // Button height
+                textStyle: TextStyle(fontSize: 18), // Text size
+              ),
               child: const Text('Update Event'),
             ),
           ],

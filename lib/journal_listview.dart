@@ -21,8 +21,20 @@ class DisplayData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Display Data'),
-        centerTitle: true,
+        backgroundColor:
+            const Color(0xFF382973), // Dark purple background color
+        title: const Align(
+          alignment: Alignment.centerLeft, // Align the title to the left
+          child: Text(
+            'Memory Log',
+            style: TextStyle(color: Colors.white), // White title color
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+          color: Colors.white, // White back arrow color
+        ),
       ),
       body: Container(
         color: Colors.white, // Set the background color to white

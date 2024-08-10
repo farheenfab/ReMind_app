@@ -26,15 +26,25 @@ class _CalendarEventState extends State<CalendarEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Event'),
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Create Event',
+            style: TextStyle(color: Colors.white), // White text color
+          ),
+        ),
         leading: IconButton(
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CalendarPage()),
           ),
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white, // White back arrow color
+          ),
         ),
-        centerTitle: true,
+        backgroundColor:
+            const Color(0xFF382973), // Dark purple background color
       ),
       backgroundColor: Colors.white, // Set background color to white
       body: Padding(
@@ -56,19 +66,19 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color:
                                     Color(0xFF382973)), // Dark purple outline
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when not focused
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when focused
                           ),
@@ -84,19 +94,19 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color:
                                     Color(0xFF382973)), // Dark purple outline
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when not focused
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when focused
                           ),
@@ -112,19 +122,19 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color:
                                     Color(0xFF382973)), // Dark purple outline
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when not focused
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when focused
                           ),
@@ -140,19 +150,19 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color:
                                     Color(0xFF382973)), // Dark purple outline
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when not focused
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(
                                     0xFF382973)), // Dark purple outline when focused
                           ),
@@ -165,15 +175,15 @@ class _CalendarEventState extends State<CalendarEvent> {
               ),
             ),
 
-            SizedBox(height: 20), // Spacing between buttons
+            const SizedBox(height: 20), // Spacing between buttons
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    Color(0xFF382973), // Dark purple background color
-                foregroundColor: Colors.white, //
-                minimumSize: Size(double.infinity, 40), // Button height
-                textStyle: TextStyle(fontSize: 18), // Text size
+                    const Color(0xFF382973), // Dark purple background color
+                foregroundColor: Colors.white, // White text color
+                minimumSize: const Size(double.infinity, 40), // Button height
+                textStyle: const TextStyle(fontSize: 18), // Text size
               ),
               child: const Text('Create Event'),
               onPressed: () async {
@@ -196,15 +206,15 @@ class _CalendarEventState extends State<CalendarEvent> {
               },
             ),
 
-            SizedBox(height: 10, width: 20.0), // Spacing between buttons
+            const SizedBox(height: 10, width: 20.0), // Spacing between buttons
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    Color(0xFF382973), // Dark purple background color
+                    const Color(0xFF382973), // Dark purple background color
                 foregroundColor: Colors.white, // White text color
-                minimumSize: Size(double.infinity, 40), // Button height
-                textStyle: TextStyle(fontSize: 18), // Text size
+                minimumSize: const Size(double.infinity, 40), // Button height
+                textStyle: const TextStyle(fontSize: 18), // Text size
               ),
               child: const Text('Cancel'),
               onPressed: () {

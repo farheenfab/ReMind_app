@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'voice_settings.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'profile_page.dart';
 import 'settings.dart';
 import 'calender_page.dart';
-import 'chat_page.dart';
-import 'medication_page.dart';
+import 'chat_screen.dart';
 import 'Screen/medicineView.dart';
 import 'Screen/sos.dart';
-import 'games_page.dart';
 import 'games_selection_screen.dart';
 import 'memory_log_page.dart';
-import 'chat_screen.dart';
+import 'journal_listview.dart';
 import 'bottom_navigation.dart';
-import 'journal.dart';
-import 'journal_content.dart';
-import 'journal_listview.dart'; // Import the new bottom navigation bar
+import 'calendarEventList.dart'; // Import the CalendarEventViewPage
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -28,16 +24,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
-
-  final List<Widget> _children = [
-    PlaceholderWidget(),
-    PlaceholderWidget(),
-    PlaceholderWidget(),
-    PlaceholderWidget(),
-    SettingsPage(),
-    GamesSelectionScreen(),
-    DisplayData()
-  ];
 
   void onTabTapped(int index) {
     if (index == 1) {
@@ -68,6 +54,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    DateTime startOfDay = DateTime(today.year, today.month, today.day);
+
     return WillPopScope(
       onWillPop: () async {
         if (_currentIndex != 0) {
@@ -81,17 +70,15 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          automaticallyImplyLeading: false, // Remove the back button
-          backgroundColor: Color.fromARGB(
-              255, 41, 19, 76), // Dark Purple background color for AppBar
+          automaticallyImplyLeading: false,
+          backgroundColor: Color.fromARGB(255, 41, 19, 76),
           title: const Text(
             'Home',
-            style: TextStyle(color: Colors.white), // Set title color to white
+            style: TextStyle(color: Colors.white),
           ),
           actions: [
             IconButton(
-              icon:
-                  Icon(Icons.person, color: Colors.white), // White profile icon
+              icon: Icon(Icons.person, color: Colors.white),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -158,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 180, 224, 173),
-                      iconColor: Color.fromARGB(255, 0, 100, 0), // Dark green
+                      iconColor: Color.fromARGB(255, 0, 100, 0),
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -174,8 +161,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 252, 233, 156),
-                      iconColor: Color.fromARGB(255, 223, 180,
-                          39), // Custom color for medication icon
+                      iconColor: Color.fromARGB(255, 223, 180, 39),
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -199,8 +185,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 168, 213, 250),
-                      iconColor: const Color.fromARGB(
-                          255, 30, 110, 175), // Custom color for chat icon
+                      iconColor: const Color.fromARGB(255, 30, 110, 175),
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -216,8 +201,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       color: Color.fromARGB(255, 255, 174, 174),
-                      iconColor: Color.fromARGB(
-                          255, 222, 38, 5), // Custom color for SOS icon
+                      iconColor: Color.fromARGB(255, 222, 38, 5),
                       iconSize: 60,
                       fontSize: 18,
                     ),
@@ -250,17 +234,55 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 5),
                     Expanded(
-                      child: ListView(
-                        children: List.generate(
-                          10,
-                          (index) => Text(
-                            'Task ${index + 1}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('CalendarEvent')
+                            .where('eventDate',
+                                isEqualTo: startOfDay.toIso8601String())
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
+                            return const Center(
+                                child: Text('No tasks for today.'));
+                          }
+
+                          final events = snapshot.data!.docs;
+
+                          return ListView.builder(
+                            itemCount: events.length,
+                            itemBuilder: (context, index) {
+                              var event = events[index];
+                              return ListTile(
+                                title: Text(
+                                  event['eventName'],
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                ),
+                                subtitle: Text(
+                                  event['eventDescription'],
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CalendarEventViewPage(
+                                        selectedDay: startOfDay,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -274,15 +296,6 @@ class _HomePageState extends State<HomePage> {
           onTap: onTabTapped,
         ),
       ),
-    );
-  }
-}
-
-class PlaceholderWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Placeholder Widget'),
     );
   }
 }
@@ -315,20 +328,19 @@ class HomeButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Icon(
               icon,
               size: iconSize,
               color: iconColor,
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: 8),
             Text(
               label,
-              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: FontWeight.bold,

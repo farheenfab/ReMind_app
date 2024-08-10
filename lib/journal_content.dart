@@ -33,8 +33,20 @@ class Display_Journal_Data extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Journal Entry: $date'),
-        centerTitle: true,
+        backgroundColor:
+            const Color(0xFF382973), // Dark purple background color
+        title: Align(
+          alignment: Alignment.centerLeft, // Align title to the left
+          child: Text(
+            'Journal Entry: $date',
+            style: const TextStyle(color: Colors.white), // White title color
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+          color: Colors.white, // White back arrow color
+        ),
       ),
       body: Container(
         color: Colors.white, // Set the background color to white
