@@ -1,5 +1,6 @@
+import 'package:alz_app/voice_settings.dart';
 import 'package:flutter/material.dart';
-import 'microphone_settings.dart'; // Import the new MicrophoneSettingsPage
+import 'voice_settings.dart'; // Import the new MicrophoneSettingsPage
 import 'bottom_navigation.dart'; // Import the custom navigation bar
 import 'home_page.dart';
 import 'games_selection_screen.dart';
@@ -8,6 +9,9 @@ import 'games_page.dart';
 import 'quiz_form_page.dart';  // Ensure this is correctly imported
 import 'memory_log_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';  // Import for Firebase
+import 'journal.dart';
+import 'journal_content.dart';
+import 'journal_listview.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -93,12 +97,12 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: SettingsTile(
                 icon: Icons.mic,
-                title: 'Microphone Voice Settings',
+                title: 'Voice Over Settings',
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MicrophoneSettingsPage(),
+                      builder: (context) => VoiceSettings(),
                     ),
                   );
                 },
@@ -152,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     case 1:
                       return GamesSelectionScreen();
                     case 2:
-                      return MemoryLogPage();
+                      return DisplayData();
                     case 3:
                       return SettingsPage();
                     default:

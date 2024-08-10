@@ -4,7 +4,9 @@ import 'home_page.dart';
 import 'settings.dart';
 import 'games_page.dart';
 import 'games_selection_screen.dart';
-import 'memory_log_page.dart';
+import 'journal.dart';
+import 'journal_content.dart';
+import 'journal_listview.dart';
 
 class MemoryLogPage extends StatefulWidget {
   @override
