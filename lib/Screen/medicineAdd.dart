@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'medicineview.dart'; // Import the MedicineViewPage
 
@@ -19,6 +20,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   TimeOfDay? _selectedTime;
   String? _selectedFoodOption;
   List<bool> _isSelectedFoodOption = [true, false]; // Default to Before Food
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -150,61 +153,48 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                   final List<String> days = _selectedDays;
                   final String? frequency = _selectedFrequency;
                   final String? foodOption = _selectedFoodOption;
+                  final String? userEmail = _auth.currentUser?.email;
 
-                  if (pillName.isNotEmpty && strength != null && days.isNotEmpty && frequency != null && _selectedTime != null && foodOption != null) {
-                    // Check if the pill already exists in the database
-                    final QuerySnapshot result = await FirebaseFirestore.instance
-                        .collection('Medicine')
-                        .where('pillName', isEqualTo: pillName)
-                        .get();
+                  if (pillName.isNotEmpty && strength != null && days.isNotEmpty && frequency != null && _selectedTime != null && foodOption != null && userEmail != null) {
+                    // Sort the days based on the predefined order
+                    List<String> sortedDays = days..sort((a, b) {
+                      int indexA = _fullDaysOfWeek.indexOf(a);
+                      int indexB = _fullDaysOfWeek.indexOf(b);
+                      return indexA.compareTo(indexB);
+                    });
 
-                    final List<DocumentSnapshot> documents = result.docs;
+                    // Add the new medicine with user email
+                    await FirebaseFirestore.instance.collection('Medicines').add({
+                      'pillName': pillName,
+                      'strength': strength,
+                      'days': sortedDays,
+                      'frequency': frequency,
+                      'foodOption': foodOption,
+                      'remainderTime': '${_selectedTime!.hour}:${_selectedTime!.minute}',
+                      'userEmail': userEmail, // Save the user's email
+                    });
 
-                    if (documents.isEmpty) {
-                      // Sort the days based on the predefined order
-                      List<String> sortedDays = days..sort((a, b) {
-                        int indexA = _fullDaysOfWeek.indexOf(a);
-                        int indexB = _fullDaysOfWeek.indexOf(b);
-                        return indexA.compareTo(indexB);
-                      });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Medicine added successfully!')),
+                    );
 
-                      // Add the new medicine if it doesn't exist
-                      await FirebaseFirestore.instance.collection('Medicine').add({
-                        'pillName': pillName,
-                        'strength': strength,
-                        'days': sortedDays,
-                        'frequency': frequency,
-                        'foodOption': foodOption,
-                        'remainderTime': '${_selectedTime!.hour}:${_selectedTime!.minute}',
-                      });
+                    _pillNameController.clear();
+                    setState(() {
+                      _selectedStrength = null;
+                      _selectedDays = [];
+                      _selectedFrequency = null;
+                      _selectedTime = null;
+                      _selectedFoodOption = null;
+                      _isSelectedFoodOption = [true, false];
+                    });
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Medicine added successfully!')),
-                      );
-
-                      _pillNameController.clear();
-                      setState(() {
-                        _selectedStrength = null;
-                        _selectedDays = [];
-                        _selectedFrequency = null;
-                        _selectedTime = null;
-                        _selectedFoodOption = null;
-                        _isSelectedFoodOption = [true, false];
-                      });
-
-                      // Navigate to MedicineViewPage
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MedicineViewPage(),
-                        ),
-                      );
-                    } else {
-                      // Show a message if the pill already exists
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('This medicine already exists.')),
-                      );
-                    }
+                    // Navigate to MedicineViewPage
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MedicineViewPage(),
+                      ),
+                    );
                   }
                 },
                 child: Text('Add Medicine'),

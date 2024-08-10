@@ -1,8 +1,8 @@
-// import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'login_page.dart';
-import 'postlogin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EmergencyDetailsPage extends StatefulWidget {
   const EmergencyDetailsPage({Key? key}) : super(key: key);
@@ -16,8 +16,69 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
-  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'AE'); // Default to UAE
+  final TextEditingController _nameController = TextEditingController();
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'AE');
   String? _selectedGender;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmergencyDetails();
+  }
+
+  Future<void> _loadEmergencyDetails() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('emergency')
+          .doc(user.uid)
+          .get();
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data()!;
+        setState(() {
+          _nameController.text = data['contact_name'] ?? '';
+          _phoneNumber = PhoneNumber(
+            phoneNumber: data['phone_number'] ?? '',
+            isoCode: 'AE',
+          );
+          _dobController.text = data['date_of_birth'] ?? '';
+          _ageController.text = data['age'] ?? '';
+          _selectedGender = data['gender'];
+        });
+      }
+    }
+  }
+
+  Future<void> _saveEmergencyDetails() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final emergencyData = {
+        'contact_name': _nameController.text,
+        'phone_number': _phoneNumber.phoneNumber,
+        'gender': _selectedGender,
+        'date_of_birth': _dobController.text,
+        'age': _ageController.text,
+        'user_id': user.uid,
+        'email': user.email,
+      };
+
+      try {
+        await FirebaseFirestore.instance
+            .collection('emergency')
+            .doc(user.uid)
+            .set(emergencyData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Emergency details saved successfully!')),
+        );
+      } catch (e) {
+        print('Error saving emergency details: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to save emergency details')),
+        );
+      }
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -44,14 +105,6 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
     return age;
   }
 
-  bool _isNextButtonEnabled = false;
-
-  void _validateForm() {
-    setState(() {
-      _isNextButtonEnabled = _formKey.currentState?.validate() ?? false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +121,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
+                controller: _nameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
                   labelText: 'Contact Name',
@@ -81,7 +135,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return 'Please enter the contact name';
                   }
                   return null;
                 },
@@ -115,8 +169,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                   ),
                   textStyle: const TextStyle(color: Colors.white),
                   selectorTextStyle: const TextStyle(color: Colors.white),
-                  formatInput:
-                      false, // Allow free input without formatting constraint
+                  formatInput: false,
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -131,10 +184,10 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 value: _selectedGender,
                 style: const TextStyle(
                   color: Colors.white,
-                ), // Text color of selected item
+                ),
                 dropdownColor:
-                    const Color(0xFF382973), // Background color of dropdown
-                iconEnabledColor: Colors.white, // Color of the dropdown icon
+                    const Color(0xFF382973),
+                iconEnabledColor: Colors.white,
                 decoration: const InputDecoration(
                   labelText: 'Gender',
                   labelStyle: TextStyle(color: Colors.white),
@@ -154,7 +207,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                       'Male',
                       style: TextStyle(
                         color: Colors.white,
-                      ), // Text color of dropdown items
+                      ),
                     ),
                   ),
                   DropdownMenuItem(
@@ -163,7 +216,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                       'Female',
                       style: TextStyle(
                         color: Colors.white,
-                      ), // Text color of dropdown items
+                      ),
                     ),
                   ),
                 ],
@@ -231,32 +284,17 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: _isNextButtonEnabled
-                    ? () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const LoginPage()),
-                        );
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF382973),
-                ),
-                child: const Text('Next'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (_) => const PostLoginWelcomePage()),
-                  );
+                onPressed: () async {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    await _saveEmergencyDetails();
+                    Navigator.of(context).pop();
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: const Color(0xFF382973),
                 ),
-                child: const Text('Skip'),
+                child: const Text('Save'),
               ),
             ],
           ),

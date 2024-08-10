@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'caretaker_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'caretaker_page.dart';
 
 class PatientDetailsPage extends StatefulWidget {
   const PatientDetailsPage({Key? key}) : super(key: key);
@@ -11,11 +15,47 @@ class PatientDetailsPage extends StatefulWidget {
 
 class _PatientDetailsPageState extends State<PatientDetailsPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   String? _selectedGender;
   PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'AE'); // Default to UAE
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> _requestLocationPermission() async {
+    final status = await Permission.location.request();
+    if (!status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Location permission is needed to access this feature.')),
+      );
+    }
+  }
+
+  Future<Position?> _getCurrentLocation() async {
+    await _requestLocationPermission(); // Ensure permission is requested
+    try {
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      return position;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error getting location: $e')),
+      );
+      return null;
+    }
+  }
+
+  Future<void> _updateLocationField() async {
+    final position = await _getCurrentLocation();
+    if (position != null) {
+      setState(() {
+        _locationController.text = 'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
+      });
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -35,11 +75,34 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   int _calculateAge(DateTime dob) {
     final now = DateTime.now();
     int age = now.year - dob.year;
-    if (now.month < dob.month ||
-        (now.month == dob.month && now.day < dob.day)) {
+    if (now.month < dob.month || (now.month == dob.month && now.day < dob.day)) {
       age--;
     }
     return age;
+  }
+
+  Future<void> _savePatientDetails() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final patientData = {
+        'name': _nameController.text,
+        'phone': _phoneNumber.phoneNumber,
+        'dob': _dobController.text,
+        'age': _ageController.text,
+        'gender': _selectedGender,
+        'location': _locationController.text,
+        'userId': user.uid,
+        'email': user.email,
+      };
+
+      try {
+        await _firestore.collection('Patients').doc(user.uid).set(patientData);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving patient details: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -58,6 +121,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
+                controller: _nameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
                   labelText: 'Name',
@@ -107,8 +171,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                   ),
                   textStyle: const TextStyle(color: Colors.white),
                   selectorTextStyle: const TextStyle(color: Colors.white),
-                  formatInput:
-                      false, // Allow free input without formatting constraint
+                  formatInput: false,
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -121,12 +184,9 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
               const SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 value: _selectedGender,
-                style: const TextStyle(
-                  color: Colors.white,
-                ), // Text color of selected item
-                dropdownColor:
-                    const Color(0xFF382973), // Background color of dropdown
-                iconEnabledColor: Colors.white, // Color of the dropdown icon
+                style: const TextStyle(color: Colors.white),
+                dropdownColor: const Color(0xFF382973),
+                iconEnabledColor: Colors.white,
                 decoration: const InputDecoration(
                   labelText: 'Gender',
                   labelStyle: TextStyle(color: Colors.white),
@@ -144,18 +204,14 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                     value: 'Male',
                     child: Text(
                       'Male',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ), // Text color of dropdown items
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                   DropdownMenuItem(
                     value: 'Female',
                     child: Text(
                       'Female',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ), // Text color of dropdown items
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
@@ -206,26 +262,31 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
-                style: TextStyle(color: Colors.white),
+              TextField(
+                controller: _locationController,
+                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Location of Home',
-                  labelStyle: TextStyle(color: Colors.white),
-                  enabledBorder: OutlineInputBorder(
+                  labelStyle: const TextStyle(color: Colors.white),
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.location_on, color: Colors.white),
+                    onPressed: _updateLocationField,
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Validation succeeded
+                    await _savePatientDetails();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const CaretakerDetailsPage(),
@@ -236,6 +297,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: const Color(0xFF382973),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
                 child: const Text('Next'),
               ),
