@@ -36,6 +36,7 @@ class _CalendarEventState extends State<CalendarEvent> {
         ),
         centerTitle: true,
       ),
+      backgroundColor: Colors.white, // Set background color to white
       body: Padding(
         padding:
             const EdgeInsets.symmetric(horizontal: 16.0), // Reduce side padding
@@ -55,6 +56,21 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color:
+                                    Color(0xFF382973)), // Dark purple outline
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when not focused
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when focused
                           ),
                           hintText: 'Enter Event Name',
                         ),
@@ -68,6 +84,21 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color:
+                                    Color(0xFF382973)), // Dark purple outline
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when not focused
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when focused
                           ),
                           hintText: 'Enter Event Description (Optional)',
                         ),
@@ -81,6 +112,21 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color:
+                                    Color(0xFF382973)), // Dark purple outline
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when not focused
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when focused
                           ),
                           hintText: 'Enter Event Location (Optional)',
                         ),
@@ -94,6 +140,21 @@ class _CalendarEventState extends State<CalendarEvent> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color:
+                                    Color(0xFF382973)), // Dark purple outline
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when not focused
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(
+                                    0xFF382973)), // Dark purple outline when focused
                           ),
                           hintText: 'Enter Event Time (Optional)',
                         ),
@@ -107,6 +168,13 @@ class _CalendarEventState extends State<CalendarEvent> {
             SizedBox(height: 20), // Spacing between buttons
 
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Color(0xFF382973), // Dark purple background color
+                foregroundColor: Colors.white, //
+                minimumSize: Size(double.infinity, 40), // Button height
+                textStyle: TextStyle(fontSize: 18), // Text size
+              ),
               child: const Text('Create Event'),
               onPressed: () async {
                 await DatabaseService().addData(
@@ -128,9 +196,16 @@ class _CalendarEventState extends State<CalendarEvent> {
               },
             ),
 
-            SizedBox(height: 10), // Spacing between buttons
+            SizedBox(height: 10, width: 20.0), // Spacing between buttons
 
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Color(0xFF382973), // Dark purple background color
+                foregroundColor: Colors.white, // White text color
+                minimumSize: Size(double.infinity, 40), // Button height
+                textStyle: TextStyle(fontSize: 18), // Text size
+              ),
               child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();

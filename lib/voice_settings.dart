@@ -202,7 +202,7 @@ class VoiceSettingsState extends State<VoiceSettings> {
               ElevatedButton(
                 onPressed: () => _navigateToNextPage(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  backgroundColor: Color.fromARGB(255, 231, 255, 225),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 50, vertical: 15), // Increased button size
                 ),

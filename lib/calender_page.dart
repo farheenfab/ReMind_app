@@ -129,13 +129,12 @@ class _CalendarPageState extends State<CalendarPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Colors.white, // Set the background color here
+            backgroundColor: Colors.white,
             title: Stack(
               children: [
                 Positioned(
                   right: 0,
-                  top:
-                      -10, // Adjust the 'top' value to move the close button up
+                  top: -10,
                   child: IconButton(
                     icon: Icon(Icons.close),
                     onPressed: () {
@@ -155,74 +154,60 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ],
             ),
-            content: Container(
-              width: double.maxFinite,
-              height: 400,
-              color: Colors.white, // Ensure the color is applied here
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: CalendarEventViewPage(
-                      selectedDay: selectedDay,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 16.0,
-                    right: 16.0,
-                    child: FloatingActionButton(
-                      child: Icon(Icons.add, color: Colors.white),
-                      backgroundColor: const Color(0xFF382973),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CalendarEvent(
-                              selectedDate: selectedDay,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+            content: SingleChildScrollView(
+              child: CalendarEventViewPage(
+                selectedDay: selectedDay,
               ),
             ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FloatingActionButton(
+                  child: Icon(Icons.add, color: Colors.white),
+                  backgroundColor: const Color(0xFF382973),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CalendarEvent(
+                          selectedDate: selectedDay,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       );
     } else {
-      // // Show a message or handle no events case
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(
-      //         'No events found for ${selectedDay.toLocal().toString().split(' ')[0]}'),
-      //   ),
-      // );
+      // _showNoEventsDialog(context, selectedDay);
     }
   }
 
   // Function to show a dialog when no events are found
-  void _showNoEventsDialog(BuildContext context, DateTime selectedDay) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('No Events'),
-          content: Text(
-              'No events found for ${selectedDay.toLocal().toString().split(' ')[0]}.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showNoEventsDialog(BuildContext context, DateTime selectedDay) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text('No Events'),
+  //         content: Text(
+  //             'No events found for ${selectedDay.toLocal().toString().split(' ')[0]}.'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text('OK'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   void _onFormatChanged(CalendarFormat format) {
     setState(() {
@@ -277,10 +262,19 @@ class _CalendarPageState extends State<CalendarPage> {
                   TableCalendar(
                     firstDay: DateTime.utc(2000, 1, 1),
                     lastDay: DateTime.utc(2100, 12, 31),
-                    rowHeight: 90,
+                    rowHeight: 80,
                     focusedDay: _focusedDay,
                     selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                    eventLoader: (day) => _events[day.toLocal()] ?? [],
+                    eventLoader: (day) {
+                      final normalizedDay =
+                          DateTime(day.year, day.month, day.day);
+                      final events = _events[normalizedDay] ?? [];
+
+                      // Debug: Print the day and associated events
+                      print('Date: $normalizedDay, Events: $events');
+
+                      return events;
+                    },
                     onDaySelected: _onDaySelected,
                     calendarFormat: _calendarFormat,
                     onFormatChanged: _onFormatChanged,
@@ -321,9 +315,24 @@ class _CalendarPageState extends State<CalendarPage> {
                           Icon(Icons.chevron_right, color: Colors.black),
                       titleCentered: true, // Centers the title text
                     ),
+                    // Remove the markerBuilder to eliminate red dots
                     calendarBuilders: CalendarBuilders(
                       markerBuilder: (context, date, events) {
-                        // Return an empty widget if there are events
+                        if (events.isNotEmpty) {
+                          return Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 4.0),
+                              width: 6.0,
+                              height: 6.0,
+                              decoration: BoxDecoration(
+                                color:
+                                    Colors.red, // Change to your desired color
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          );
+                        }
                         return SizedBox.shrink();
                       },
                     ),
