@@ -4,17 +4,8 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   cloud_firestore
-<<<<<<< HEAD
   firebase_core
   flutter_tts
-=======
-  file_selector_windows
-  firebase_core
-  firebase_storage
-  flutter_tts
-  permission_handler_windows
-  url_launcher_windows
->>>>>>> 50745d24be20ecaa0259d5908cd48202eeef8043
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

@@ -30,15 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dio: ^5.0.0  
-  intl: ^0.17.0
-  flutter_tts: ^3.2.2
-  shared_preferences: ^2.0.15
-  intl_phone_number_input: ^0.7.4
-  font_awesome_flutter: ^10.0.0
-  table_calendar: ^3.0.0
-  sqflite: ^2.0.0+4
-  path_provider: ^2.0.2
  
 
   # The following adds the Cupertino Icons font to your application.
@@ -55,6 +46,7 @@ dependencies:
   google_generative_ai: ^0.4.3
   speech_to_text: ^6.6.2
   flutter_tts: ^3.2.2
+
   # intl:
   # firebase_core_web:
   # cloud_firestore_platform_interface:
