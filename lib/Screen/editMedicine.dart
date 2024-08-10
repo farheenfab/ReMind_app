@@ -44,7 +44,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
   }
 
   void updateMedicine() {
-    FirebaseFirestore.instance.collection('Medicine').doc(widget.id).update({
+    FirebaseFirestore.instance.collection('Medicines').doc(widget.id).update({
       'pillName': pillNameController.text,
       'strength': strengthController.text,
       'days': daysController.text.split(', ').toList(),

@@ -69,6 +69,9 @@ dependencies:
   # google_generative_ai: ^0.4.3
   speech_to_text: ^6.6.0
   
+  firebase_auth: ^5.1.4
+  google_maps_flutter: ^2.8.0
+  geolocator: ^12.0.0
   # android_alarm_manager_plus: ^4.0.3
   # flutter_local_notifications: ^17.2.1+2
 

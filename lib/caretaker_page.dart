@@ -1,11 +1,9 @@
-// import 'dart:async';
 import 'package:flutter/material.dart';
-// import 'splash_screen.dart';
-
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login_page.dart';
-import 'emergency_page.dart';
-
+import 'emergency.dart';
 class CaretakerDetailsPage extends StatefulWidget {
   const CaretakerDetailsPage({Key? key}) : super(key: key);
 
@@ -15,11 +13,16 @@ class CaretakerDetailsPage extends StatefulWidget {
 
 class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'AE'); // Default to UAE
   String? _selectedGender;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -46,12 +49,24 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
     return age;
   }
 
-  bool _isNextButtonEnabled = false;
+  Future<void> _saveCaretakerDetails() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      // Create a map of caretaker details
+      final caretakerData = {
+        'name': _nameController.text,
+        'phone': _phoneNumber.phoneNumber,
+        'dob': _dobController.text,
+        'age': _ageController.text,
+        'gender': _selectedGender,
+        'location': _locationController.text,
+        'userId': user.uid, 
+        'email': user.email, // Link to the current user
+      };
 
-  void _validateForm() {
-    setState(() {
-      _isNextButtonEnabled = _formKey.currentState?.validate() ?? false;
-    });
+      // Store the data in Firestore
+      await _firestore.collection('caretakers').doc(user.uid).set(caretakerData);
+    }
   }
 
   @override
@@ -70,6 +85,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
+                controller: _nameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
                   labelText: 'Caretaker Name',
@@ -117,8 +133,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                   ),
                   textStyle: const TextStyle(color: Colors.white),
                   selectorTextStyle: const TextStyle(color: Colors.white),
-                  formatInput:
-                      false, // Allow free input without formatting constraint
+                  formatInput: false,
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -152,21 +167,11 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                 items: const [
                   DropdownMenuItem(
                     value: 'Male',
-                    child: Text(
-                      'Male',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ), // Text color of dropdown items
-                    ),
+                    child: Text('Male', style: TextStyle(color: Colors.white)),
                   ),
                   DropdownMenuItem(
                     value: 'Female',
-                    child: Text(
-                      'Female',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ), // Text color of dropdown items
-                    ),
+                    child: Text('Female', style: TextStyle(color: Colors.white)),
                   ),
                 ],
                 onChanged: (String? newValue) {
@@ -216,9 +221,10 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
+              TextField(
+                controller: _locationController,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
                   labelText: 'Location of Home',
                   labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: OutlineInputBorder(
@@ -233,13 +239,14 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: _isNextButtonEnabled
-                    ? () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const LoginPage()),
-                        );
-                      }
-                    : null,
+                onPressed: () async {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    await _saveCaretakerDetails();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const EmergencyDetailsPage()),
+                    );
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: const Color.fromARGB(255, 41, 19, 76),

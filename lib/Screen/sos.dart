@@ -2,9 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:alz_app/Screen/sosButton/alertPersonal.dart';
 import 'package:alz_app/Screen/sosButton/callEmergency.dart';
 import 'package:alz_app/Screen/sosButton/launchLocation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SOSPage extends StatelessWidget {
   const SOSPage({super.key});
+
+  Future<Map<String, double>?> _getPatientLocation() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(user.uid)
+          .get();
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && data['location'] != null) {
+          return {
+            'latitude': data['location']['latitude'],
+            'longitude': data['location']['longitude'],
+          };
+        }
+      }
+    }
+    return null;
+  }
+
+  Future<void> _showAlertSentDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Alert Sent'),
+          content: const Text('Alert sent to emergency contacts!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +81,13 @@ class SOSPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 40), // Space between the text and buttons
+                const SizedBox(height: 40),
                 SOSButton(
                   icon: Icons.phone,
                   text: 'Send alert to caretaker & emergency contact',
                   onPressed: () async {
                     await sendAlertToEmergencyContacts(context);
+                    _showAlertSentDialog(context); // Show the alert pop-up after sending the alert
                   },
                 ),
                 const SizedBox(height: 40),
@@ -51,9 +95,14 @@ class SOSPage extends StatelessWidget {
                   icon: Icons.location_on,
                   text: 'Lost? Click here for your way back home!',
                   onPressed: () async {
-                    double latitude = 37.7749;
-                    double longitude = -122.4194;
-                    await launchMap(context, latitude, longitude);
+                    final location = await _getPatientLocation();
+                    if (location != null) {
+                      await launchMap(context, location['latitude']!, location['longitude']!);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Location not found.')),
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 40),

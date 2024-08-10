@@ -1,61 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'caretaker_page.dart';
+import 'login_page.dart';
+import 'postlogin.dart';
+import 'quiz.dart';
 
-class PatientDetailsPage extends StatefulWidget {
-  const PatientDetailsPage({Key? key}) : super(key: key);
+class EmergencyDetailsPage extends StatefulWidget {
+  const EmergencyDetailsPage({Key? key}) : super(key: key);
 
   @override
-  _PatientDetailsPageState createState() => _PatientDetailsPageState();
+  _EmergencyDetailsPageState createState() => _EmergencyDetailsPageState();
 }
 
-class _PatientDetailsPageState extends State<PatientDetailsPage> {
+class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  String? _selectedGender;
   PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'AE'); // Default to UAE
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  Future<void> _requestLocationPermission() async {
-    final status = await Permission.location.request();
-    if (!status.isGranted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Location permission is needed to access this feature.')),
-      );
-    }
-  }
-
-  Future<Position?> _getCurrentLocation() async {
-    await _requestLocationPermission(); // Ensure permission is requested
-    try {
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      return position;
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error getting location: $e')),
-      );
-      return null;
-    }
-  }
-
-  Future<void> _updateLocationField() async {
-    final position = await _getCurrentLocation();
-    if (position != null) {
-      setState(() {
-        _locationController.text = 'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
-      });
-    }
-  }
+  String? _selectedGender;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -75,41 +41,61 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   int _calculateAge(DateTime dob) {
     final now = DateTime.now();
     int age = now.year - dob.year;
-    if (now.month < dob.month || (now.month == dob.month && now.day < dob.day)) {
+    if (now.month < dob.month ||
+        (now.month == dob.month && now.day < dob.day)) {
       age--;
     }
     return age;
   }
 
-  Future<void> _savePatientDetails() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      final patientData = {
-        'name': _nameController.text,
-        'phone': _phoneNumber.phoneNumber,
-        'dob': _dobController.text,
-        'age': _ageController.text,
-        'gender': _selectedGender,
-        'location': _locationController.text,
-        'userId': user.uid,
-        'email': user.email,
-      };
+  bool _isNextButtonEnabled = false;
 
-      try {
-        await _firestore.collection('Patients').doc(user.uid).set(patientData);
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving patient details: $e')),
-        );
-      }
+  void _validateForm() {
+    setState(() {
+      _isNextButtonEnabled = _formKey.currentState?.validate() ?? false;
+    });
+  }
+
+  Future<void> _saveEmergencyDetails() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User not logged in')),
+      );
+      return;
     }
+
+    final email = user.email;
+
+    final emergencyDetails = {
+      'name': _nameController.text,
+      'phone_number': _phoneNumber.phoneNumber,
+      'gender': _selectedGender,
+      'dob': _dobController.text,
+      'age': _ageController.text,
+      'location': _locationController.text,
+      'email': user.email,
+    };
+
+    await FirebaseFirestore.instance
+        .collection('emergency')
+        .doc(email)
+        .set(emergencyDetails);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Emergency details saved successfully')),
+    );
+
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Patient Details'),
+        title: const Text('Emergency Contact Details'),
       ),
       backgroundColor: const Color.fromARGB(255, 41, 19, 76),
       body: Padding(
@@ -124,20 +110,18 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                 controller: _nameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  labelText: 'Name',
+                  labelText: 'Contact Name',
                   labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return 'Please enter the contact name';
                   }
                   return null;
                 },
@@ -171,11 +155,11 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                   ),
                   textStyle: const TextStyle(color: Colors.white),
                   selectorTextStyle: const TextStyle(color: Colors.white),
-                  formatInput: false,
+                  formatInput: false, // Allow free input without formatting constraint
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your phone number';
+                      return 'Please enter the phone number';
                     }
                     return null;
                   },
@@ -187,8 +171,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                 style: const TextStyle(
                   color: Colors.white,
                 ), // Text color of selected item
-                dropdownColor:
-                    const Color.fromARGB(255, 41, 19, 76), // Background color of dropdown
+                dropdownColor: const Color.fromARGB(255, 41, 19, 76), // Background color of dropdown
                 iconEnabledColor: Colors.white, // Color of the dropdown icon
                 decoration: const InputDecoration(
                   labelText: 'Gender',
@@ -207,14 +190,18 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                     value: 'Male',
                     child: Text(
                       'Male',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                      ), // Text color of dropdown items
                     ),
                   ),
                   DropdownMenuItem(
                     value: 'Female',
                     child: Text(
                       'Female',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                      ), // Text color of dropdown items
                     ),
                   ),
                 ],
@@ -268,40 +255,51 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
               TextField(
                 controller: _locationController,
                 style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Location of Home',
-                  labelStyle: const TextStyle(color: Colors.white),
-                  enabledBorder: const OutlineInputBorder(
+                  labelStyle: TextStyle(color: Colors.white),
+                  enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  focusedBorder: const OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.location_on, color: Colors.white),
-                    onPressed: _updateLocationField,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    await _savePatientDetails();
+                  if (_formKey.currentState?.validate() ?? false) {
+                    await _saveEmergencyDetails();
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const CaretakerDetailsPage(),
-                      ),
+                      MaterialPageRoute(builder: (_) => const quizPage()),
                     );
                   }
                 },
+                // onPressed: _isNextButtonEnabled
+                //     ? _saveEmergencyDetails
+                //     : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: const Color.fromARGB(255, 41, 19, 76),
                 ),
                 child: const Text('Next'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const quizPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
+                ),
+                child: const Text('Skip'),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'editMedicine.dart';
 import 'medicineAdd.dart';
@@ -37,13 +38,19 @@ class MedicineViewPage extends StatelessWidget {
 class MedicineList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
+
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Medicine').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('Medicines')
+          .where('userEmail', isEqualTo: userEmail)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
-        if (!snapshot.hasData) {
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return Center(child: Text('No medicines found.'));
         }
 
@@ -233,7 +240,7 @@ class MedicineCard extends StatelessWidget {
                 ),
                 onPressed: () {
                   FirebaseFirestore.instance
-                      .collection('Medicine')
+                      .collection('Medicines')
                       .doc(id)
                       .delete()
                       .then((_) {

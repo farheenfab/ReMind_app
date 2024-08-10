@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class EmergencyDetailsPage extends StatefulWidget {
+class PatientDetailsPage extends StatefulWidget {
   @override
-  _EmergencyDetailsPageState createState() => _EmergencyDetailsPageState();
+  _PatientDetailsPageState createState() => _PatientDetailsPageState();
 }
 
-class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
-  Map<String, dynamic>? emergencyData;
+class _PatientDetailsPageState extends State<PatientDetailsPage> {
+  Map<String, dynamic>? patientData;
   bool isEditing = false;
 
   final TextEditingController _nameController = TextEditingController();
@@ -16,14 +16,15 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _loademergencyData();
+    _loadPatientData();
   }
 
-  Future<void> _loademergencyData() async {
+  Future<void> _loadPatientData() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -31,30 +32,40 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
 
       try {
         final querySnapshot = await FirebaseFirestore.instance
-            .collection('emergency')
+            .collection('Patients')
             .where('email', isEqualTo: email)
             .get();
 
         if (querySnapshot.docs.isNotEmpty) {
           final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
           setState(() {
-            emergencyData = data;
+            patientData = data;
             _nameController.text = data['name'] ?? '';
-            _phoneController.text = data['phone_number'] ?? '';
+            _phoneController.text = data['phone'] ?? '';
             _dobController.text = data['dob'] ?? '';
             _ageController.text = data['age'] ?? '';
             _genderController.text = data['gender'] ?? '';
+            _locationController.text = _getLocationString(data['location']);
           });
         }
       } catch (e) {
-        print('Error fetching emergency details: $e');
+        print('Error fetching patient details: $e');
       }
     } else {
       print('No user is logged in');
     }
   }
 
-  Future<void> _updateEmergencyDetails() async {
+  String _getLocationString(dynamic location) {
+    if (location is Map<String, dynamic>) {
+      final latitude = location['latitude'];
+      final longitude = location['longitude'];
+      return 'Latitude: ${latitude?.toString() ?? 'N/A'}, Longitude: ${longitude?.toString() ?? 'N/A'}';
+    }
+    return 'Location Selected';
+  }
+
+  Future<void> _updatePatientDetails() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -65,38 +76,57 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
         'dob': _dobController.text,
         'age': _ageController.text,
         'gender': _genderController.text,
+        'location': _parseLocation(_locationController.text),
         'email': user.email,
       };
 
       try {
         await FirebaseFirestore.instance
-            .collection('emergency')
+            .collection('Patients')
             .doc(userId)
             .update(updatedData);
         setState(() {
-          emergencyData = updatedData;
+          patientData = updatedData;
           isEditing = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Emergency details updated')),
+          SnackBar(content: Text('Patient details updated')),
         );
       } catch (e) {
-        print('Error updating emergency details: $e');
+        print('Error updating patient details: $e');
       }
     }
+  }
+
+  Map<String, dynamic> _parseLocation(String locationStr) {
+    final parts = locationStr.split(',');
+    if (parts.length == 2) {
+      final latitude = double.tryParse(parts[0].replaceAll('Latitude:', '').trim());
+      final longitude = double.tryParse(parts[1].replaceAll('Longitude:', '').trim());
+      return {
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+    }
+    return {};
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Emergency Profile', style: TextStyle(color: Colors.white)), // White color for title
+        title: Text(
+          'Patient Profile',
+          style: TextStyle(color: Colors.white), // Title color changed to white
+        ),
         backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
-        iconTheme: IconThemeData(color: Colors.white), // White color for back arrow and other icons
+        iconTheme: IconThemeData(
+          color: Colors.white, // White color for icons
+        ),
         actions: [
           if (!isEditing)
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: Icon(Icons.edit, color: Colors.white), // Edit icon color changed to white
               onPressed: () {
                 setState(() {
                   isEditing = true;
@@ -105,14 +135,14 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
             ),
           if (isEditing)
             IconButton(
-              icon: Icon(Icons.save),
+              icon: Icon(Icons.save, color: Colors.white), // Save icon color changed to white
               onPressed: () {
-                _updateEmergencyDetails();
+                _updatePatientDetails();
               },
             ),
         ],
       ),
-      body: emergencyData == null
+      body: patientData == null
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
@@ -131,14 +161,20 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: const Color.fromARGB(255, 0, 0, 0), // White text color
                       ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      patientData?['email'] ?? 'N/A',
+                      style: TextStyle(fontSize: 16, color: Color.fromARGB(179, 77, 75, 75)), // Light white color for text
                     ),
                     SizedBox(height: 30),
                     _buildDetailField('Phone', _phoneController, isEditing),
                     _buildDetailField('Date of Birth', _dobController, isEditing),
                     _buildDetailField('Age', _ageController, isEditing),
                     _buildDetailField('Gender', _genderController, isEditing),
+                    _buildDetailField('Location', _locationController, isEditing),
                   ],
                 ),
               ),
@@ -167,7 +203,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: Colors.white,
+                  color: Colors.white, // Label color changed to white
                 ),
               ),
               SizedBox(height: 8),
@@ -177,22 +213,22 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: BorderSide(color: Colors.white), // Border color changed to white
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          borderSide: BorderSide(color: Colors.white, width: 2.0), // Focused border color changed to white
                         ),
                         hintText: 'Enter $label',
-                        hintStyle: TextStyle(color: Colors.grey[300]),
+                        hintStyle: TextStyle(color: Colors.white70), // Hint text color changed to light white
                       ),
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white), // Text color changed to white
                     )
                   : Text(
                       controller.text.isEmpty ? 'N/A' : controller.text,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.white, // Text color changed to white
                       ),
                     ),
             ],

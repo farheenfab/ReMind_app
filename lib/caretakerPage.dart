@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class EmergencyDetailsPage extends StatefulWidget {
+class CaretakerDetailsPage extends StatefulWidget {
   @override
-  _EmergencyDetailsPageState createState() => _EmergencyDetailsPageState();
+  _CaretakerDetailsPageState createState() => _CaretakerDetailsPageState();
 }
 
-class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
-  Map<String, dynamic>? emergencyData;
+class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
+  Map<String, dynamic>? caretakerData;
   bool isEditing = false;
 
   final TextEditingController _nameController = TextEditingController();
@@ -20,10 +20,10 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _loademergencyData();
+    _loadCaretakerData();
   }
 
-  Future<void> _loademergencyData() async {
+  Future<void> _loadCaretakerData() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -31,30 +31,30 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
 
       try {
         final querySnapshot = await FirebaseFirestore.instance
-            .collection('emergency')
+            .collection('caretakers')
             .where('email', isEqualTo: email)
             .get();
 
         if (querySnapshot.docs.isNotEmpty) {
           final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
           setState(() {
-            emergencyData = data;
+            caretakerData = data;
             _nameController.text = data['name'] ?? '';
-            _phoneController.text = data['phone_number'] ?? '';
+            _phoneController.text = data['phone'] ?? '';
             _dobController.text = data['dob'] ?? '';
             _ageController.text = data['age'] ?? '';
             _genderController.text = data['gender'] ?? '';
           });
         }
       } catch (e) {
-        print('Error fetching emergency details: $e');
+        print('Error fetching caretaker details: $e');
       }
     } else {
       print('No user is logged in');
     }
   }
 
-  Future<void> _updateEmergencyDetails() async {
+  Future<void> _updateCaretakerDetails() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -70,18 +70,18 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
 
       try {
         await FirebaseFirestore.instance
-            .collection('emergency')
+            .collection('caretakers')
             .doc(userId)
             .update(updatedData);
         setState(() {
-          emergencyData = updatedData;
+          caretakerData = updatedData;
           isEditing = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Emergency details updated')),
+          SnackBar(content: Text('Caretaker details updated')),
         );
       } catch (e) {
-        print('Error updating emergency details: $e');
+        print('Error updating caretaker details: $e');
       }
     }
   }
@@ -90,13 +90,18 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Emergency Profile', style: TextStyle(color: Colors.white)), // White color for title
+        title: Text(
+          'Caretaker Profile',
+          style: TextStyle(color: Colors.white), // Title color changed to white
+        ),
         backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
-        iconTheme: IconThemeData(color: Colors.white), // White color for back arrow and other icons
+        iconTheme: IconThemeData(
+          color: Colors.white, // White color for icons
+        ),
         actions: [
           if (!isEditing)
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: Icon(Icons.edit, color: Colors.white), // Edit icon color changed to white
               onPressed: () {
                 setState(() {
                   isEditing = true;
@@ -105,14 +110,14 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
             ),
           if (isEditing)
             IconButton(
-              icon: Icon(Icons.save),
+              icon: Icon(Icons.save, color: Colors.white), // Save icon color changed to white
               onPressed: () {
-                _updateEmergencyDetails();
+                _updateCaretakerDetails();
               },
             ),
         ],
       ),
-      body: emergencyData == null
+      body: caretakerData == null
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
@@ -167,7 +172,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: Colors.white,
+                  color: Colors.white, // Label color changed to white
                 ),
               ),
               SizedBox(height: 8),
@@ -177,22 +182,22 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: BorderSide(color: Colors.white), // Border color changed to white
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          borderSide: BorderSide(color: Colors.white, width: 2.0), // Focused border color changed to white
                         ),
                         hintText: 'Enter $label',
                         hintStyle: TextStyle(color: Colors.grey[300]),
                       ),
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white), // Text color changed to white
                     )
                   : Text(
                       controller.text.isEmpty ? 'N/A' : controller.text,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.white, // Text color changed to white
                       ),
                     ),
             ],
