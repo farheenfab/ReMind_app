@@ -35,9 +35,7 @@ class _MemoryLogPageState extends State<MemoryLogPage> {
                 builder: (context) {
                   switch (index) {
                     case 0:
-                      return HomePage(
-                          username:
-                              'User'); // Replace 'User' with actual username if needed
+                      return HomePage(); // Replace 'User' with actual username if needed
                     case 1:
                       return GamesSelectionScreen();
                     case 2:

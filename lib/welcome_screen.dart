@@ -27,15 +27,15 @@ class WelcomeScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            const Text(
-              'ReMind is your companion designed to support individuals with Alzheimer\'s and their caregivers. Our app offers a suite of features to help manage daily tasks, medication, communication, and cognitive health.',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black87,
-                height: 1.5,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            // const Text(
+            //   'ReMind is your companion designed to support individuals with Alzheimer\'s and their caregivers. Our app offers a suite of features to help manage daily tasks, medication, communication, and cognitive health.',
+            //   style: TextStyle(
+            //     fontSize: 16,
+            //     color: Colors.black87,
+            //     height: 1.5,
+            //   ),
+            //   textAlign: TextAlign.center,
+            // ),
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,

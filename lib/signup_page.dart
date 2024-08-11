@@ -151,17 +151,22 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _signUp();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
-                ),
-                child: const Text('Next'),
-              ),
+  onPressed: () {
+    if (_formKey.currentState!.validate()) {
+      _signUp();
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.white,
+    foregroundColor: const Color.fromARGB(255, 41, 19, 76),
+    minimumSize: const Size(double.infinity, 50), // Button takes full width
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8), // Rectangular shape with slight rounding
+    ),
+  ),
+  child: const Text('Next'),
+),
+
             ],
           ),
         ),

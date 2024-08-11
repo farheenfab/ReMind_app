@@ -147,7 +147,7 @@ class _MicrophoneSettingsPageState extends State<MicrophoneSettingsPage> {
               builder: (context) {
                 switch (index) {
                   case 0:
-                    return HomePage(username: 'User');
+                    return HomePage();
                   case 1:
                     return GamesSelectionScreen();
                   case 2:

@@ -139,7 +139,7 @@ class _QuizFormPageState extends State<QuizFormPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HomePage(username: 'John'),
+        builder: (context) => HomePage(),
       ),
     );
   }

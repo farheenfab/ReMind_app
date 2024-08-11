@@ -13,11 +13,16 @@ import 'memory_log_page.dart';
 import 'journal_listview.dart';
 import 'bottom_navigation.dart';
 import 'calendarEventList.dart'; // Updated import
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class HomePage extends StatefulWidget {
-  final String username;
+  // final String username;
 
-  const HomePage({Key? key, required this.username}) : super(key: key);
+  const HomePage({Key? key, 
+  // required this.username
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -25,6 +30,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  Map<String, dynamic>? patientData;
+  String username = "";
 
   void onTabTapped(int index) {
     if (index == 1) {
@@ -50,6 +57,40 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _currentIndex = index;
       });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPatientData();
+  }
+
+
+  Future<void> _loadPatientData() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      final email = user.email;
+
+      try {
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('Patients')
+            .where('email', isEqualTo: email)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          setState(() {
+            patientData = data;
+            username = data['name'] ?? '';
+          });
+        }
+      } catch (e) {
+        print('Error fetching patient details: $e');
+      }
+    } else {
+      print('No user is logged in');
     }
   }
 
@@ -119,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Hello, ${widget.username}!',
+                      'Hello, ${username}!',
                       style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

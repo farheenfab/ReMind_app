@@ -6,6 +6,7 @@ import 'home_page.dart';
 import 'calanderEvent.dart';
 import 'calendarEventList.dart'; // Import the CalendarEventViewPage
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'global_data.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -230,7 +231,6 @@ class _CalendarPageState extends State<CalendarPage> {
               context,
               MaterialPageRoute(
                 builder: (context) => const HomePage(
-                  username: 'John',
                 ),
               ),
             );

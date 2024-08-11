@@ -51,26 +51,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'ReMind',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.deepPurple,
-          ).copyWith(secondary: Colors.white),
-          useMaterial3: true,
-        ),
-        home: const SplashScreen(),
-        // home: const CalendarEvent(),
-        initialRoute: '/welcome',
-        routes: {
-          '/welcome': (context) => const WelcomeScreen(),
-          '/settings': (context) => SettingsPage(),
-          '/login': (context) => const LoginPage(),
-          '/signup': (context) => const SignUpPage(),
-          '/games_selection': (context) => GamesSelectionScreen(),
-          '/memory_game': (context) => MemoryGameHome(),
-          '/memory_quiz_game': (context) => MemoryQuizGame(),
-          '/quiz_form_page': (context) => QuizFormPage(),
-        });
+  title: 'ReMind',
+  theme: ThemeData(
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      primary: const Color.fromARGB(255, 41, 19, 76),
+      secondary: Colors.white,
+    ),
+    useMaterial3: true,
+  ),
+  home: const SplashScreen(),
+  initialRoute: '/welcome',
+  routes: {
+    '/welcome': (context) => const WelcomeScreen(),
+    '/settings': (context) => SettingsPage(),
+    '/login': (context) => const LoginPage(),
+    '/signup': (context) => const SignUpPage(),
+    '/games_selection': (context) => GamesSelectionScreen(),
+    '/memory_game': (context) => MemoryGameHome(),
+    '/memory_quiz_game': (context) => MemoryQuizGame(),
+    '/quiz_form_page': (context) => QuizFormPage(),
+  },
+);
+
   }
 }
 

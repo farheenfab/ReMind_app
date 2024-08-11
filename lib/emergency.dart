@@ -282,9 +282,13 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                 //     ? _saveEmergencyDetails
                 //     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
-                ),
+    backgroundColor: Colors.white,
+    foregroundColor: const Color.fromARGB(255, 41, 19, 76),
+    minimumSize: const Size(double.infinity, 50), // Button takes full width
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8), // Rectangular shape with slight rounding
+    ),
+  ),
                 child: const Text('Next'),
               ),
               const SizedBox(height: 20),
@@ -296,9 +300,13 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color.fromARGB(255, 41, 19, 76),
-                ),
+    backgroundColor: Colors.white,
+    foregroundColor: const Color.fromARGB(255, 41, 19, 76),
+    minimumSize: const Size(double.infinity, 50), // Button takes full width
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8), // Rectangular shape with slight rounding
+    ),
+  ),
                 child: const Text('Skip'),
               ),
             ],
