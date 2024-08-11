@@ -59,6 +59,11 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Image.asset(
+              'lib/assets/logo.png', // Path to your logo image in the assets folder
+              height: 100, // Adjust the height according to your needs
+            ),
+            const SizedBox(height: 20),
             TextField(
               controller: _emailController,
               style: const TextStyle(color: Colors.white),
@@ -98,13 +103,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const PostLoginWelcomePage(),
-                    ),
-                  );
-                },
+                onPressed: _signIn,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   backgroundColor: Colors.white,
