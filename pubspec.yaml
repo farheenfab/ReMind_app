@@ -46,6 +46,9 @@ dependencies:
   google_generative_ai: ^0.4.3
   speech_to_text: ^6.6.2
   flutter_tts: ^3.2.2
+  firebase_auth: ^5.1.4
+  cloud_firestore_platform_interface: ^6.2.9
+  firebase_storage: ^12.1.1
 
   # intl:
   # firebase_core_web:

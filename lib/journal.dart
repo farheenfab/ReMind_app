@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'journal_listview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class JournalDiaryEntry extends StatefulWidget {
   const JournalDiaryEntry({super.key});
@@ -21,6 +22,8 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Firebase connection'),
@@ -53,7 +56,7 @@ class _MyJournalEntryState extends State<JournalDiaryEntry> {
             child: ElevatedButton(
               child: const Text('Push to Firebase!'),
               onPressed: () async {
-                await DatabaseService().addData(recordController.text, DateTime.now() );
+                await DatabaseService().addData(recordController.text, DateTime.now(), userEmail.toString() );
                 recordController.clear();
               },
             ),

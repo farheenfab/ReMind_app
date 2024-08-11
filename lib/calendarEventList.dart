@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'editCalendarEvent.dart';
@@ -7,14 +8,17 @@ import 'editCalendarEvent.dart';
 
 
 class CalendarEventViewPage extends StatelessWidget {
+
   @override
   Widget build (BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendar Event List'),
       ),
       body: StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('CalendarEvent').snapshots(),
+      stream: FirebaseFirestore.instance.collection('CalendarEvents').where('userEmail', isEqualTo: userEmail).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -36,6 +40,7 @@ class CalendarEventViewPage extends StatelessWidget {
               eventDescription: event['eventDescription'],
               eventLocation: event['eventLocation'],
               eventTime: event['eventTime'],
+              eventDate:  event['eventDate'],
             );
           },
         );
@@ -52,6 +57,7 @@ class EventCard extends StatelessWidget {
   final String eventDescription;
   final String eventLocation;
   final String eventTime;
+  final String eventDate;
 
   EventCard({
     required this.id,
@@ -59,6 +65,7 @@ class EventCard extends StatelessWidget {
     required this.eventDescription,
     required this.eventLocation,
     required this.eventTime,
+    required this.eventDate,
   });
 
   @override

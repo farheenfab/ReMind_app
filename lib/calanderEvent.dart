@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'calendarDB.dart';
 import 'calendarEventList.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CalendarEvent extends StatefulWidget {
   const CalendarEvent({super.key});
@@ -16,7 +17,6 @@ class _CalendarEventState extends State<CalendarEvent> {
   TextEditingController eventLocation = TextEditingController();
   TextEditingController eventTime = TextEditingController();
 
-
   @override
   void initState(){
     super.initState();
@@ -24,6 +24,8 @@ class _CalendarEventState extends State<CalendarEvent> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Firebase connection'),
@@ -96,7 +98,9 @@ class _CalendarEventState extends State<CalendarEvent> {
                   eventDescription.text,
                   eventLocation.text,
                   eventTime.text,
-                  DateTime.now() 
+                  DateTime.now(),
+                  userEmail.toString()
+
                   );
 
                 eventName.clear();

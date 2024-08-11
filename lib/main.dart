@@ -12,6 +12,7 @@ import 'voice_settings.dart';
 import 'database.dart';
 import 'journal_listview.dart';
 import 'calanderEvent.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
   final double volume;
   final double pitch;
   final double speechRate;
+  
   
   const MyApp({super.key, required this.voice , required this.volume, required this.pitch, required this.speechRate});
 
@@ -85,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var content;
   var response;
+  String? userEmail;
 
   var reportTitle = "Conversation Summary and Symptom Report";
 
@@ -198,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // if the message from Gemini contains the report title, push report msg to firebase
     if (response.text.contains(reportTitle)){
-      DatabaseService().addData(response.text, DateTime.now() );
+      DatabaseService().addData(response.text, DateTime.now(), userEmail.toString() );
     }
 
     // print(userMsg);
@@ -208,6 +211,8 @@ class _MyHomePageState extends State<MyHomePage> {
   // // Chat UI
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         leading:

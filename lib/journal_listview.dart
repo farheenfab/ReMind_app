@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'journal_content.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DisplayData extends StatelessWidget {
   DisplayData({super.key});
@@ -17,13 +18,15 @@ class DisplayData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Display Data'),
         centerTitle: true,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('JournalEntry').snapshots(),
+        stream: FirebaseFirestore.instance.collection('JournalEntries').where('userEmail', isEqualTo: userEmail).snapshots(),
         builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.active){
             if(snapshot.hasData){
