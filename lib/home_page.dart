@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Color.fromARGB(255, 41, 19, 76),
+          backgroundColor: const Color(0xFF382973),
           title: const Text(
             'Home',
             style: TextStyle(color: Colors.white),

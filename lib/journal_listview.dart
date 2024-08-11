@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'journal_content.dart';
+import 'bottom_navigation.dart'; // Ensure this import is correct
+import 'home_page.dart';
+import 'settings.dart';
+import 'memory_game.dart';
+import 'games_selection_screen.dart';
 
-class DisplayData extends StatelessWidget {
-  DisplayData({super.key});
+class DisplayData extends StatefulWidget {
+  @override
+  _DisplayDataState createState() => _DisplayDataState();
+}
+
+class _DisplayDataState extends State<DisplayData> {
+  int _currentIndex = 0; // Manage navigation bar index
 
   String _date = "";
   String _time = "";
@@ -94,6 +104,35 @@ class DisplayData extends StatelessWidget {
             }
           },
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 2,
+        onTap: (index) {
+          // Define your navigation logic here
+          if (index != 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  switch (index) {
+                    case 0:
+                      return HomePage(
+                          username:
+                              'John'); // Replace 'User' with actual username if needed
+                    case 1:
+                      return GamesSelectionScreen();
+                    case 2:
+                      return DisplayData();
+                    case 3:
+                      return SettingsPage();
+                    default:
+                      return SettingsPage();
+                  }
+                },
+              ),
+            );
+          }
+        },
       ),
     );
   }

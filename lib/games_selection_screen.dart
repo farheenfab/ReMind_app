@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'bottom_navigation.dart';
+import 'home_page.dart';
+import 'settings.dart';
+import 'journal_listview.dart';
 
 class GamesSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple color
+        backgroundColor: const Color(0xFF382973), // Dark purple color
         title: Text(
           'Games',
           style: TextStyle(
@@ -38,9 +42,11 @@ class GamesSelectionScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/memory_game');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple button
+                  backgroundColor:
+                      const Color(0xFF382973), // Dark purple button
                   foregroundColor: Colors.white, // White text color
-                  padding: EdgeInsets.symmetric(vertical: 15.0), // Reduced padding
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.0), // Reduced padding
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15), // Rounded corners
                   ),
@@ -63,9 +69,11 @@ class GamesSelectionScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/memory_quiz_game');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple button
+                  backgroundColor:
+                      const Color(0xFF382973), // Dark purple button
                   foregroundColor: Colors.white, // White text color
-                  padding: EdgeInsets.symmetric(vertical: 15.0), // Reduced padding
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.0), // Reduced padding
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15), // Rounded corners
                   ),
@@ -86,6 +94,35 @@ class GamesSelectionScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 1,
+        onTap: (index) {
+          // Define your navigation logic here
+          if (index != 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  switch (index) {
+                    case 0:
+                      return HomePage(
+                          username:
+                              'John'); // Replace 'User' with actual username if needed
+                    case 1:
+                      return GamesSelectionScreen();
+                    case 2:
+                      return DisplayData();
+                    case 3:
+                      return SettingsPage();
+                    default:
+                      return SettingsPage();
+                  }
+                },
+              ),
+            );
+          }
+        },
       ),
     );
   }
