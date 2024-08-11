@@ -91,6 +91,39 @@ class _SettingsPageState extends State<SettingsPage> {
               child: SettingsTile(
                 icon: Icons.info,
                 title: 'About',
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white, // White background color
+                        title: Text(
+                          'About Remind',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold, // Bold title
+                          ),
+                        ),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              Text(
+                                'ReMind is your companion designed to support individuals with Alzheimer\'s and their caregivers. Our app offers a suite of features to help manage daily tasks, medication, communication, and cognitive health.',
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
             ),
             Divider(color: Colors.black),
@@ -115,6 +148,46 @@ class _SettingsPageState extends State<SettingsPage> {
               child: SettingsTile(
                 icon: Icons.lock,
                 title: 'Privacy and Security',
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white, // White background color
+                        title: Text(
+                          'Privacy and Security',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold, // Bold title
+                          ),
+                        ),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              Text(
+                                'Your privacy and security are our top priorities. We ensure that all data collected through the Remind app is securely stored and protected. We adhere to strict data protection regulations and only use your data to enhance your experience and provide support. For detailed information on how we handle your data, please refer to our Privacy Policy and Terms of Service available in the app.',
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                'Data Protection: All personal information is encrypted and securely stored.',
+                              ),
+                              Text(
+                                'Third-Party Services: We do not share your data with third parties without your consent.',
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
             ),
             const Divider(color: Colors.black),
