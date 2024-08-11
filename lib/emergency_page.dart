@@ -1,44 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+ 
 class EmergencyDetailsPage extends StatefulWidget {
   @override
   _EmergencyDetailsPageState createState() => _EmergencyDetailsPageState();
 }
-
+ 
 class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   Map<String, dynamic>? emergencyData;
+  String? documentId;  // Store document ID here
   bool isEditing = false;
-
+ 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
-
+ 
   @override
   void initState() {
     super.initState();
-    _loademergencyData();
+    _loadEmergencyData();
   }
-
-  Future<void> _loademergencyData() async {
+ 
+  Future<void> _loadEmergencyData() async {
     final user = FirebaseAuth.instance.currentUser;
-
+ 
     if (user != null) {
       final email = user.email;
-
+ 
       try {
         final querySnapshot = await FirebaseFirestore.instance
             .collection('emergency')
             .where('email', isEqualTo: email)
             .get();
-
+ 
         if (querySnapshot.docs.isNotEmpty) {
-          final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          final doc = querySnapshot.docs.first;
+          final data = doc.data() as Map<String, dynamic>;
           setState(() {
             emergencyData = data;
+            documentId = doc.id;  // Save the document ID here
             _nameController.text = data['name'] ?? '';
             _phoneController.text = data['phone_number'] ?? '';
             _dobController.text = data['dob'] ?? '';
@@ -53,25 +56,24 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
       print('No user is logged in');
     }
   }
-
+ 
   Future<void> _updateEmergencyDetails() async {
     final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      final userId = user.uid;
+ 
+    if (user != null && documentId != null) {
       final updatedData = {
         'name': _nameController.text,
-        'phone': _phoneController.text,
+        'phone_number': _phoneController.text,
         'dob': _dobController.text,
         'age': _ageController.text,
         'gender': _genderController.text,
         'email': user.email,
       };
-
+ 
       try {
         await FirebaseFirestore.instance
             .collection('emergency')
-            .doc(userId)
+            .doc(documentId)  // Use the correct document ID
             .update(updatedData);
         setState(() {
           emergencyData = updatedData;
@@ -85,14 +87,14 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
       }
     }
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Emergency Profile', style: TextStyle(color: Colors.white)), // White color for title
-        backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
-        iconTheme: IconThemeData(color: Colors.white), // White color for back arrow and other icons
+        title: Text('Emergency Profile', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color.fromARGB(255, 41, 19, 76),
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           if (!isEditing)
             IconButton(
@@ -122,7 +124,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                   children: [
                     CircleAvatar(
                       radius: 60,
-                      backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
+                      backgroundColor: const Color.fromARGB(255, 41, 19, 76),
                       child: Icon(Icons.person, size: 60, color: Colors.white),
                     ),
                     SizedBox(height: 20),
@@ -145,13 +147,13 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
             ),
     );
   }
-
+ 
   Widget _buildDetailField(
       String label, TextEditingController controller, bool isEditing) {
     return Container(
       width: double.infinity,
       child: Card(
-        color: const Color.fromARGB(255, 41, 19, 76), // Dark purple color for cards
+        color: const Color.fromARGB(255, 41, 19, 76),
         margin: const EdgeInsets.only(bottom: 20.0),
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -202,3 +204,5 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
     );
   }
 }
+ 
+ 

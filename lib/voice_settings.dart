@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'dart:developer';
-import 'main.dart';
-import 'chat_screen.dart';
-import 'home_page.dart';
+import 'settings.dart'; // Import the settings page
 
 class VoiceSettings extends StatefulWidget {
   @override
@@ -47,13 +44,7 @@ class VoiceSettingsState extends State<VoiceSettings> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MyHomePage(
-            voice: isFemale
-                ? {"name": "en-us-x-tpf-local", "locale": "en-US"}
-                : {'name': 'en-us-x-iol-local', 'locale': 'en-US'},
-            volume: volume,
-            pitch: pitch,
-            speechRate: speechRate),
+        builder: (context) => SettingsPage(), // Navigate to settings page
       ),
     );
   }
@@ -62,10 +53,20 @@ class VoiceSettingsState extends State<VoiceSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Voice Over Setting'),
-        centerTitle: true,
+        title: const Text(
+          'Voice Over Setting',
+          style: TextStyle(color: Colors.white), // Title color to white
+        ),
+        centerTitle: false, // Title aligned to the left
         backgroundColor:
-            const Color(0xFF382973), // Dark purple color for AppBar
+            const Color.fromARGB(255, 41, 19, 76), // Dark purple color for AppBar
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Colors.white), // Back arrow color to white
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Container(
         color: Colors.white, // White background for the main content
@@ -75,6 +76,7 @@ class VoiceSettingsState extends State<VoiceSettings> {
             crossAxisAlignment:
                 CrossAxisAlignment.center, // Align content to the center
             children: [
+              const SizedBox(height: 20), // Add space at the top
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -167,7 +169,7 @@ class VoiceSettingsState extends State<VoiceSettings> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isFemale
                           ? Color.fromARGB(255, 255, 235, 254)
-                          : const Color.fromARGB(255, 0, 0, 0),
+                          : Color.fromARGB(255, 244, 244, 244),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 50,
                           vertical: 15), // Increased button size
@@ -184,7 +186,7 @@ class VoiceSettingsState extends State<VoiceSettings> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isMale
                           ? const Color.fromARGB(255, 214, 221, 255)
-                          : Color.fromARGB(255, 219, 226, 250),
+                          : Color.fromARGB(255, 244, 244, 244),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 50,
                         vertical: 15, // Increased button size

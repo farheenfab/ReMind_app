@@ -75,7 +75,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 controller: _usernameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'Username (Email)',
                   labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),

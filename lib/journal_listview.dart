@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'journal_content.dart';
+import 'bottom_navigation.dart'; // Ensure this import is correct
+import 'home_page.dart';
+import 'settings.dart';
+import 'memory_game.dart';
+import 'games_selection_screen.dart';
 
-class DisplayData extends StatelessWidget {
-  DisplayData({super.key});
+class DisplayData extends StatefulWidget {
+  @override
+  _DisplayDataState createState() => _DisplayDataState();
+}
+
+class _DisplayDataState extends State<DisplayData> {
+  int _currentIndex = 0; // Manage navigation bar index
 
   String _date = "";
   String _time = "";
@@ -21,8 +31,20 @@ class DisplayData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Display Data'),
-        centerTitle: true,
+        backgroundColor:
+            const Color.fromARGB(255, 41, 19, 76), // Dark purple background color
+        title: const Align(
+          alignment: Alignment.centerLeft, // Align the title to the left
+          child: Text(
+            'Memory Log',
+            style: TextStyle(color: Colors.white), // White title color
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+          color: Colors.white, // White back arrow color
+        ),
       ),
       body: Container(
         color: Colors.white, // Set the background color to white
@@ -42,7 +64,7 @@ class DisplayData extends StatelessWidget {
                     return ListTile(
                       leading: CircleAvatar(
                         backgroundColor:
-                            const Color(0xFF382973), // Dark purple color
+                            const Color.fromARGB(255, 41, 19, 76), // Dark purple color
                         child: Text(
                           "${index + 1}",
                           style: const TextStyle(
@@ -82,6 +104,35 @@ class DisplayData extends StatelessWidget {
             }
           },
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 2,
+        onTap: (index) {
+          // Define your navigation logic here
+          if (index != 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  switch (index) {
+                    case 0:
+                      return HomePage(
+                          username:
+                              'John'); // Replace 'User' with actual username if needed
+                    case 1:
+                      return GamesSelectionScreen();
+                    case 2:
+                      return DisplayData();
+                    case 3:
+                      return SettingsPage();
+                    default:
+                      return SettingsPage();
+                  }
+                },
+              ),
+            );
+          }
+        },
       ),
     );
   }

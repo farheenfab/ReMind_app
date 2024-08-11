@@ -221,22 +221,25 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            //remove
-            onPressed: () => Navigator.push(
-                  context,
-                  // MaterialPageRoute(builder: (context) => const JournalDiaryEntry()),
-                  MaterialPageRoute(
-                      builder: (context) => HomePage(
-                            username: 'John',
-                          )),
-                  // builder: (context) => DisplayData()), // Journal list page
-                  // MaterialPageRoute(builder: (context) => VoiceSettings()),   // Voice settings page
-                ),
-            icon: const Icon(Icons.arrow_back)),
-        title: const Text('Chat with Gemini'),
-        centerTitle: true,
+  backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
+  leading: IconButton(
+    onPressed: () => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(
+          username: 'John',
+        ),
       ),
+    ),
+    icon: const Icon(Icons.arrow_back, color: Colors.white), // White back arrow
+  ),
+  title: const Text(
+    'Chat with Gemini',
+    style: TextStyle(color: Colors.white), // White title
+  ),
+  centerTitle: true,
+),
+
       body: Container(
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(

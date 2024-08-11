@@ -6,9 +6,9 @@ import 'home_page.dart';
 import 'games_selection_screen.dart';
 import 'settings.dart';
 import 'games_page.dart';
-import 'quiz_form_page.dart';  // Ensure this is correctly imported
+import 'quiz_form_page.dart'; // Ensure this is correctly imported
 import 'memory_log_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';  // Import for Firebase
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import for Firebase
 import 'journal.dart';
 import 'journal_content.dart';
 import 'journal_listview.dart';
@@ -19,7 +19,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool hasQuiz = false;  // State to track if a quiz exists
+  bool hasQuiz = false; // State to track if a quiz exists
   String latestDateTime = '';
 
   @override
@@ -69,7 +69,8 @@ class _SettingsPageState extends State<SettingsPage> {
             color: Colors.white, // White color for the title text
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
+        backgroundColor:
+            const Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
         iconTheme: IconThemeData(
           color: Colors.white, // White color for the AppBar icons
         ),
@@ -124,7 +125,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 // Navigate to QuizFormPage or QuizEditPage
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => QuizFormPage(latestDateTime: latestDateTime)), // Adjust if there's a specific edit page
+                  MaterialPageRoute(
+                      builder: (context) => QuizFormPage(
+                          latestDateTime:
+                              latestDateTime)), // Adjust if there's a specific edit page
                 );
               },
             ),
@@ -152,7 +156,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 builder: (context) {
                   switch (index) {
                     case 0:
-                      return HomePage(username: 'User'); // Replace 'User' with actual username if needed
+                      return HomePage(
+                          username:
+                              'John'); // Replace 'User' with actual username if needed
                     case 1:
                       return GamesSelectionScreen();
                     case 2:
@@ -176,7 +182,8 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFFD3D3D3), // Pastel grey color for background
+          backgroundColor:
+              Color(0xFFD3D3D3), // Pastel grey color for background
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -255,7 +262,8 @@ class SettingsTile extends StatelessWidget {
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
-        color: Color.fromARGB(255, 41, 19, 76), // Dark purple color for the arrow icon
+        color: Color.fromARGB(
+            255, 41, 19, 76), // Dark purple color for the arrow icon
       ),
       onTap: onTap,
     );

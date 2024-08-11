@@ -1,42 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+ 
 class CaretakerDetailsPage extends StatefulWidget {
   @override
   _CaretakerDetailsPageState createState() => _CaretakerDetailsPageState();
 }
-
+ 
 class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
   Map<String, dynamic>? caretakerData;
   bool isEditing = false;
-
+  String? caretakerDocumentId;
+ 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
-
+ 
   @override
   void initState() {
     super.initState();
     _loadCaretakerData();
   }
-
+ 
   Future<void> _loadCaretakerData() async {
     final user = FirebaseAuth.instance.currentUser;
-
+ 
     if (user != null) {
       final email = user.email;
-
+ 
       try {
         final querySnapshot = await FirebaseFirestore.instance
             .collection('caretakers')
             .where('email', isEqualTo: email)
             .get();
-
+ 
         if (querySnapshot.docs.isNotEmpty) {
           final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          caretakerDocumentId = querySnapshot.docs.first.id; // Store the document ID
           setState(() {
             caretakerData = data;
             _nameController.text = data['name'] ?? '';
@@ -53,12 +55,11 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
       print('No user is logged in');
     }
   }
-
+ 
   Future<void> _updateCaretakerDetails() async {
     final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      final userId = user.uid;
+ 
+    if (user != null && caretakerDocumentId != null) {  // Check if documentId is available
       final updatedData = {
         'name': _nameController.text,
         'phone': _phoneController.text,
@@ -67,11 +68,11 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
         'gender': _genderController.text,
         'email': user.email,
       };
-
+ 
       try {
         await FirebaseFirestore.instance
             .collection('caretakers')
-            .doc(userId)
+            .doc(caretakerDocumentId)  // Use the correct document ID
             .update(updatedData);
         setState(() {
           caretakerData = updatedData;
@@ -85,7 +86,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
       }
     }
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,7 +151,7 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
             ),
     );
   }
-
+ 
   Widget _buildDetailField(
       String label, TextEditingController controller, bool isEditing) {
     return Container(

@@ -13,6 +13,12 @@ class CalendarEventViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Define the start and end of the selected day
+    DateTime startOfDay =
+        DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+    DateTime endOfDay = DateTime(
+        selectedDay.year, selectedDay.month, selectedDay.day, 23, 59, 59);
+
     return Container(
       width: 300, // Adjust width as needed
       height: 300, // Adjust height as needed
@@ -23,14 +29,17 @@ class CalendarEventViewPage extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('CalendarEvent')
-                  .where('eventDate', isEqualTo: selectedDay.toIso8601String())
+                  .where('eventDate',
+                      isGreaterThanOrEqualTo: startOfDay.toIso8601String())
+                  .where('eventDate',
+                      isLessThanOrEqualTo: endOfDay.toIso8601String())
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (!snapshot.hasData) {
-                  return const Center(child: Text('No events found.'));
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text('No tasks for today.'));
                 }
 
                 final events = snapshot.data!.docs;
@@ -66,7 +75,7 @@ class CalendarEventViewPage extends StatelessWidget {
 }
 
 class EventCard extends StatelessWidget {
-  final Color color; // Add a color parameter
+  final Color color;
   final String id;
   final String eventName;
   final String eventDescription;
@@ -75,7 +84,7 @@ class EventCard extends StatelessWidget {
 
   const EventCard({
     Key? key,
-    required this.color, // Receive the color parameter
+    required this.color,
     required this.id,
     required this.eventName,
     required this.eventDescription,
@@ -87,7 +96,7 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(8.0),
-      color: color, // Use the passed color
+      color: color,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -104,7 +113,7 @@ class EventCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 2, // Allow text to wrap to the next line
+                    maxLines: 2,
                   ),
                 ),
                 Row(
@@ -129,10 +138,7 @@ class EventCard extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        FirebaseFirestore.instance
-                            .collection('CalendarEvent')
-                            .doc(id)
-                            .delete();
+                        _showDeleteConfirmationDialog(context, id);
                       },
                     ),
                   ],
@@ -148,6 +154,72 @@ class EventCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor:
+              const Color(0xFFD3D3D3), // Pastel grey color for background
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Are you sure you want to delete this event?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17.0,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextButton(
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  ),
+                ),
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection('CalendarEvent')
+                      .doc(id)
+                      .delete()
+                      .then((_) {
+                    Navigator.of(context).pop(); // Close the dialog
+                  }).catchError((error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to delete event: $error')),
+                    );
+                  });
+                },
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              TextButton(
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

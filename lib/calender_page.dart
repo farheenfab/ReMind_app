@@ -164,7 +164,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: FloatingActionButton(
                   child: Icon(Icons.add, color: Colors.white),
-                  backgroundColor: const Color(0xFF382973),
+                  backgroundColor: const Color.fromARGB(255, 41, 19, 76),
                   onPressed: () {
                     Navigator.of(context).pop();
                     Navigator.push(
@@ -219,8 +219,12 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 41, 19, 76),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -232,12 +236,13 @@ class _CalendarPageState extends State<CalendarPage> {
             );
           },
         ),
-        title: Text('Calendar', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('Calendar',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
             height: 3.0,
-            color: Colors.black,
+            color: Color.fromARGB(255, 0, 0, 0),
           ),
         ),
       ),
@@ -291,8 +296,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       selectedTextStyle: TextStyle(color: Colors.black),
                       todayDecoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: const Color(
-                            0xFF382973), // Change to your desired color
+                        color: const Color.fromARGB(255, 41, 19, 76), // Change to your desired color
                       ),
                       selectedDecoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -378,7 +382,7 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add, color: Colors.white),
-        backgroundColor: const Color(0xFF382973),
+        backgroundColor: const Color.fromARGB(255, 41, 19, 76),
         onPressed: () {
           Navigator.push(
             context,
