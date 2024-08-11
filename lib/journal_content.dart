@@ -50,14 +50,28 @@ class Display_Journal_Data extends StatelessWidget {
       ),
       body: Container(
         color: Colors.white, // Set the background color to white
-        child: Center(
+        padding: const EdgeInsets.all(16.0), // Add padding around the content
+        child: SingleChildScrollView(
+          // Make the content scrollable
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment:
+                CrossAxisAlignment.start, // Align text to the start
             children: [
-              Text("${daysOfWeek[DateTime.parse(date).weekday]}"),
-              Text(time),
+              Text(
+                "${daysOfWeek[DateTime.parse(date).weekday]}",
+                style: const TextStyle(
+                    fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8), // Space between elements
+              Text(
+                time,
+                style: const TextStyle(fontSize: 16.0),
+              ),
               const SizedBox(height: 20), // Space between elements
-              Text(content),
+              Text(
+                content,
+                style: const TextStyle(fontSize: 18.0),
+              ),
             ],
           ),
         ),

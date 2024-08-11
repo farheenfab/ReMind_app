@@ -13,6 +13,12 @@ class CalendarEventViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Define the start and end of the selected day
+    DateTime startOfDay =
+        DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+    DateTime endOfDay = DateTime(
+        selectedDay.year, selectedDay.month, selectedDay.day, 23, 59, 59);
+
     return Container(
       width: 300, // Adjust width as needed
       height: 300, // Adjust height as needed
@@ -23,14 +29,17 @@ class CalendarEventViewPage extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('CalendarEvent')
-                  .where('eventDate', isEqualTo: selectedDay.toIso8601String())
+                  .where('eventDate',
+                      isGreaterThanOrEqualTo: startOfDay.toIso8601String())
+                  .where('eventDate',
+                      isLessThanOrEqualTo: endOfDay.toIso8601String())
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (!snapshot.hasData) {
-                  return const Center(child: Text('No events found.'));
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text('No tasks for today.'));
                 }
 
                 final events = snapshot.data!.docs;

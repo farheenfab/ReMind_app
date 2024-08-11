@@ -1,3 +1,4 @@
+import 'package:alz_app/calendarEventList.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +12,7 @@ import 'games_selection_screen.dart';
 import 'memory_log_page.dart';
 import 'journal_listview.dart';
 import 'bottom_navigation.dart';
-import 'calendarEventList.dart'; // Import the CalendarEventViewPage
+import 'calendarEventList.dart'; // Updated import
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -56,6 +57,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
     DateTime startOfDay = DateTime(today.year, today.month, today.day);
+    DateTime endOfDay =
+        DateTime(today.year, today.month, today.day, 23, 59, 59);
 
     return WillPopScope(
       onWillPop: () async {
@@ -235,55 +238,45 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 5),
                     Expanded(
                       child: StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('CalendarEvent')
-                            .where('eventDate',
-                                isEqualTo: startOfDay.toIso8601String())
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                          if (!snapshot.hasData ||
-                              snapshot.data!.docs.isEmpty) {
-                            return const Center(
-                                child: Text('No tasks for today.'));
-                          }
+                          stream: FirebaseFirestore.instance
+                              .collection('CalendarEvent')
+                              .where('eventDate',
+                                  isGreaterThanOrEqualTo:
+                                      startOfDay.toIso8601String())
+                              .where('eventDate',
+                                  isLessThanOrEqualTo:
+                                      endOfDay.toIso8601String())
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (!snapshot.hasData ||
+                                snapshot.data!.docs.isEmpty) {
+                              return const Center(
+                                  child: Text('No tasks for today.'));
+                            }
 
-                          final events = snapshot.data!.docs;
+                            final events = snapshot.data!.docs;
 
-                          return ListView.builder(
-                            itemCount: events.length,
-                            itemBuilder: (context, index) {
-                              var event = events[index];
-                              return ListTile(
-                                title: Text(
-                                  event['eventName'],
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.black),
-                                ),
-                                subtitle: Text(
-                                  event['eventDescription'],
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          CalendarEventViewPage(
-                                        selectedDay: startOfDay,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                      ),
+                            return ListView.builder(
+                              itemCount: events.length,
+                              itemBuilder: (context, index) {
+                                var event = events[index];
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical:
+                                          2.0), // Reduced vertical padding
+                                  child: Text(
+                                    '${index + 1}. ${event['eventName']}',
+                                    style: const TextStyle(fontSize: 16), //
+                                  ),
+                                );
+                              },
+                            );
+                          }),
                     ),
                   ],
                 ),
@@ -306,7 +299,6 @@ class HomeButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color color;
   final Color iconColor;
-
   final double iconSize;
   final double fontSize;
 
@@ -338,13 +330,12 @@ class HomeButton extends StatelessWidget {
               size: iconSize,
               color: iconColor,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
               ),
             ),
           ],
