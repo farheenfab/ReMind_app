@@ -36,7 +36,7 @@ I developed the Memory Card Game, a classic matching game designed to help users
 3. Memory Quiz Game
 In addition, I worked on the Memory Quiz Game, a customizable tool that allows users to create quizzes by adding questions and answers. These are stored in Firebase for easy access and modification. The game retrieves these quizzes for users to play, and any updates made in the settings are automatically reflected in the gameplay. To support learning, I added a feature that reveals the correct answer after two incorrect attempts, aiding users in retaining the information more effectively.
 
-##### **Gauri**
+### **Gauri**
 Below are my Backend and Frontend Contributions to the application:
 
 1. Gemini Chatbot Integration:
