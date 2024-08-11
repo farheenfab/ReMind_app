@@ -1,5 +1,5 @@
 # ReMind: 
-### Tagline:
+### _Tagline:_
 ReMind: Your daily companion for memory care, keeping routines on track and safety within reach.
 
 ## Description:
