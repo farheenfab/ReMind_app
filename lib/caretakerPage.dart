@@ -61,7 +61,6 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null && caretakerDocumentId != null) {
-      // Check if documentId is available
       final updatedData = {
         'name': _nameController.text,
         'phone': _phoneController.text,
@@ -146,8 +145,16 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Colors.black87, // Updated to a darker color
                       ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      caretakerData?['email'] ?? 'N/A',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(
+                              179, 77, 75, 75)), // Light gray color for text
                     ),
                     SizedBox(height: 30),
                     _buildDetailField('Phone', _phoneController, isEditing),
@@ -206,7 +213,9 @@ class _CaretakerDetailsPageState extends State<CaretakerDetailsPage> {
                                   2.0), // Focused border color changed to white
                         ),
                         hintText: 'Enter $label',
-                        hintStyle: TextStyle(color: Colors.grey[300]),
+                        hintStyle: TextStyle(
+                            color: Colors
+                                .white70), // Hint text color changed to light white
                       ),
                       style: TextStyle(
                           color: Colors.white), // Text color changed to white

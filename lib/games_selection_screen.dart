@@ -9,7 +9,8 @@ class GamesSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
+        backgroundColor:
+            const Color.fromARGB(255, 41, 19, 76), // Dark purple color
         title: Text(
           'Games',
           style: TextStyle(
@@ -22,7 +23,7 @@ class GamesSelectionScreen extends StatelessWidget {
       ),
       body: Container(
         color: Colors.white, // White background color for the entire screen
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,7 +38,7 @@ class GamesSelectionScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30), // Space between the title and buttons
-              
+
               // Match Game Section
               Text(
                 'Users select 4 images from their gallery, which are used as the cards in the game. Aim is to match pairs of cards by flipping them over. When 3 or 4 incorrect matches are made, the game will briefly reveal two cards as a hint before flipping them back over.',
@@ -52,8 +53,8 @@ class GamesSelectionScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/memory_game');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 41, 19, 76), // Dark purple button
+                  backgroundColor: const Color.fromARGB(
+                      255, 41, 19, 76), // Dark purple button
                   foregroundColor: Colors.white, // White text color
                   padding:
                       EdgeInsets.symmetric(vertical: 15.0), // Reduced padding
@@ -73,9 +74,9 @@ class GamesSelectionScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 20), // Space between sections
-              
+
               // Quiz Game Section
               Text(
                 'This is a customizable quiz game. Users can create a quiz by adding questions and answers, which are stored in Firebase. When you select the quiz game from the games page, the saved questions will appear. If needed, you can edit the quiz at any time through settings. During gameplay, if you make two incorrect attempts, the correct answer will be revealed to assist you.',
@@ -90,8 +91,8 @@ class GamesSelectionScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/memory_quiz_game');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 41, 19, 76), // Dark purple button
+                  backgroundColor: const Color.fromARGB(
+                      255, 41, 19, 76), // Dark purple button
                   foregroundColor: Colors.white, // White text color
                   padding:
                       EdgeInsets.symmetric(vertical: 15.0), // Reduced padding

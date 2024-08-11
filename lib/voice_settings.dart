@@ -58,8 +58,8 @@ class VoiceSettingsState extends State<VoiceSettings> {
           style: TextStyle(color: Colors.white), // Title color to white
         ),
         centerTitle: false, // Title aligned to the left
-        backgroundColor:
-            const Color.fromARGB(255, 41, 19, 76), // Dark purple color for AppBar
+        backgroundColor: const Color.fromARGB(
+            255, 41, 19, 76), // Dark purple color for AppBar
         leading: IconButton(
           icon: const Icon(Icons.arrow_back,
               color: Colors.white), // Back arrow color to white
