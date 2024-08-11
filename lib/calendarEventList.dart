@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'editCalendarEvent.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'pastel_colors.dart'; // Import the pastel colors file
 
 class CalendarEventViewPage extends StatelessWidget {
@@ -13,6 +14,8 @@ class CalendarEventViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
     // Define the start and end of the selected day
     DateTime startOfDay =
         DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
@@ -28,11 +31,8 @@ class CalendarEventViewPage extends StatelessWidget {
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('CalendarEvent')
-                  .where('eventDate',
-                      isGreaterThanOrEqualTo: startOfDay.toIso8601String())
-                  .where('eventDate',
-                      isLessThanOrEqualTo: endOfDay.toIso8601String())
+                  .collection('CalendarEvents')
+                  .where('userEmail', isEqualTo: userEmail)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -188,7 +188,7 @@ class EventCard extends StatelessWidget {
                 ),
                 onPressed: () {
                   FirebaseFirestore.instance
-                      .collection('CalendarEvent')
+                      .collection('CalendarEvents')
                       .doc(id)
                       .delete()
                       .then((_) {

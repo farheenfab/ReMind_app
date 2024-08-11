@@ -1,47 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
- 
+
 class EmergencyDetailsPage extends StatefulWidget {
   @override
   _EmergencyDetailsPageState createState() => _EmergencyDetailsPageState();
 }
- 
+
 class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
   Map<String, dynamic>? emergencyData;
-  String? documentId;  // Store document ID here
+  String? documentId; // Store document ID here
   bool isEditing = false;
- 
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
- 
+
   @override
   void initState() {
     super.initState();
     _loadEmergencyData();
   }
- 
+
   Future<void> _loadEmergencyData() async {
     final user = FirebaseAuth.instance.currentUser;
- 
+
     if (user != null) {
       final email = user.email;
- 
+
       try {
         final querySnapshot = await FirebaseFirestore.instance
             .collection('emergency')
             .where('email', isEqualTo: email)
             .get();
- 
+
         if (querySnapshot.docs.isNotEmpty) {
           final doc = querySnapshot.docs.first;
           final data = doc.data() as Map<String, dynamic>;
           setState(() {
             emergencyData = data;
-            documentId = doc.id;  // Save the document ID here
+            documentId = doc.id; // Save the document ID here
             _nameController.text = data['name'] ?? '';
             _phoneController.text = data['phone_number'] ?? '';
             _dobController.text = data['dob'] ?? '';
@@ -56,10 +56,10 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
       print('No user is logged in');
     }
   }
- 
+
   Future<void> _updateEmergencyDetails() async {
     final user = FirebaseAuth.instance.currentUser;
- 
+
     if (user != null && documentId != null) {
       final updatedData = {
         'name': _nameController.text,
@@ -69,11 +69,11 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
         'gender': _genderController.text,
         'email': user.email,
       };
- 
+
       try {
         await FirebaseFirestore.instance
             .collection('emergency')
-            .doc(documentId)  // Use the correct document ID
+            .doc(documentId) // Use the correct document ID
             .update(updatedData);
         setState(() {
           emergencyData = updatedData;
@@ -87,7 +87,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
       }
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,6 +114,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
             ),
         ],
       ),
+      backgroundColor: Colors.white, // Change the background color to white
       body: emergencyData == null
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -129,7 +130,9 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      _nameController.text.isEmpty ? 'N/A' : _nameController.text,
+                      _nameController.text.isEmpty
+                          ? 'N/A'
+                          : _nameController.text,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -138,7 +141,8 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                     ),
                     SizedBox(height: 30),
                     _buildDetailField('Phone', _phoneController, isEditing),
-                    _buildDetailField('Date of Birth', _dobController, isEditing),
+                    _buildDetailField(
+                        'Date of Birth', _dobController, isEditing),
                     _buildDetailField('Age', _ageController, isEditing),
                     _buildDetailField('Gender', _genderController, isEditing),
                   ],
@@ -147,7 +151,7 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
             ),
     );
   }
- 
+
   Widget _buildDetailField(
       String label, TextEditingController controller, bool isEditing) {
     return Container(
@@ -183,7 +187,8 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
                         hintText: 'Enter $label',
                         hintStyle: TextStyle(color: Colors.grey[300]),
@@ -204,5 +209,3 @@ class _EmergencyDetailsPageState extends State<EmergencyDetailsPage> {
     );
   }
 }
- 
- 

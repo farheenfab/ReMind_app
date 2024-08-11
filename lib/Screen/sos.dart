@@ -1,52 +1,85 @@
-import 'package:flutter/material.dart';
-import 'package:alz_app/Screen/sosButton/alertPersonal.dart';
-import 'package:alz_app/Screen/sosButton/callEmergency.dart';
-import 'package:alz_app/Screen/sosButton/launchLocation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:alz_app/Screen/sosButton/alertPersonal.dart';
+import 'package:alz_app/Screen/sosButton/callEmergency.dart';
 
-class SOSPage extends StatelessWidget {
+class SOSPage extends StatefulWidget {
   const SOSPage({super.key});
 
+  @override
+  _SOSPageState createState() => _SOSPageState();
+}
+
+class _SOSPageState extends State<SOSPage> {
   Future<Map<String, double>?> _getPatientLocation() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final docSnapshot = await FirebaseFirestore.instance
-          .collection('patients')
+          .collection('Patients')
           .doc(user.uid)
           .get();
 
       if (docSnapshot.exists) {
         final data = docSnapshot.data();
         if (data != null && data['location'] != null) {
-          return {
-            'latitude': data['location']['latitude'],
-            'longitude': data['location']['longitude'],
-          };
+          final locationString = data['location'] as String;
+
+          // Extract latitude and longitude from the string
+          final latitudeRegex = RegExp(r'Latitude:\s*([\d.-]+)');
+          final longitudeRegex = RegExp(r'Longitude:\s*([\d.-]+)');
+
+          final latitudeMatch = latitudeRegex.firstMatch(locationString);
+          final longitudeMatch = longitudeRegex.firstMatch(locationString);
+
+          if (latitudeMatch != null && longitudeMatch != null) {
+            final latitude = double.tryParse(latitudeMatch.group(1) ?? '');
+            final longitude = double.tryParse(longitudeMatch.group(1) ?? '');
+
+            if (latitude != null && longitude != null) {
+              return {'latitude': latitude, 'longitude': longitude};
+            }
+          }
         }
       }
     }
     return null;
   }
 
-  Future<void> _showAlertSentDialog(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Alert Sent'),
-          content: const Text('Alert sent to emergency contacts!'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> requestLocationPermission() async {
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      // Request permission
+      status = await Permission.location.request();
+    }
+
+    if (status.isPermanentlyDenied) {
+      // Show a message to the user about manually enabling permissions
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Location permission is permanently denied. Please enable it from settings.'),
+        ),
+      );
+      // Optionally, redirect user to app settings
+      await openAppSettings();
+    }
+  }
+
+  Future<void> launchMap(double latitude, double longitude) async {
+    final String googleMapsUrl =
+        "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
+    final Uri uri = Uri.parse(googleMapsUrl);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch Google Maps.')),
+      );
+    }
   }
 
   @override
@@ -87,7 +120,6 @@ class SOSPage extends StatelessWidget {
                   text: 'Send alert to caretaker & emergency contact',
                   onPressed: () async {
                     await sendAlertToEmergencyContacts(context);
-                    _showAlertSentDialog(context); // Show the alert pop-up after sending the alert
                   },
                 ),
                 const SizedBox(height: 40),
@@ -95,9 +127,11 @@ class SOSPage extends StatelessWidget {
                   icon: Icons.location_on,
                   text: 'Lost? Click here for your way back home!',
                   onPressed: () async {
+                    await requestLocationPermission();
                     final location = await _getPatientLocation();
                     if (location != null) {
-                      await launchMap(context, location['latitude']!, location['longitude']!);
+                      await launchMap(
+                          location['latitude']!, location['longitude']!);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Location not found.')),
@@ -147,7 +181,9 @@ class SOSButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
           child: Row(
             children: [
-              Icon(icon, color: Color.fromARGB(255, 191, 46, 35), size: 70.0), // Red icon on the left
+              Icon(icon,
+                  color: Color.fromARGB(255, 191, 46, 35),
+                  size: 70.0), // Red icon on the left
               const SizedBox(width: 10),
               Expanded(
                 child: Text(

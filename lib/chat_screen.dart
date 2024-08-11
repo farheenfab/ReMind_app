@@ -25,6 +25,8 @@ import 'package:alz_app/Screen/medicineAdd.dart';
 import 'package:alz_app/Screen/medicineView.dart';
 import 'calanderEvent.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChatScreen extends StatelessWidget {
   final Map<String, String> voice;
@@ -80,8 +82,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String? APIKEY;
+
   final TextEditingController _userInput = TextEditingController();
-  static const apiKey = 'AIzaSyDDs23kIZKv2g_uRzl1aHFipuRva-aKyks';
+  // String apiKey = 'AIzaSyDDs23kIZKv2g_uRzl1aHFipuRva-aKyks';
   final List<Message> _messages = [];
   // var history = "You are responsible for conversing with an Alzheimer's disease patient. \nThe following are the instructions to keep in mind while conversing with the patient:\n\n1. You start by asking the person how they are AND how was their day so far.\n2. Ask only one question at a time. DO NOT include multiple questions in a sentence. DO NOT use emojis in the questions.\n3. While conversing, perform a sentiment analysis of the conversation. The patient may be in a good, bad, or neutral mood so converse according to the patient's behavior.\n4. DO NOT repeat the questions. If the patient does not respond to the questions directly, ask something like 'What happened?' or 'Oh what's wrong'. Be empathetic. If something is troubling them, try to get to know the reason for their trouble.\n5. If something is troubling them, try calming them by guiding them through some short breathing exercises or saying some calming and comforting words like \n\"Everything is going to be fine.\", \"I understand this is hard for you.\", \"It's okay to feel upset. I'm here for you.\", \"Take your time, there's no rush.\", \"You are not alone. I'm right here with you.\", \"Don't worry, we'll figure this out together.\". Using a gentle tone and maintaining comforting behavior is very important during the conversation. \n6. Ask them what they did during the day. \n7. The conversation should not include more than 20 questions and responses. If the conversation extends, conclude it by saying \"Thank you for your time, I hope our conversation made you feel better. Have a nice day!\".\n8. Finally summarize the conversation and make a report with the title \"Conversation Summary and Symptom Report:\" on the following symptoms noticed in the conversation:\n- Difficulty with Everyday Task: Trouble completing familiar activities (daily routine)\n- Language Problems: Struggling with vocabulary, leading to difficulty finding the right words or following conversations.\n- Confusion: Disorientation with time, place, and identity of people, including loved ones.\n- Loss of Initiative: Reduced interest in hobbies, activities, and social interactions.\n- Mood and Behavior Changes: Depression, anxiety, irritability, aggression, and social withdrawal.\n- Physical Symptoms: Difficulty with movement, coordination, and eventually the loss of mobility.\n- Sleep Problems: Disrupted sleep patterns, including insomnia or excessive sleeping.\n9. Again, using a gentle and friendly tone and maintaining comforting behavior is very important during the conversation. You are talking to the patient directly.";
   String history_prompt =
@@ -91,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var content;
   var response;
+  String? userEmail;
 
   var reportTitle = "Conversation Summary and Symptom Report";
 
@@ -104,6 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _initSpeechState();
+
+    APIKEY = dotenv.env['apiKey'];
 
     flutterTts.setCompletionHandler(() {
       setState(() {
@@ -174,7 +181,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final model = GenerativeModel(
       model: "gemini-1.5-flash",
-      apiKey: "AIzaSyDzEnn0L7b0HDurSaoC7iIvx0AmnlUcppU",
+      apiKey: APIKEY!,
+      //"AIzaSyDzEnn0L7b0HDurSaoC7iIvx0AmnlUcppU",
       generationConfig: config, //apiKey
       // systemInstruction: Content.text(history),
       systemInstruction: Content.text(history.join('\n')),
@@ -208,7 +216,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // if the message from Gemini contains the report title, push report msg to firebase
     if (response.text.contains(reportTitle)) {
-      DatabaseService().addData(response.text, DateTime.now());
+      DatabaseService()
+          .addData(response.text, DateTime.now(), userEmail.toString());
     }
 
     // print(userMsg);
@@ -219,26 +228,28 @@ class _MyHomePageState extends State<MyHomePage> {
   // // Chat UI
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
-  backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
-  leading: IconButton(
-    onPressed: () => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(
+        backgroundColor:
+            const Color.fromARGB(255, 41, 19, 76), // Dark purple color
+        leading: IconButton(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          ),
+          icon: const Icon(Icons.arrow_back,
+              color: Colors.white), // White back arrow
         ),
+        title: const Text(
+          'Chat with Gemini',
+          style: TextStyle(color: Colors.white), // White title
+        ),
+        centerTitle: true,
       ),
-    ),
-    icon: const Icon(Icons.arrow_back, color: Colors.white), // White back arrow
-  ),
-  title: const Text(
-    'Chat with Gemini',
-    style: TextStyle(color: Colors.white), // White title
-  ),
-  centerTitle: true,
-),
-
       body: Container(
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(

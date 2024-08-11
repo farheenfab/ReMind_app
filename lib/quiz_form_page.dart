@@ -218,91 +218,98 @@ class _QuizFormPageState extends State<QuizFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple AppBar
+        backgroundColor:
+            const Color.fromARGB(255, 41, 19, 76), // Dark purple AppBar
         title: Text(
           widget.latestDateTime == null ? 'Create Quiz' : 'Edit Quiz',
           style: TextStyle(color: Colors.white), // White title
         ),
         iconTheme: IconThemeData(color: Colors.white), // White back arrow
       ),
-      body: Stack(
-        children: [
-          Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...questions
-                      .map((question) =>
-                          buildQuestionCard(questions.indexOf(question)))
-                      .toList(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  questions.add(Question(options: ['', '', '']));
-                                });
-                              },
-                              child: Text('Add'),
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+      body: Container(
+        color:
+            Color.fromARGB(255, 153, 153, 201), // Light purple background color
+        child: Stack(
+          children: [
+            Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ...questions
+                        .map((question) =>
+                            buildQuestionCard(questions.indexOf(question)))
+                        .toList(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    questions
+                                        .add(Question(options: ['', '', '']));
+                                  });
+                                },
+                                child: Text('Add'),
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 15),
+                                  backgroundColor: Colors.white,
                                 ),
-                                padding: EdgeInsets.symmetric(vertical: 15),
-                                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  await saveQuizDetails();
-                                }
-                              },
-                              child: Text('Save'),
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    await saveQuizDetails();
+                                  }
+                                },
+                                child: Text('Save'),
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 15),
+                                  backgroundColor: Colors.white,
                                 ),
-                                padding: EdgeInsets.symmetric(vertical: 15),
-                                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (_showLoading || _showSuccess)
-            AnimatedOpacity(
-              opacity: _showLoading || _showSuccess ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 300),
-              child: Container(
-                color: Colors.green,
-                child: Center(
-                  child: _showLoading
-                      ? CircularProgressIndicator()
-                      : _showSuccess
-                          ? Icon(Icons.check_circle, color: Colors.white, size: 100)
-                          : Container(),
+                  ],
                 ),
               ),
             ),
-        ],
+            if (_showLoading || _showSuccess)
+              AnimatedOpacity(
+                opacity: _showLoading || _showSuccess ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 300),
+                child: Container(
+                  color: Colors.green,
+                  child: Center(
+                    child: _showLoading
+                        ? CircularProgressIndicator()
+                        : _showSuccess
+                            ? Icon(Icons.check_circle,
+                                color: Colors.white, size: 100)
+                            : Container(),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

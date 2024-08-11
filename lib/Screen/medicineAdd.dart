@@ -10,10 +10,28 @@ class AddMedicineScreen extends StatefulWidget {
 
 class _AddMedicineScreenState extends State<AddMedicineScreen> {
   final _pillNameController = TextEditingController();
-  final List<String> _strengthOptions = ['5 mg', '10 mg', '20 mg', '50 mg', '100 mg'];
+  final List<String> _strengthOptions = [
+    '5 mg',
+    '10 mg',
+    '20 mg',
+    '50 mg',
+    '100 mg'
+  ];
   final List<String> _daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  final List<String> _fullDaysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  final List<String> _frequencyOptions = ['Once a day', 'Twice a day', 'Three times a day'];
+  final List<String> _fullDaysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ];
+  final List<String> _frequencyOptions = [
+    'Once a day',
+    'Twice a day',
+    'Three times a day'
+  ];
   String? _selectedStrength;
   List<String> _selectedDays = [];
   String? _selectedFrequency;
@@ -34,7 +52,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
         ),
         iconTheme: IconThemeData(color: Colors.white), // Back icon color
       ),
-      backgroundColor: Colors.white, // Set the background color of the entire screen to white
+      backgroundColor: Colors
+          .white, // Set the background color of the entire screen to white
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -48,11 +67,15 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(
+                          255, 59, 21, 94)), // Dark purple border
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(
+                          255, 59, 21, 94)), // Dark purple border
                 ),
                 filled: true,
                 fillColor: Colors.white,
@@ -68,11 +91,15 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(
+                          255, 59, 21, 94)), // Dark purple border
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(
+                          255, 59, 21, 94)), // Dark purple border
                 ),
                 filled: true,
                 fillColor: Colors.white,
@@ -92,7 +119,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
             SizedBox(height: 20),
 
             // Days of the Week
-            Text('Days of the Week', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('Days of the Week',
+                style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
             Wrap(
               spacing: 8.0,
@@ -146,11 +174,16 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(
+                          255, 59, 21, 94)), // Dark purple border
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 59, 21, 94)), // Dark purple border
+                  borderSide: BorderSide(
+                      color: Color.fromARGB(
+                          255, 59, 21, 94)), // Dark purple border
                 ),
                 filled: true,
                 fillColor: Colors.white,
@@ -170,7 +203,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
             SizedBox(height: 20),
 
             // Food Preference
-            Text('Food Preference', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('Food Preference',
+                style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
             ToggleButtons(
               borderRadius: BorderRadius.circular(8.0),
@@ -190,7 +224,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                   for (int i = 0; i < _isSelectedFoodOption.length; i++) {
                     _isSelectedFoodOption[i] = i == index;
                   }
-                  _selectedFoodOption = index == 0 ? 'Before Food' : 'After Food';
+                  _selectedFoodOption =
+                      index == 0 ? 'Before Food' : 'After Food';
                 });
               },
             ),
@@ -206,11 +241,15 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                     return Theme(
                       data: ThemeData.light().copyWith(
                         colorScheme: ColorScheme.light(
-                          primary: Color.fromARGB(255, 41, 19, 76), // Dark Purple
-                          onSurface: Color.fromARGB(255, 59, 21, 94), // Dark Purple
+                          primary:
+                              Color.fromARGB(255, 41, 19, 76), // Dark Purple
+                          onSurface:
+                              Color.fromARGB(255, 59, 21, 94), // Dark Purple
                         ),
                         buttonTheme: ButtonThemeData(
-                          colorScheme: ColorScheme.light(primary: Color.fromARGB(255, 41, 19, 76)), // Dark Purple
+                          colorScheme: ColorScheme.light(
+                              primary: Color.fromARGB(
+                                  255, 41, 19, 76)), // Dark Purple
                         ),
                       ),
                       child: child!,
@@ -225,7 +264,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               },
               child: Row(
                 children: [
-                  Icon(Icons.access_time, color: Color.fromARGB(255, 41, 19, 76)), // Dark Purple
+                  Icon(Icons.access_time,
+                      color: Color.fromARGB(255, 41, 19, 76)), // Dark Purple
                   SizedBox(width: 10),
                   Text(
                     _selectedTime == null
@@ -252,22 +292,32 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                   final String? foodOption = _selectedFoodOption;
                   final String? userEmail = _auth.currentUser?.email;
 
-                  if (pillName.isNotEmpty && strength != null && days.isNotEmpty && frequency != null && _selectedTime != null && foodOption != null && userEmail != null) {
+                  if (pillName.isNotEmpty &&
+                      strength != null &&
+                      days.isNotEmpty &&
+                      frequency != null &&
+                      _selectedTime != null &&
+                      foodOption != null &&
+                      userEmail != null) {
                     // Sort the days based on the predefined order
-                    List<String> sortedDays = days..sort((a, b) {
-                      int indexA = _fullDaysOfWeek.indexOf(a);
-                      int indexB = _fullDaysOfWeek.indexOf(b);
-                      return indexA.compareTo(indexB);
-                    });
+                    List<String> sortedDays = days
+                      ..sort((a, b) {
+                        int indexA = _fullDaysOfWeek.indexOf(a);
+                        int indexB = _fullDaysOfWeek.indexOf(b);
+                        return indexA.compareTo(indexB);
+                      });
 
                     // Add the new medicine with user email
-                    await FirebaseFirestore.instance.collection('Medicines').add({
+                    await FirebaseFirestore.instance
+                        .collection('Medicines')
+                        .add({
                       'pillName': pillName,
                       'strength': strength,
                       'days': sortedDays,
                       'frequency': frequency,
                       'foodOption': foodOption,
-                      'remainderTime': '${_selectedTime!.hour}:${_selectedTime!.minute}',
+                      'remainderTime':
+                          '${_selectedTime!.hour}:${_selectedTime!.minute}',
                       'userEmail': userEmail, // Save the user's email
                     });
 
@@ -295,13 +345,15 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple
+                  backgroundColor:
+                      Color.fromARGB(255, 41, 19, 76), // Dark Purple
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-                child: Text('Add Medicine', style: TextStyle(color: Colors.white)), // White text color
+                child: Text('Add Medicine',
+                    style: TextStyle(color: Colors.white)), // White text color
               ),
             ),
           ],

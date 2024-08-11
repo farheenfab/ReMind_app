@@ -6,6 +6,7 @@ import 'home_page.dart';
 import 'settings.dart';
 import 'memory_game.dart';
 import 'games_selection_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DisplayData extends StatefulWidget {
   @override
@@ -29,10 +30,12 @@ class _DisplayDataState extends State<DisplayData> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            const Color.fromARGB(255, 41, 19, 76), // Dark purple background color
+        backgroundColor: const Color.fromARGB(
+            255, 41, 19, 76), // Dark purple background color
         title: const Align(
           alignment: Alignment.centerLeft, // Align the title to the left
           child: Text(
@@ -49,8 +52,10 @@ class _DisplayDataState extends State<DisplayData> {
       body: Container(
         color: Colors.white, // Set the background color to white
         child: StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection('JournalEntry').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('JournalEntries')
+              .where('userEmail', isEqualTo: userEmail)
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
@@ -63,8 +68,8 @@ class _DisplayDataState extends State<DisplayData> {
 
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundColor:
-                            const Color.fromARGB(255, 41, 19, 76), // Dark purple color
+                        backgroundColor: const Color.fromARGB(
+                            255, 41, 19, 76), // Dark purple color
                         child: Text(
                           "${index + 1}",
                           style: const TextStyle(

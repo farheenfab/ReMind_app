@@ -16,12 +16,12 @@ import 'calendarEventList.dart'; // Updated import
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class HomePage extends StatefulWidget {
   // final String username;
 
-  const HomePage({Key? key, 
-  // required this.username
+  const HomePage({
+    Key? key,
+    // required this.username
   }) : super(key: key);
 
   @override
@@ -65,7 +65,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadPatientData();
   }
-
 
   Future<void> _loadPatientData() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -280,7 +279,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
-                              .collection('CalendarEvent')
+                              .collection('CalendarEvents')
                               .where('eventDate',
                                   isGreaterThanOrEqualTo:
                                       startOfDay.toIso8601String())

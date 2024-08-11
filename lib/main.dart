@@ -28,6 +28,7 @@ import 'memory_game.dart';
 import 'memory_quiz_game.dart';
 import 'quiz_form_page.dart';
 import 'games_selection_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +42,7 @@ void main() async {
   await FirebaseMessaging.instance.subscribeToTopic("topic");
   final fcmToken = await FirebaseMessaging.instance.getToken();
   // print("FCM Token: $fcmToken");
-
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -51,28 +52,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-  title: 'ReMind',
-  theme: ThemeData(
-    colorScheme: ColorScheme.fromSwatch().copyWith(
-      primary: const Color.fromARGB(255, 41, 19, 76),
-      secondary: Colors.white,
-    ),
-    useMaterial3: true,
-  ),
-  home: const SplashScreen(),
-  initialRoute: '/welcome',
-  routes: {
-    '/welcome': (context) => const WelcomeScreen(),
-    '/settings': (context) => SettingsPage(),
-    '/login': (context) => const LoginPage(),
-    '/signup': (context) => const SignUpPage(),
-    '/games_selection': (context) => GamesSelectionScreen(),
-    '/memory_game': (context) => MemoryGameHome(),
-    '/memory_quiz_game': (context) => MemoryQuizGame(),
-    '/quiz_form_page': (context) => QuizFormPage(),
-  },
-);
-
+      title: 'ReMind',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: const Color.fromARGB(255, 41, 19, 76),
+          secondary: Colors.white,
+        ),
+        useMaterial3: true,
+      ),
+      home: const SplashScreen(),
+      initialRoute: '/welcome',
+      routes: {
+        '/welcome': (context) => const WelcomeScreen(),
+        '/settings': (context) => SettingsPage(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignUpPage(),
+        '/games_selection': (context) => GamesSelectionScreen(),
+        '/memory_game': (context) => MemoryGameHome(),
+        '/memory_quiz_game': (context) => MemoryQuizGame(),
+        '/quiz_form_page': (context) => QuizFormPage(),
+      },
+    );
   }
 }
 

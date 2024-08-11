@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'calendarDB.dart';
 import 'calender_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CalendarEvent extends StatefulWidget {
   final DateTime selectedDate;
@@ -24,6 +25,8 @@ class _CalendarEventState extends State<CalendarEvent> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final String? userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         title: const Align(
@@ -43,8 +46,8 @@ class _CalendarEventState extends State<CalendarEvent> {
             color: Colors.white, // White back arrow color
           ),
         ),
-        backgroundColor:
-            const Color.fromARGB(255, 41, 19, 76), // Dark purple background color
+        backgroundColor: const Color.fromARGB(
+            255, 41, 19, 76), // Dark purple background color
       ),
       backgroundColor: Colors.white, // Set background color to white
       body: Center(
@@ -62,7 +65,8 @@ class _CalendarEventState extends State<CalendarEvent> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                            color: Color.fromARGB(
+                                255, 41, 19, 76)), // Dark purple outline
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -88,7 +92,8 @@ class _CalendarEventState extends State<CalendarEvent> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                            color: Color.fromARGB(
+                                255, 41, 19, 76)), // Dark purple outline
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -114,7 +119,8 @@ class _CalendarEventState extends State<CalendarEvent> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                            color: Color.fromARGB(
+                                255, 41, 19, 76)), // Dark purple outline
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -140,7 +146,8 @@ class _CalendarEventState extends State<CalendarEvent> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                            color: Color.fromARGB(
+                                255, 41, 19, 76)), // Dark purple outline
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -179,14 +186,14 @@ class _CalendarEventState extends State<CalendarEvent> {
                     ),
                     onPressed: () async {
                       await DatabaseService().addData(
-                        widget.selectedDate
-                            .toIso8601String(), // Use the selected date
-                        eventName.text,
-                        eventDescription.text,
-                        eventLocation.text,
-                        eventTime.text,
-                        DateTime.now(),
-                      );
+                          widget.selectedDate
+                              .toIso8601String(), // Use the selected date
+                          eventName.text,
+                          eventDescription.text,
+                          eventLocation.text,
+                          eventTime.text,
+                          DateTime.now(),
+                          userEmail.toString());
 
                       eventName.clear();
                       eventDescription.clear();

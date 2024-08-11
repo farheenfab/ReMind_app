@@ -68,6 +68,7 @@ dependencies:
   cached_network_image: ^3.4.0
   # google_generative_ai: ^0.4.3
   speech_to_text: ^6.6.0
+  flutter_dotenv: ^5.1.0
   
   firebase_auth: ^5.1.4
   google_maps_flutter: ^2.8.0
@@ -93,6 +94,7 @@ dev_dependencies:
 flutter:
   assets:
     - lib/assets/logo.png
+    - .env
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

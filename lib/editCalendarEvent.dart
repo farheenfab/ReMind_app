@@ -37,7 +37,7 @@ class _EditEventPageState extends State<EditEventPage> {
 
   void updateEvent() {
     FirebaseFirestore.instance
-        .collection('CalendarEvent')
+        .collection('CalendarEvents')
         .doc(widget.id)
         .update({
       'eventName': eventName.text,
@@ -59,7 +59,8 @@ class _EditEventPageState extends State<EditEventPage> {
           style:
               TextStyle(color: Colors.white), // Set AppBar text color to white
         ),
-        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark purple background color
+        backgroundColor:
+            Color.fromARGB(255, 41, 19, 76), // Dark purple background color
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: Colors.white, // White color for back arrow
@@ -81,7 +82,8 @@ class _EditEventPageState extends State<EditEventPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                          color: Color.fromARGB(
+                              255, 41, 19, 76)), // Dark purple outline
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -107,7 +109,8 @@ class _EditEventPageState extends State<EditEventPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                          color: Color.fromARGB(
+                              255, 41, 19, 76)), // Dark purple outline
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -133,7 +136,8 @@ class _EditEventPageState extends State<EditEventPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                          color: Color.fromARGB(
+                              255, 41, 19, 76)), // Dark purple outline
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -159,7 +163,8 @@ class _EditEventPageState extends State<EditEventPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          color: Color.fromARGB(255, 41, 19, 76)), // Dark purple outline
+                          color: Color.fromARGB(
+                              255, 41, 19, 76)), // Dark purple outline
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -183,8 +188,8 @@ class _EditEventPageState extends State<EditEventPage> {
                 child: ElevatedButton(
                   onPressed: updateEvent,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color.fromARGB(255, 41, 19, 76), // Dark purple background color
+                    backgroundColor: const Color.fromARGB(
+                        255, 41, 19, 76), // Dark purple background color
                     foregroundColor: Colors.white, // White text color
                     minimumSize:
                         const Size(double.infinity, 40), // Button height

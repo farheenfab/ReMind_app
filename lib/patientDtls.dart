@@ -101,8 +101,10 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   Map<String, dynamic> _parseLocation(String locationStr) {
     final parts = locationStr.split(',');
     if (parts.length == 2) {
-      final latitude = double.tryParse(parts[0].replaceAll('Latitude:', '').trim());
-      final longitude = double.tryParse(parts[1].replaceAll('Longitude:', '').trim());
+      final latitude =
+          double.tryParse(parts[0].replaceAll('Latitude:', '').trim());
+      final longitude =
+          double.tryParse(parts[1].replaceAll('Longitude:', '').trim());
       return {
         'latitude': latitude,
         'longitude': longitude,
@@ -119,14 +121,16 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
           'Patient Profile',
           style: TextStyle(color: Colors.white), // Title color changed to white
         ),
-        backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
+        backgroundColor:
+            const Color.fromARGB(255, 41, 19, 76), // Dark purple color
         iconTheme: IconThemeData(
           color: Colors.white, // White color for icons
         ),
         actions: [
           if (!isEditing)
             IconButton(
-              icon: Icon(Icons.edit, color: Colors.white), // Edit icon color changed to white
+              icon: Icon(Icons.edit,
+                  color: Colors.white), // Edit icon color changed to white
               onPressed: () {
                 setState(() {
                   isEditing = true;
@@ -135,13 +139,15 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
             ),
           if (isEditing)
             IconButton(
-              icon: Icon(Icons.save, color: Colors.white), // Save icon color changed to white
+              icon: Icon(Icons.save,
+                  color: Colors.white), // Save icon color changed to white
               onPressed: () {
                 _updatePatientDetails();
               },
             ),
         ],
       ),
+      backgroundColor: Colors.white, // Change the background color to white
       body: patientData == null
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -152,29 +158,38 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                   children: [
                     CircleAvatar(
                       radius: 60,
-                      backgroundColor: const Color.fromARGB(255, 41, 19, 76), // Dark purple color
+                      backgroundColor: const Color.fromARGB(
+                          255, 41, 19, 76), // Dark purple color
                       child: Icon(Icons.person, size: 60, color: Colors.white),
                     ),
                     SizedBox(height: 20),
                     Text(
-                      _nameController.text.isEmpty ? 'N/A' : _nameController.text,
+                      _nameController.text.isEmpty
+                          ? 'N/A'
+                          : _nameController.text,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: const Color.fromARGB(255, 0, 0, 0), // White text color
+                        color: const Color.fromARGB(
+                            255, 0, 0, 0), // White text color
                       ),
                     ),
                     SizedBox(height: 10),
                     Text(
                       patientData?['email'] ?? 'N/A',
-                      style: TextStyle(fontSize: 16, color: Color.fromARGB(179, 77, 75, 75)), // Light white color for text
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(
+                              179, 77, 75, 75)), // Light white color for text
                     ),
                     SizedBox(height: 30),
                     _buildDetailField('Phone', _phoneController, isEditing),
-                    _buildDetailField('Date of Birth', _dobController, isEditing),
+                    _buildDetailField(
+                        'Date of Birth', _dobController, isEditing),
                     _buildDetailField('Age', _ageController, isEditing),
                     _buildDetailField('Gender', _genderController, isEditing),
-                    _buildDetailField('Location', _locationController, isEditing),
+                    _buildDetailField(
+                        'Location', _locationController, isEditing),
                   ],
                 ),
               ),
@@ -187,7 +202,8 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
     return Container(
       width: double.infinity,
       child: Card(
-        color: const Color.fromARGB(255, 41, 19, 76), // Dark purple color for cards
+        color: const Color.fromARGB(
+            255, 41, 19, 76), // Dark purple color for cards
         margin: const EdgeInsets.only(bottom: 20.0),
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -213,16 +229,24 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.white), // Border color changed to white
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .white), // Border color changed to white
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(color: Colors.white, width: 2.0), // Focused border color changed to white
+                          borderSide: BorderSide(
+                              color: Colors.white,
+                              width:
+                                  2.0), // Focused border color changed to white
                         ),
                         hintText: 'Enter $label',
-                        hintStyle: TextStyle(color: Colors.white70), // Hint text color changed to light white
+                        hintStyle: TextStyle(
+                            color: Colors
+                                .white70), // Hint text color changed to light white
                       ),
-                      style: TextStyle(color: Colors.white), // Text color changed to white
+                      style: TextStyle(
+                          color: Colors.white), // Text color changed to white
                     )
                   : Text(
                       controller.text.isEmpty ? 'N/A' : controller.text,

@@ -38,7 +38,9 @@ Future<void> sendAlertToEmergencyContacts(BuildContext context) async {
   if (smsPermissionStatus.isPermanentlyDenied) {
     // Show a message informing the user that permission was permanently denied
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('SMS permission is permanently denied. You need to enable it in the app settings.')),
+      SnackBar(
+          content: Text(
+              'SMS permission is permanently denied. You need to enable it in the app settings.')),
     );
     return;
   }
@@ -76,7 +78,8 @@ Future<void> sendAlertToEmergencyContacts(BuildContext context) async {
           child: const Text('OK'),
         ),
       ],
-      backgroundColor: Colors.grey, // Set pop-up background color to grey
+      backgroundColor: const Color.fromARGB(
+          255, 255, 255, 255), // Set pop-up background color to grey
     ),
   );
 }

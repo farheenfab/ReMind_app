@@ -7,6 +7,7 @@ import 'calanderEvent.dart';
 import 'calendarEventList.dart'; // Import the CalendarEventViewPage
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'global_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _selectedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
+  String? userEmail;
 
   @override
   void initState() {
@@ -49,13 +51,15 @@ class _CalendarPageState extends State<CalendarPage> {
     final Map<DateTime, List<String>> loadedEvents = {};
 
     for (var map in maps) {
-      final date = DateTime.parse(map['date']).toLocal();
+      // final date = DateTime.parse(map['date']).toLocal();
+      DateTime convertedDate = DateTime.parse(map['date']);
       final event = map['event'] as String;
 
-      if (loadedEvents[date] == null) {
-        loadedEvents[date] = [];
+      if (loadedEvents[convertedDate] == null) {
+        //date
+        loadedEvents[convertedDate] = []; //date
       }
-      loadedEvents[date]!.add(event);
+      loadedEvents[convertedDate]!.add(event); //date
     }
 
     setState(() {
@@ -64,22 +68,27 @@ class _CalendarPageState extends State<CalendarPage> {
     });
 
     // Debug: Print loaded events
+    print('---------------------------------------------------');
     print('Loaded events: $_events');
+    print('Loaded events: $_selectedDay');
   }
 
   Future<void> _addEvent(String event) async {
     final date = _selectedDay.toIso8601String();
-    await _database.insert('events', {'date': date, 'event': event});
-    if (_events[_selectedDay] == null) {
+    print('hiiiii');
+    print(date);
+    await _database.insert('events', {'date': _selectedDay, 'event': event});
+    if (_events[date] == null) {
       _events[_selectedDay] = [];
     }
-    _events[_selectedDay]!.add(event);
+    _events[date]!.add(event);
     setState(() {
-      _selectedEvents = _events[_selectedDay]!;
+      _selectedEvents = _events[date]!;
     });
 
-    print('Added event: $event on $_selectedDay');
-    print('Events: $_events');
+    print('---------------------------------------------------');
+    print('Loaded events: $_events');
+    print('Loaded events: $_selectedDay');
   }
 
   Future<void> _removeEvent(String event) async {
@@ -89,14 +98,14 @@ class _CalendarPageState extends State<CalendarPage> {
       where: 'date = ? AND event = ?',
       whereArgs: [date, event],
     );
-    _events[_selectedDay]?.remove(event);
+    _events[date]?.remove(event);
 
     // Reload events to reflect changes
     await _loadEvents();
 
     // Update the selected events after reloading
     setState(() {
-      _selectedEvents = _events[_selectedDay] ?? [];
+      _selectedEvents = _events[date] ?? [];
     });
 
     print('Removed event: $event from $_selectedDay');
@@ -105,8 +114,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Future<bool> _checkIfDateHasEvents(DateTime date) async {
     final snapshot = await FirebaseFirestore.instance
-        .collection('CalendarEvent')
+        .collection('CalendarEvents')
         .where('eventDate', isEqualTo: date.toIso8601String())
+        .where('userEmail', isEqualTo: userEmail.toString())
         .limit(1) // Limit to 1 to check existence
         .get();
 
@@ -218,6 +228,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    // final String?
+    userEmail = _auth.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 41, 19, 76),
@@ -230,8 +243,7 @@ class _CalendarPageState extends State<CalendarPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomePage(
-                ),
+                builder: (context) => const HomePage(),
               ),
             );
           },
@@ -296,7 +308,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       selectedTextStyle: TextStyle(color: Colors.black),
                       todayDecoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: const Color.fromARGB(255, 41, 19, 76), // Change to your desired color
+                        color: const Color.fromARGB(
+                            255, 41, 19, 76), // Change to your desired color
                       ),
                       selectedDecoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -384,6 +397,7 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Icon(Icons.add, color: Colors.white),
         backgroundColor: const Color.fromARGB(255, 41, 19, 76),
         onPressed: () {
+          print(_selectedDay);
           Navigator.push(
             context,
             MaterialPageRoute(

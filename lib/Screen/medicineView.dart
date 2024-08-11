@@ -9,7 +9,8 @@ class MedicineViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 41, 19, 76), // Dark Purple background color for AppBar
+        backgroundColor: Color.fromARGB(
+            255, 41, 19, 76), // Dark Purple background color for AppBar
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -27,10 +28,12 @@ class MedicineViewPage extends StatelessWidget {
             ),
           ],
         ),
-        iconTheme: IconThemeData(color: Colors.white), // Set back arrow color to white
+        iconTheme:
+            IconThemeData(color: Colors.white), // Set back arrow color to white
       ),
       body: MedicineList(),
-      backgroundColor: Color(0xFFFFFFFF), // Set the background color of the page to white
+      backgroundColor:
+          Color(0xFFFFFFFF), // Set the background color of the page to white
     );
   }
 }
@@ -57,7 +60,15 @@ class MedicineList extends StatelessWidget {
         final medicines = snapshot.data!.docs;
 
         // Sort medicines by day of the week
-        final daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        final daysOfWeek = [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday'
+        ];
         final Map<String, List<QueryDocumentSnapshot>> sortedMedicines = {
           for (var day in daysOfWeek) day: []
         };
@@ -81,7 +92,8 @@ class MedicineList extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 41, 19, 76), // Dark Purple text color
+                      color: Color.fromARGB(
+                          255, 41, 19, 76), // Dark Purple text color
                     ),
                   ),
                 ),
@@ -143,7 +155,8 @@ class MedicineCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Color.fromARGB(255, 224, 204, 240), // Light Pastel Purple color
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black.withOpacity(0.1), width: 1), // Subtle border
+        border: Border.all(
+            color: Colors.black.withOpacity(0.1), width: 1), // Subtle border
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -159,14 +172,17 @@ class MedicineCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 41, 19, 76), // Dark Purple text color
+                      color: Color.fromARGB(
+                          255, 41, 19, 76), // Dark Purple text color
                     ),
                   ),
                 ),
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit, color: Color.fromARGB(255, 21, 94, 37)), // Dark Green icon color for edit
+                      icon: Icon(Icons.edit,
+                          color: Color.fromARGB(255, 21, 94,
+                              37)), // Dark Green icon color for edit
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -185,9 +201,11 @@ class MedicineCard extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete, color: Color(0xFFB71C1C)), // Red icon color for delete
+                      icon: Icon(Icons.delete,
+                          color:
+                              Color(0xFFB71C1C)), // Red icon color for delete
                       onPressed: () {
-                        _showDeleteConfirmationDialog(context, id);
+                        _showDeleteConfirmationDialog(context, id, days);
                       },
                     ),
                   ],
@@ -203,24 +221,27 @@ class MedicineCard extends StatelessWidget {
             SizedBox(height: 8),
             Text('Food Option: $foodOption', style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
-            Text('Reminder Time: $remainderTime', style: TextStyle(fontSize: 16)),
+            Text('Reminder Time: $remainderTime',
+                style: TextStyle(fontSize: 16)),
           ],
         ),
       ),
     );
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context, String id) {
+  void _showDeleteConfirmationDialog(
+      BuildContext context, String id, List<String> days) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFFD3D3D3), // Pastel grey color for background
+          backgroundColor:
+              Color(0xFFD3D3D3), // Pastel grey color for background
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Are you sure you want to delete this medicine?',
+                'Are you sure you want to delete this medicine ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold, // Bold text
@@ -239,18 +260,39 @@ class MedicineCard extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  FirebaseFirestore.instance
-                      .collection('Medicines')
-                      .doc(id)
-                      .delete()
-                      .then((_) {
-                    Navigator.of(context).pop(); // Close the dialog
-                  }).catchError((error) {
-                    // Handle any errors here
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to delete medicine: $error')),
-                    );
-                  });
+                  if (days.length > 1) {
+                    // Update the document by removing the selected day
+                    days.removeWhere((day) =>
+                        day == days[0]); // Example for deleting the first day
+                    FirebaseFirestore.instance
+                        .collection('Medicines')
+                        .doc(id)
+                        .update({'days': days}).then((_) {
+                      Navigator.of(context).pop(); // Close the dialog
+                    }).catchError((error) {
+                      // Handle any errors here
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(
+                                'Failed to delete medicine for the day: $error')),
+                      );
+                    });
+                  } else {
+                    // If it's the only day, delete the entire document
+                    FirebaseFirestore.instance
+                        .collection('Medicines')
+                        .doc(id)
+                        .delete()
+                        .then((_) {
+                      Navigator.of(context).pop(); // Close the dialog
+                    }).catchError((error) {
+                      // Handle any errors here
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('Failed to delete medicine: $error')),
+                      );
+                    });
+                  }
                 },
               ),
               Divider(
