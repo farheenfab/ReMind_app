@@ -1,5 +1,3 @@
-# alz_app
-
 # ReMind: 
 ### Tagline:
 ReMind: Your daily companion for memory care, keeping routines on track and safety within reach.
