@@ -20,10 +20,10 @@ ReMind is tailored for individuals with Alzheimer's disease, providing them with
 ## Contributions:
 ### **Arshati**
 Contributed significantly to the frontend development of several key features in the application:
-Calendar Feature: Developed the calendar interface with event management functionality. Implemented a popup to display events for selected dates, ensuring users can view and interact with event details effectively. Linked calendar events with daily tasks on the home page for a consolidated view of activities.
-Memory Log Page: Linked the memory log with the journal content to display journal entries effectively, ensuring a seamless integration of user data with the journal interface.
-Settings Page: Created and styled the settings page, linking the voice-over settings option to allow users to switch between male and female voice options, enhancing accessibility and personalization.
-Login and Sign-Up Pages: Built the frontend for login and sign-up, focusing on a seamless and secure user authentication process.
+- Calendar Feature: Developed the calendar interface with event management functionality. Implemented a popup to display events for selected dates, ensuring users can view and interact with event details effectively. Linked calendar events with daily tasks on the home page for a consolidated view of activities.
+- Memory Log Page: Linked the memory log with the journal content to display journal entries effectively, ensuring a seamless integration of user data with the journal interface.
+- Settings Page: Created and styled the settings page, linking the voice-over settings option to allow users to switch between male and female voice options, enhancing accessibility and personalization.
+- Login and Sign-Up Pages: Built the frontend for login and sign-up, focusing on a seamless and secure user authentication process.
 Patient Details, Caretaker Details, and Emergency Contact Pages: Designed and developed the frontend for managing patient details, caretaker information, and emergency contacts, ensuring clear and efficient data presentation.
 
 ### **Farheen**
