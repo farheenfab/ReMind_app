@@ -17,8 +17,8 @@ ReMind is tailored for individuals with Alzheimer's disease, providing them with
 - Pooja
 - Prasitha
 
-### Contributions:
-#### **Arshati**
+## Contributions:
+### **Arshati**
 Contributed significantly to the frontend development of several key features in the application:
 Calendar Feature: Developed the calendar interface with event management functionality. Implemented a popup to display events for selected dates, ensuring users can view and interact with event details effectively. Linked calendar events with daily tasks on the home page for a consolidated view of activities.
 Memory Log Page: Linked the memory log with the journal content to display journal entries effectively, ensuring a seamless integration of user data with the journal interface.
@@ -26,7 +26,7 @@ Settings Page: Created and styled the settings page, linking the voice-over sett
 Login and Sign-Up Pages: Built the frontend for login and sign-up, focusing on a seamless and secure user authentication process.
 Patient Details, Caretaker Details, and Emergency Contact Pages: Designed and developed the frontend for managing patient details, caretaker information, and emergency contacts, ensuring clear and efficient data presentation.
 
-#### **Farheen**
+### **Farheen**
 1. Firebase and GitHub Setup
 As part of the ReMind project, I took the initiative to establish the foundational infrastructure by setting up Firebase for backend support and creating the GitHub repository to ensure smooth version control and collaboration within the team.
 
@@ -36,7 +36,7 @@ I developed the Memory Card Game, a classic matching game designed to help users
 3. Memory Quiz Game
 In addition, I worked on the Memory Quiz Game, a customizable tool that allows users to create quizzes by adding questions and answers. These are stored in Firebase for easy access and modification. The game retrieves these quizzes for users to play, and any updates made in the settings are automatically reflected in the gameplay. To support learning, I added a feature that reveals the correct answer after two incorrect attempts, aiding users in retaining the information more effectively.
 
-#### **Gauri**
+### **Gauri**
 Below are my Backend and Frontend Contributions to the application:
 
 1. Gemini Chatbot Integration:
@@ -62,9 +62,9 @@ Below are my Backend and Frontend Contributions to the application:
    - Developed backend functionalities for managing calendar events, including creating, updating, deleting, and displaying events.
    - Integrated Firebase to store and fetch user-created events, ensuring seamless data synchronization and display within the app.
 
-#### **Pooja**
+### **Pooja**
 
-#### **Prasitha**
+### **Prasitha**
 
 <!-- ## Getting Started
 
