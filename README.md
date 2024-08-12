@@ -74,10 +74,10 @@ Frontend Development:
 
 Worked on the frontend design and implementation of the following pages in the Remind Flutter app:
 
-Home Page
-Profile Page
-Medication Management (view, add, edit)
-Games (Match Game, Quiz Game, edit game)
+- Home Page
+- Profile Page
+- Medication Management (view, add, edit)
+- Games (Match Game, Quiz Game, edit game)
 
 Made sure the UI was consistent in all the pages throughout the application.
 
@@ -85,11 +85,11 @@ Backend Integration:
 
 Collaborated with team members to link the frontend with the backend for the following pages:
 
-Medicine
-Profile
-Login
-Sign-Up
-Games
+- Medicine
+- Profile
+- Login
+- Sign-Up
+- Games
 
 
 <!-- ## Getting Started
