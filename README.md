@@ -21,10 +21,10 @@ ReMind is tailored for individuals with Alzheimer's disease, providing them with
 ## Contributions:
 ### **Arshati**
 Contributed significantly to the frontend development of several key features in the application:
-- Calendar Feature: Developed the calendar interface with event management functionality. Implemented a popup to display events for selected dates, ensuring users can view and interact with event details effectively. Linked calendar events with daily tasks on the home page for a consolidated view of activities.
-- Memory Log Page: Linked the memory log with the journal content to display journal entries effectively, ensuring a seamless integration of user data with the journal interface.
-- Settings Page: Created and styled the settings page, linking the voice-over settings option to allow users to switch between male and female voice options, enhancing accessibility and personalization.
-- Login and Sign-Up Pages: Built the frontend for login and sign-up, focusing on a seamless and secure user authentication process.
+1. Calendar Feature: Developed the calendar interface with event management functionality. Implemented a popup to display events for selected dates, ensuring users can view and interact with event details effectively. Linked calendar events with daily tasks on the home page for a consolidated view of activities.
+2. Memory Log Page: Linked the memory log with the journal content to display journal entries effectively, ensuring a seamless integration of user data with the journal interface.
+3. Settings Page: Created and styled the settings page, linking the voice-over settings option to allow users to switch between male and female voice options, enhancing accessibility and personalization.
+4. Login and Sign-Up Pages: Built the frontend for login and sign-up, focusing on a seamless and secure user authentication process.
 Patient Details, Caretaker Details, and Emergency Contact Pages: Designed and developed the frontend for managing patient details, caretaker information, and emergency contacts, ensuring clear and efficient data presentation.
 
 ### **Farheen**
@@ -64,8 +64,33 @@ Below are my Backend and Frontend Contributions to the application:
    - Integrated Firebase to store and fetch user-created events, ensuring seamless data synchronization and display within the app.
 
 ### **Pooja**
+In this project, I played a pivotal role in developing the backend infrastructure that supports core functionalities crucial for user interaction and data management. I implemented a robust authentication system using Firebase, which provides secure login and sign-up capabilities, ensuring user data protection and access control. I designed and developed backend services for managing caretaker and patient details, including emergency data, which involves capturing user inputs, validating them, and storing them efficiently in the database. Additionally, I created a comprehensive medicine management system, which encompasses adding new medicines through a detailed form and backend functionality for editing, displaying, and deleting medicine records. This ensures that users can manage their medicine inventory effectively. It also focuses on enhancing user experience by enabling backend support for editing patient profiles, updating emergency information, and modifying caretaker details. A significant feature I integrated is the SOS button, which encompasses several emergency functions: locating the nearest police station, route to the nearest safe place, individuals, and sending immediate alerts to nearby responders. This feature is designed to enhance user safety and provide quick access to emergency services.
 
 ### **Prasitha**
+Developed the initial app prototype design using Figma.
+Created a custom logo for the app.
+
+Frontend Development:
+
+Worked on the frontend design and implementation of the following pages in the Remind Flutter app:
+
+Home Page
+Profile Page
+Medication Management (view, add, edit)
+Games (Match Game, Quiz Game, edit game)
+
+Made sure the UI was consistent in all the pages throughout the application.
+
+Backend Integration:
+
+Collaborated with team members to link the frontend with the backend for the following pages:
+
+Medicine
+Profile
+Login
+Sign-Up
+Games
+
 
 <!-- ## Getting Started
 
