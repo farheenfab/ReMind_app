@@ -1,6 +1,7 @@
 # ReMind: 
 ### _Tagline:_
-ReMind: Your daily companion for memory care, keeping routines on track and safety within reach.
+ReMind: Helping you remember, stay safe, and on track.
+
 
 ## Description:
 ReMind is an innovative mobile application designed specifically for individuals with Alzheimer's disease and their caregivers. The app assists users in managing daily tasks, medications, and routines through an intuitive and user-friendly interface. ReMind offers a personalized chatbot, powered by the Gemini API, that engages users in daily conversations to track their activities and well-being. These interactions generate insightful reports that are automatically logged into a memory journal, accessible by healthcare professionals to monitor the patient's condition over time.
