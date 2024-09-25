@@ -1,4 +1,4 @@
-# ReMind: 
+# ReMind 
 ### _Tagline:_
 ReMind: Helping you remember, stay safe, and on track.
 
